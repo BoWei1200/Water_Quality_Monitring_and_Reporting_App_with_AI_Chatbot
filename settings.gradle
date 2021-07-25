@@ -1,0 +1,2 @@
+rootProject.name = "Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot"
+include ':app'
