@@ -55,6 +55,6 @@
         app:layout_constraintTop_toBottomOf="@+id/appname"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/vaccine"/>
+        app:lottie_rawRes="@raw/loading_water_bowl"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
