@@ -2,4 +2,8 @@
     <string name="app_name">HydroMy</string>
     <string name="report">Report</string>
     <string name="do_you_know">Do you know..</string>
+    <string name="title_activity_user_pages_with_bottom_menu">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
