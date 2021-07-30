@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HydroMy</string>
+    <string name="report">Report</string>
+    <string name="do_you_know">Do you know..</string>
 </resources>
