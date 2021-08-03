@@ -2,10 +2,10 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import static java.lang.Math.*;
 
-public class IoTWaterQualityManagement {
+public class IoTWQICalculation {
     private Double DO, BOD, COD, NH3N, SS, pH, WQI;
 
-    public IoTWaterQualityManagement(Double DO, Double BOD, Double COD, Double NH3N, Double SS, Double pH) {
+    public IoTWQICalculation(Double DO, Double BOD, Double COD, Double NH3N, Double SS, Double pH) {
         this.DO = DO;
         this.BOD = BOD;
         this.COD = COD;

@@ -29,6 +29,7 @@ public class UserHome extends AppCompatActivity {
     private static final String POLLUTION_LEVEL = "level";
     private TextView pollutionLevel;
     private GraphView graphWQI;
+    private IoTValues ioTValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +38,6 @@ public class UserHome extends AppCompatActivity {
 
         pollutionLevel = findViewById(R.id.pollutionlevel);
         graphWQI = findViewById(R.id.userHome_graph_WQI);
-
-
     }
 
     @Override
@@ -102,44 +101,78 @@ public class UserHome extends AppCompatActivity {
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
         private final String API_KEY = "BBFF-d0da8e6ab1cdee030aa24fe674d2a051330";
-        private final String VARIABLE_ID = "60f2b0be4763e74e29fcc3aa";
+
+        private final String VARIABLE_ID_DO = "6108d1e334efb5000a66154f";
+        private final String VARIABLE_ID_BOD = "6108d1e234efb5000b53ece6";
+        private final String VARIABLE_ID_COD = "6108d1e3636012000c64ab6a";
+        private final String VARIABLE_ID_NH3N = "6108d1e334efb5000b53ece7";
+        private final String VARIABLE_ID_SS = "6108d1e3636012000db3fb3a";
+        private final String VARIABLE_ID_pH = "6108d1e4636012000db3fb3b";
 
         @Override
         protected Value[] doInBackground(Integer... params) {
             ApiClient apiClient = new ApiClient(API_KEY);
 
-            if(i == 0){
-                DataSource newDevice = apiClient.createDataSource("Water Quality Monitoring");
-                newDevice.createVariable("DO");
-                newDevice.createVariable("BOD");
-                newDevice.createVariable("COD");
-                newDevice.createVariable("NH3N");
-                newDevice.createVariable("SS");
-                newDevice.createVariable("pH");
+//            if(i == 0){
+//                DataSource newDevice = apiClient.createDataSource("Water Quality Monitoring");
+//                newDevice.createVariable("DO");
+//                newDevice.createVariable("BOD");
+//                newDevice.createVariable("COD");
+//                newDevice.createVariable("NH3N");
+//                newDevice.createVariable("SS");
+//                newDevice.createVariable("pH");
+//
+//                i++;
+//            }
 
-                i++;
-            }
-            Variable pollutionLevel = apiClient.getVariable(VARIABLE_ID);
+            Variable DO = apiClient.getVariable(VARIABLE_ID_DO);
+            Variable BOD = apiClient.getVariable(VARIABLE_ID_BOD);
+            Variable COD = apiClient.getVariable(VARIABLE_ID_COD);
+            Variable NH3N = apiClient.getVariable(VARIABLE_ID_NH3N);
+            Variable SS = apiClient.getVariable(VARIABLE_ID_SS);
+            Variable pH = apiClient.getVariable(VARIABLE_ID_pH);
 
-            Value[] variableValues = pollutionLevel.getValues();
+            Value[] valuesDO = DO.getValues();
+            Value[] valuesBOD = BOD.getValues();
+            Value[] valuesCOD = COD.getValues();
+            Value[] valuesNH3N = NH3N.getValues();
+            Value[] valuesSS = SS.getValues();
+            Value[] valuespH = pH.getValues();
 
-            return variableValues;
+            ioTValues = new IoTValues(valuesDO, valuesBOD, valuesCOD, valuesNH3N, valuesSS, valuespH);
+
+            return valuesDO;
         }
+
 
         @Override
         protected void onPostExecute(Value[] variableValues) {
             pollutionLevel.setText(String.valueOf(variableValues[0].getValue()));
             // Update your views here
 
-
             System.out.println("\n\n\nrunning\n\n\n");
 
-            int listSize = 30;
+            int listSize = 10;
             DataPoint[] dataPoints = new DataPoint[listSize]; // declare an array of DataPoint objects with the same size as your list
             int y = listSize - 1;
+
+            IoTWQICalculation WQIcalc;
+            Double calculatedWQI = 0.0;
             for (int i = 0; i < listSize; i++) {
                 // add new DataPoint object to the array for each of your list entries
-                dataPoints[i] = new DataPoint(i, Double.parseDouble(String.valueOf(variableValues[y - i].getValue()))); // not sure but I think the second argument should be of type double
+                Value[] DO = ioTValues.getValuesDO();
+                WQIcalc = new IoTWQICalculation(
+                        Double.parseDouble(String.valueOf(ioTValues.getValuesDO()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(ioTValues.getValuesBOD()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(ioTValues.getValuesCOD()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(ioTValues.getValuesNH3N()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(ioTValues.getValuesSS()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(ioTValues.getValuespH()[y - i].getValue()))
+                );
+                WQIcalc.calculateWQI();
+                calculatedWQI = WQIcalc.getWQI();
+                dataPoints[i] = new DataPoint(i, calculatedWQI); //calculated WQI
+                //dataPoints[i] = new DataPoint(i, Double.parseDouble(String.valueOf(variableValues[y - i].getValue()))); //calculated WQI
             }
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
@@ -148,8 +181,8 @@ public class UserHome extends AppCompatActivity {
 
             graphWQI.getViewport().setMinX(0);
             graphWQI.getViewport().setMaxX(listSize);
-            //graphWQI.getViewport().setMinY(2.0);
-            //graphWQI.getViewport().setMaxY(15.0);
+            graphWQI.getViewport().setMinY(0.0);
+            graphWQI.getViewport().setMaxY(100.0);
 
             graphWQI.getViewport().setYAxisBoundsManual(true);
             graphWQI.getViewport().setXAxisBoundsManual(true);
