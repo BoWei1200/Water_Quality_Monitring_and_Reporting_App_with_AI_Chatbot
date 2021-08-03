@@ -66,7 +66,7 @@ public class UserHome extends AppCompatActivity {
             @Override
             public void run() {
                 // we add 100 new entries
-                for (int i = 0; i < 100; i++) {
+                for (int i = 0; i < 10; i++) {
                     runOnUiThread(new Runnable() {
 
                         @Override
@@ -152,7 +152,7 @@ public class UserHome extends AppCompatActivity {
 
             System.out.println("\n\n\nrunning\n\n\n");
 
-            int listSize = 10;
+            int listSize = 11;
             DataPoint[] dataPoints = new DataPoint[listSize]; // declare an array of DataPoint objects with the same size as your list
             int y = listSize - 1;
 
@@ -180,7 +180,7 @@ public class UserHome extends AppCompatActivity {
             graphWQI.addSeries(series);
 
             graphWQI.getViewport().setMinX(0);
-            graphWQI.getViewport().setMaxX(listSize);
+            graphWQI.getViewport().setMaxX(listSize - 1);
             graphWQI.getViewport().setMinY(0.0);
             graphWQI.getViewport().setMaxY(100.0);
 
