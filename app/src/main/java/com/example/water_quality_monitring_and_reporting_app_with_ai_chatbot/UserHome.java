@@ -15,6 +15,8 @@ import android.os.AsyncTask;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.ubidots.ApiClient;
 import com.ubidots.DataSource;
 import com.ubidots.Value;
@@ -26,6 +28,7 @@ public class UserHome extends AppCompatActivity {
     private static int i = 0;
     private static final String POLLUTION_LEVEL = "level";
     private TextView pollutionLevel;
+    private GraphView graphWQI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,39 +36,24 @@ public class UserHome extends AppCompatActivity {
         setContentView(R.layout.activity_user_home);
 
         pollutionLevel = findViewById(R.id.pollutionlevel);
-    }
+        graphWQI = findViewById(R.id.userHome_graph_WQI);
 
-    public void toReportMenu(View view) {
-        Intent intent = new Intent(this, UserReportMenu.class);
-        startActivity(intent);
-        finish();
-    }
-
-    public void toHome(View view) {
 
     }
-
-    private BroadcastReceiver pollutionLevelReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int level = intent.getIntExtra(POLLUTION_LEVEL, 0);
-
-            pollutionLevel.setText(level + "%");
-            new ApiUbidots().execute(level);
-        }
-    };
 
     @Override
     protected void onStart() {
         super.onStart();
-        registerReceiver(pollutionLevelReceiver, new IntentFilter(Intent.ACTION_ATTACH_DATA));
+        new ApiUbidots().execute();
+        //registerReceiver(pollutionLevelReceiver, new IntentFilter(Intent.ACTION_ATTACH_DATA));
         Toast.makeText(this,"Start!",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onRestart(){
         super.onRestart();
-        registerReceiver(pollutionLevelReceiver, new IntentFilter(Intent.ACTION_ATTACH_DATA));
+        new ApiUbidots().execute();
+        //registerReceiver(pollutionLevelReceiver, new IntentFilter(Intent.ACTION_ATTACH_DATA));
         Toast.makeText(this,"Restart!",Toast.LENGTH_SHORT).show();
     }
 
@@ -87,7 +75,7 @@ public class UserHome extends AppCompatActivity {
                             try{
                                 new ApiUbidots().execute();
                             }catch(Exception e){
-                                Log.e("ERROR", "\n\n"+ e.toString()+"\n\n");
+
                             }
 
                         }
@@ -102,11 +90,14 @@ public class UserHome extends AppCompatActivity {
         }).start();
     }
 
-    @Override
-    protected void onStop() {
-        unregisterReceiver(pollutionLevelReceiver);
-        Toast.makeText(this,"Stop!",Toast.LENGTH_SHORT).show();
-        super.onStop();
+    public void toReportMenu(View view) {
+        Intent intent = new Intent(this, UserReportMenu.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void toHome(View view) {
+
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
@@ -115,19 +106,53 @@ public class UserHome extends AppCompatActivity {
 
         @Override
         protected Value[] doInBackground(Integer... params) {
-                ApiClient apiClient = new ApiClient(API_KEY);
+            ApiClient apiClient = new ApiClient(API_KEY);
 
-                Variable pollutionLevel = apiClient.getVariable(VARIABLE_ID);
+            if(i == 0){
+                DataSource newDevice = apiClient.createDataSource("Water Quality Monitoring");
+                newDevice.createVariable("DO");
+                newDevice.createVariable("BOD");
+                newDevice.createVariable("COD");
+                newDevice.createVariable("NH3N");
+                newDevice.createVariable("SS");
+                newDevice.createVariable("pH");
 
-                Value[] variableValues = pollutionLevel.getValues();
+                i++;
+            }
+            Variable pollutionLevel = apiClient.getVariable(VARIABLE_ID);
 
-                return variableValues;
+            Value[] variableValues = pollutionLevel.getValues();
+
+            return variableValues;
         }
 
         @Override
         protected void onPostExecute(Value[] variableValues) {
             pollutionLevel.setText(String.valueOf(variableValues[0].getValue()));
             // Update your views here
+
+
+            System.out.println("\n\n\nrunning\n\n\n");
+
+            int listSize = 30;
+            DataPoint[] dataPoints = new DataPoint[listSize]; // declare an array of DataPoint objects with the same size as your list
+            int y = listSize - 1;
+            for (int i = 0; i < listSize; i++) {
+                // add new DataPoint object to the array for each of your list entries
+                dataPoints[i] = new DataPoint(i, Double.parseDouble(String.valueOf(variableValues[y - i].getValue()))); // not sure but I think the second argument should be of type double
+            }
+
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
+            graphWQI.removeAllSeries();
+            graphWQI.addSeries(series);
+
+            graphWQI.getViewport().setMinX(0);
+            graphWQI.getViewport().setMaxX(listSize);
+            //graphWQI.getViewport().setMinY(2.0);
+            //graphWQI.getViewport().setMaxY(15.0);
+
+            graphWQI.getViewport().setYAxisBoundsManual(true);
+            graphWQI.getViewport().setXAxisBoundsManual(true);
         }
     }
 }
