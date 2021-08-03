@@ -91,11 +91,6 @@ public class UserHome extends AppCompatActivity {
         }).start();
     }
 
-    public void toReportMenu(View view) {
-
-
-    }
-
     public void toOtherPages_btn(View view) {
         Button btn = (Button) view;
         Intent intent = new Intent();
@@ -130,6 +125,7 @@ public class UserHome extends AppCompatActivity {
     public void toGraphDetails(View view) {
         Intent intent = new Intent(this, GraphDetails.class);
         startActivity(intent);
+        //finish();
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
