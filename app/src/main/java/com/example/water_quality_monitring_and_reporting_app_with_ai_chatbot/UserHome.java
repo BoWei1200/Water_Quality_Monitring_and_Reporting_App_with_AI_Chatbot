@@ -12,6 +12,8 @@ import android.view.View;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,13 +92,44 @@ public class UserHome extends AppCompatActivity {
     }
 
     public void toReportMenu(View view) {
-        Intent intent = new Intent(this, UserReportMenu.class);
+
+
+    }
+
+    public void toOtherPages_btn(View view) {
+        Button btn = (Button) view;
+        Intent intent = new Intent();
+
+        switch(view.getId()){
+            case R.id.userHome_btn_report:
+                intent = new Intent(this, UserReportMenu.class);
+                break;
+        }
+
         startActivity(intent);
         finish();
     }
 
-    public void toHome(View view) {
+    public void toOtherPages_imgBtn(View view) {
+        ImageButton imgBtn = (ImageButton) view;
+        Intent intent = new Intent();
 
+        switch(view.getId()){
+            case R.id.userHome_btn_bottomMenuReport:
+                intent = new Intent(this, UserReportMenu.class);
+                break;
+
+            case R.id.userHome_btn_bottomMenuAIChat:
+                break;
+        }
+
+        startActivity(intent);
+        finish();
+    }
+
+    public void toGraphDetails(View view) {
+        Intent intent = new Intent(this, GraphDetails.class);
+        startActivity(intent);
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {

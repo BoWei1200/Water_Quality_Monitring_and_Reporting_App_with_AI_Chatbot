@@ -58,6 +58,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
+                            android:onClick="toGraphDetails"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +135,7 @@
                             android:fontFamily="@font/nunito_sans"
                             android:gravity="bottom|center"
                             android:inputType="textCapSentences"
-                            android:onClick="toReportMenu"
+                            android:onClick="toOtherPages_btn"
                             android:paddingBottom="10dp"
                             android:text="@string/report"
                             android:textSize="18sp"
@@ -239,7 +240,7 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@drawable/fully_rounded_corners"
-                android:onClick="toReportMenu"
+                android:onClick="toOtherPages_imgBtn"
                 android:padding="12dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/warningicon3"/>
@@ -255,7 +256,6 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@drawable/fully_rounded_corners"
-                android:onClick="toHome"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/homeiconedit" />
