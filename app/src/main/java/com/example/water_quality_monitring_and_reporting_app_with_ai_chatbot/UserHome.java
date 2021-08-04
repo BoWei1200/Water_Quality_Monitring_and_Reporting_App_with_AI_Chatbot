@@ -101,6 +101,7 @@ public class UserHome extends AppCompatActivity {
                 break;
 
             case R.id.userHome_btn_bottomMenuAIChat:
+                intent = new Intent(this, UserAIChatting.class);
                 break;
 
             case R.id.userHome_graph_WQI:

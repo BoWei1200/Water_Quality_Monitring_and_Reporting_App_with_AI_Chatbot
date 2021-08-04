@@ -47,7 +47,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/userHome_linearlayout_graph"
+                android:id="@+id/graphDetails_linearlayout_graph"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight=".35"
@@ -55,7 +55,7 @@
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/userHome_cv_graph"
+                    android:id="@+id/graphDetails_cv_graph"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
@@ -70,7 +70,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <com.jjoe64.graphview.GraphView
-                            android:id="@+id/userHome_graph_WQI"
+                            android:id="@+id/graphDetails_graph_WQI"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
@@ -85,7 +85,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/userHome_linearlayout_others"
+                android:id="@+id/graphDetails_linearlayout_others"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight=".65"

@@ -11,11 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot">
-        <activity android:name=".GraphDetails"/>
+        <activity android:name=".UserAIChatting"></activity>
+        <activity android:name=".UserMyReport" />
+        <activity android:name=".UserAddReport" />
+        <activity android:name=".GraphDetails" />
         <activity android:name=".UserReportMenu" />
         <activity android:name=".AdminHome" />
-        <activity android:name=".UserHome"
-            android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot.ActionBar"/>
+        <activity
+            android:name=".UserHome"
+            android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot.ActionBar" />
         <activity android:name=".Registration" />
         <activity android:name=".Login" />
         <activity android:name=".SplashScreen">

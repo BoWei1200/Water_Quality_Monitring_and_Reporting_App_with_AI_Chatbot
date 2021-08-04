@@ -28,4 +28,35 @@ public class UserReportMenu extends AppCompatActivity {
 
         }
     }
+
+    public void toOtherPages(View view) {
+        Intent intent = new Intent();
+
+        Boolean needFinish = true;
+
+        switch(view.getId()){
+            case R.id.userReportMenu_btn_bottomMenuHome:
+                intent = new Intent(this, UserHome.class);
+                break;
+
+            case R.id.userReportMenu_btn_bottomMenuAIChat:
+                intent = new Intent(this, UserAIChatting.class);
+                break;
+
+            case R.id.userReportMenu_tableRow_myReport:
+                intent = new Intent(this, UserMyReport.class);
+                needFinish = false;
+                break;
+
+            case R.id.userReportMenu_tableRow_addReport:
+                intent = new Intent(this, UserAddReport.class);
+                needFinish = false;
+                break;
+        }
+
+        startActivity(intent);
+
+        if(needFinish)
+            finish();
+    }
 }

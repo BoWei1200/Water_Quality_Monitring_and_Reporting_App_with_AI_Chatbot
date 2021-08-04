@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:theme="@style/Toolbar_back_button_style"
-        app:title="My Report"
+        app:title="Manage My Report"
         app:titleMargin="2dp"
         app:titleTextColor="#FFFFFF" />
 
@@ -39,7 +39,6 @@
         android:layout_margin="0dp"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"
-
         android:layout_marginEnd="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="10dp"
@@ -64,22 +63,22 @@
                 android:layout_height="wrap_content">
 
                 <TableRow
-                    android:id="@+id/tabRow_userManage_createUser"
+                    android:id="@+id/userReportMenu_tableRow_addReport"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:onClick="adminOperation"
+                    android:onClick="toOtherPages"
                     android:weightSum="10">
 
                     <ImageView
-                        android:id="@+id/img_userManage_createUser"
+                        android:id="@+id/userReportMenu_img_addReport"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_column="1"
                         android:layout_weight="1"
-                        app:srcCompat="@drawable/warningicon3" />
+                        app:srcCompat="@drawable/addreporticon" />
 
                     <TextView
-                        android:id="@+id/txt_userManage_createUser"
+                        android:id="@+id/userReportMenu_txt_addReport"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_column="2"
@@ -107,22 +106,22 @@
                 </TableRow>
 
                 <TableRow
-                    android:id="@+id/tabRow_userManage_viewAllUsers"
+                    android:id="@+id/userReportMenu_tableRow_myReport"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:weightSum="10"
-                    android:onClick="toOtherPages_tableRow">
+                    android:onClick="toOtherPages">
 
                     <ImageView
-                        android:id="@+id/img_userManage_viewUsers"
+                        android:id="@+id/userReportMenu_img_myReport"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_column="1"
                         android:layout_weight="1"
-                        app:srcCompat="@drawable/aichatboticonedit" />
+                        app:srcCompat="@drawable/myreporticon" />
 
                     <TextView
-                        android:id="@+id/txt_userManage_viewAllUsers"
+                        android:id="@+id/userReportMenu_txt_myReport"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_column="2"
@@ -140,7 +139,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/userHome_linearlayout_bottomMenu"
+        android:id="@+id/userReportMenu_linearlayout_bottomMenu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="0dp"
@@ -155,7 +154,7 @@
         app:layout_constraintTop_toBottomOf="@id/linearParent">
 
         <ImageButton
-            android:id="@+id/userHome_btn_bottomMenuReport"
+            android:id="@+id/userReportMenu_btn_bottomMenuReport"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="15dp"
@@ -170,7 +169,7 @@
             android:src="@drawable/warningicon3"/>
 
         <ImageButton
-            android:id="@+id/userHome_btn_bottomMenuHome"
+            android:id="@+id/userReportMenu_btn_bottomMenuHome"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="15dp"
@@ -180,13 +179,13 @@
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:background="@drawable/fully_rounded_corners"
-            android:onClick="toHome"
+            android:onClick="toOtherPages"
             android:padding="12dp"
             android:scaleType="fitCenter"
             android:src="@drawable/homeiconedit" />
 
         <ImageButton
-            android:id="@+id/userHome_btn_bottomMenuAIChat"
+            android:id="@+id/userReportMenu_btn_bottomMenuAIChat"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="15dp"
@@ -195,6 +194,7 @@
             android:layout_marginRight="15dp"
             android:layout_weight="1"
             android:adjustViewBounds="true"
+            android:onClick="toOtherPages"
             android:background="@drawable/fully_rounded_corners"
             android:padding="10dp"
             android:scaleType="fitCenter"
