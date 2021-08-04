@@ -76,9 +76,7 @@ public class UserHome extends AppCompatActivity {
                             try{
                                 new ApiUbidots().execute();
                             }catch(Exception e){
-
                             }
-
                         }
                     });
 
@@ -91,41 +89,30 @@ public class UserHome extends AppCompatActivity {
         }).start();
     }
 
-    public void toOtherPages_btn(View view) {
-        Button btn = (Button) view;
+    public void toOtherPages(View view) {
         Intent intent = new Intent();
 
+        Boolean needFinish = true;
+
         switch(view.getId()){
+            case R.id.userHome_btn_bottomMenuReport :
             case R.id.userHome_btn_report:
-                intent = new Intent(this, UserReportMenu.class);
-                break;
-        }
-
-        startActivity(intent);
-        finish();
-    }
-
-    public void toOtherPages_imgBtn(View view) {
-        ImageButton imgBtn = (ImageButton) view;
-        Intent intent = new Intent();
-
-        switch(view.getId()){
-            case R.id.userHome_btn_bottomMenuReport:
                 intent = new Intent(this, UserReportMenu.class);
                 break;
 
             case R.id.userHome_btn_bottomMenuAIChat:
                 break;
+
+            case R.id.userHome_graph_WQI:
+                intent = new Intent(this, GraphDetails.class);
+                needFinish = false;
+                break;
         }
 
         startActivity(intent);
-        finish();
-    }
 
-    public void toGraphDetails(View view) {
-        Intent intent = new Intent(this, GraphDetails.class);
-        startActivity(intent);
-        //finish();
+        if(needFinish)
+            finish();
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {

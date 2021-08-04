@@ -22,4 +22,10 @@ public class UserReportMenu extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    public void toOtherPages_tableRow(View view) {
+        switch(view.getId()){
+
+        }
+    }
 }

@@ -25,8 +25,12 @@
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="0dp"
+    android:orientation="vertical"
+    app:layout_constraintTop_toBottomOf="@+id/userReportMenu_toolbar"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent">
 
     <LinearLayout
         android:id="@+id/linearParent"
@@ -42,7 +46,99 @@
         android:layout_weight=".92"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_UserManageMenu">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:id="@+id/tabRow_userManage_createUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="adminOperation"
+                    android:weightSum="10">
+
+                    <ImageView
+                        android:id="@+id/img_userManage_createUser"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_column="1"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/warningicon3" />
+
+                    <TextView
+                        android:id="@+id/txt_userManage_createUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_column="2"
+                        android:layout_weight="7"
+                        android:fontFamily="@font/nunito_sans"
+                        android:gravity="center_vertical"
+                        android:text="  Report for Water Pollution"
+                        android:textSize="18sp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp">
+                </TableRow>
+
+                <View
+                    android:layout_height="1dip"
+                    android:background="#FF909090" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp">
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/tabRow_userManage_viewAllUsers"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="10"
+                    android:onClick="toOtherPages_tableRow">
+
+                    <ImageView
+                        android:id="@+id/img_userManage_viewUsers"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_column="1"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/aichatboticonedit" />
+
+                    <TextView
+                        android:id="@+id/txt_userManage_viewAllUsers"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_column="2"
+                        android:layout_weight="7"
+                        android:gravity="center_vertical"
+                        android:fontFamily="@font/nunito_sans"
+                        android:text="  My Report"
+                        android:textSize="18sp" />
+                </TableRow>
+
+            </TableLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/userHome_linearlayout_bottomMenu"
         android:layout_width="match_parent"
