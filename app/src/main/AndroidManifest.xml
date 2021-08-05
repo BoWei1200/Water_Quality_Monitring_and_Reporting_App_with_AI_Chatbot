@@ -2,7 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +17,7 @@
         android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot">
         <activity android:name=".UserAIChatting"></activity>
         <activity android:name=".UserMyReport" />
-        <activity android:name=".UserAddReport" />
+        <activity android:name=".UserAddReportDraft" />
         <activity android:name=".GraphDetails" />
         <activity android:name=".UserReportMenu" />
         <activity android:name=".AdminHome" />
