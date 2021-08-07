@@ -14,9 +14,11 @@ import android.os.Bundle;
 import android.os.AsyncTask;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.ubidots.ApiClient;
@@ -29,17 +31,19 @@ import com.jjoe64.graphview.GraphView;
 public class UserHome extends AppCompatActivity {
     private static int i = 0;
     private static final String POLLUTION_LEVEL = "level";
-    private TextView pollutionLevel;
+    //private TextView pollutionLevel;
     private GraphView graphWQI;
     private IoTValues ioTValues;
+    private LinearLayout userHome_linearlayout_graphDetails_hide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
 
-        pollutionLevel = findViewById(R.id.pollutionlevel);
+        //pollutionLevel = findViewById(R.id.pollutionlevel);
         graphWQI = findViewById(R.id.userHome_graph_WQI);
+        userHome_linearlayout_graphDetails_hide = findViewById(R.id.userHome_linearlayout_graphDetails_hide);
     }
 
     @Override
@@ -92,7 +96,7 @@ public class UserHome extends AppCompatActivity {
     public void toOtherPages(View view) {
         Intent intent = new Intent();
 
-        Boolean needFinish = true;
+        //Boolean needFinish = true;
 
         switch(view.getId()){
             case R.id.userHome_btn_bottomMenuReport :
@@ -106,14 +110,22 @@ public class UserHome extends AppCompatActivity {
 
             case R.id.userHome_graph_WQI:
                 intent = new Intent(this, GraphDetails.class);
-                needFinish = false;
+                //needFinish = false;
                 break;
         }
 
         startActivity(intent);
 
-        if(needFinish)
-            finish();
+//        if(needFinish){
+//           finish();
+//        }
+    }
+
+    public void viewGraphDetails(View view) {
+        if(userHome_linearlayout_graphDetails_hide.getVisibility() == View.GONE)
+            userHome_linearlayout_graphDetails_hide.setVisibility(View.VISIBLE);
+        else
+            userHome_linearlayout_graphDetails_hide.setVisibility(View.GONE);
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
@@ -126,8 +138,17 @@ public class UserHome extends AppCompatActivity {
         private final String VARIABLE_ID_SS = "6108d1e3636012000db3fb3a";
         private final String VARIABLE_ID_pH = "6108d1e4636012000db3fb3b";
 
+        TextView pollutionLevel;
+
+        @Override
+        protected void onPreExecute(){
+            pollutionLevel = findViewById(R.id.pollutionlevel);
+
+        }
+
         @Override
         protected Value[] doInBackground(Integer... params) {
+
             ApiClient apiClient = new ApiClient(API_KEY);
 
 //            if(i == 0){
@@ -164,10 +185,16 @@ public class UserHome extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Value[] variableValues) {
-            pollutionLevel.setText(String.valueOf(variableValues[0].getValue()));
-            // Update your views here
+            super.onPostExecute(variableValues);
 
-            System.out.println("\n\n\nrunning\n\n\n");
+            try{
+                pollutionLevel.setText(String.valueOf(variableValues[0].getValue()));
+                System.out.println(String.valueOf(variableValues[0].getValue()));
+            }catch(Exception e){
+                System.out.println(e.toString());
+            }
+
+            // Update your views here
 
             int listSize = 11;
             DataPoint[] dataPoints = new DataPoint[listSize]; // declare an array of DataPoint objects with the same size as your list
@@ -203,6 +230,13 @@ public class UserHome extends AppCompatActivity {
 
             graphWQI.getViewport().setYAxisBoundsManual(true);
             graphWQI.getViewport().setXAxisBoundsManual(true);
+
+            graphWQI.getViewport().setScrollable(true); // enables horizontal scrolling
+            graphWQI.getViewport().setScalable(true); // enables horizontal zooming and scrolling
+
+//            GridLabelRenderer gridLabel = graphWQI.getGridLabelRenderer();
+//            gridLabel.setHorizontalAxisTitle("WQI");
+//            gridLabel.setVerticalAxisTitle("WQI");
         }
     }
 }

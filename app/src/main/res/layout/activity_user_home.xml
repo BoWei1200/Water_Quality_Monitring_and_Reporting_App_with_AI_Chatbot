@@ -17,202 +17,225 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/graphDetails_scrollview_others"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".92"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="vertical">
+            android:layout_weight=".92">
 
             <LinearLayout
-                android:id="@+id/userHome_linearlayout_graph"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".35"
-
-                android:layout_margin="5dp"
+                android:id="@+id/linearScroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/userHome_cv_graph"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="1dp"
-                    app:cardCornerRadius="7dp"
-                    app:cardUseCompatPadding="false">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="5dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.jjoe64.graphview.GraphView
-                            android:id="@+id/userHome_graph_WQI"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:onClick="toOtherPages"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/userHome_linearlayout_others"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight=".65"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/userHome_linearlayout_news"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight=".5"
-                    android:orientation="horizontal">
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/userHome_cv_news"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="1dp"
-                        app:cardCornerRadius="7dp"
-                        app:cardUseCompatPadding="false">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="10dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <TextView
-                                android:id="@+id/pollutionlevel"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:text="XX"
-                                android:textSize="30dp"
-                                />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/userHome_linearlayout_report_tips"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".5"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/userHome_linearlayout_report"
+                        android:id="@+id/userHome_linearlayout_graph"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_margin="5dp"
-                        android:layout_weight=".5"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/userHome_btn_report"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/rounded_corners"
-                            android:fontFamily="@font/nunito_sans"
-                            android:gravity="bottom|center"
-                            android:inputType="textCapSentences"
-                            android:onClick="toOtherPages"
-                            android:paddingBottom="10dp"
-                            android:text="@string/report"
-                            android:textSize="18sp"
-                            app:backgroundTint="#E6FFD659"
-                            app:icon="@drawable/warningicon2edit"
-                            app:iconGravity="textTop"
-                            app:iconSize="50dp" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/userHome_linearlayout_tips"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight=".5"
                         android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/userHome_cv_tips"
+                            android:id="@+id/userHome_cv_graph"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_margin="1dp"
                             app:cardCornerRadius="7dp"
                             app:cardUseCompatPadding="false">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:padding="5dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent">
 
-                                <TextView
-                                    android:id="@+id/userHome_txt_doUKnowTitle"
+                                <com.jjoe64.graphview.GraphView
+                                    android:id="@+id/userHome_graph_WQI"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="10dp"
-                                    android:fontFamily="@font/nunito_sans"
-                                    android:inputType="textMultiLine"
-                                    android:paddingTop="5dp"
-
-                                    android:text="@string/do_you_know"
-                                    android:textSize="18dp"
-                                    android:textStyle="bold"
+                                    android:layout_height="240dp"
+                                    android:layout_alignParentTop="true"
+                                    android:onClick="viewGraphDetails"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
-                                <TextView
-                                    android:id="@+id/userHome_txt_doUKnowContent"
+                                <LinearLayout
+                                    android:id="@+id/userHome_linearlayout_graphDetails_hide"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="10dp"
-                                    android:fontFamily="@font/nunito_sans"
-                                    android:inputType="textMultiLine"
-                                    android:paddingTop="5dp"
-                                    android:paddingBottom="8dp"
-                                    android:text="text..."
-                                    android:textSize="15dp"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@id/userHome_txt_doUKnowTitle" />
+                                    app:layout_constraintTop_toBottomOf="@+id/userHome_graph_WQI"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="5454"
+                                        android:textSize="100dp" />
+
+                                </LinearLayout>
+
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/userHome_linearlayout_others"
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:id="@+id/userHome_linearlayout_news"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight=".5"
+                            android:orientation="horizontal">
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/userHome_cv_news"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="1dp"
+                                app:cardCornerRadius="7dp"
+                                app:cardUseCompatPadding="false">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:padding="10dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <TextView
+                                        android:id="@+id/pollutionlevel"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="XX"
+                                        android:textSize="30dp"
+                                        />
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+                            </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/userHome_linearlayout_report_tips"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".5"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/userHome_linearlayout_report"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_margin="5dp"
+                                android:layout_weight=".5"
+                                android:orientation="vertical">
+
+                                <Button
+                                    android:id="@+id/userHome_btn_report"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/rounded_corners"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="bottom|center"
+                                    android:inputType="textCapSentences"
+                                    android:onClick="toOtherPages"
+                                    android:paddingBottom="10dp"
+                                    android:text="@string/report"
+                                    android:textSize="18sp"
+                                    app:backgroundTint="#E6FFD659"
+                                    app:icon="@drawable/warningicon2edit"
+                                    app:iconGravity="textTop"
+                                    app:iconSize="50dp" />
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/userHome_linearlayout_tips"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_margin="5dp"
+                                android:layout_weight=".5"
+                                android:orientation="vertical">
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/userHome_cv_tips"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="1dp"
+                                    app:cardCornerRadius="7dp"
+                                    app:cardUseCompatPadding="false">
+
+                                    <androidx.constraintlayout.widget.ConstraintLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:padding="5dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent">
+
+                                        <TextView
+                                            android:id="@+id/userHome_txt_doUKnowTitle"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_margin="10dp"
+                                            android:fontFamily="@font/nunito_sans"
+                                            android:inputType="textMultiLine"
+                                            android:paddingTop="5dp"
+
+                                            android:text="@string/do_you_know"
+                                            android:textSize="18dp"
+                                            android:textStyle="bold"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent" />
+
+                                        <TextView
+                                            android:id="@+id/userHome_txt_doUKnowContent"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_margin="10dp"
+                                            android:fontFamily="@font/nunito_sans"
+                                            android:inputType="textMultiLine"
+                                            android:paddingTop="5dp"
+                                            android:paddingBottom="8dp"
+                                            android:text="text..."
+                                            android:textSize="15dp"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@id/userHome_txt_doUKnowTitle" />
+                                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                </androidx.cardview.widget.CardView>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DDDDDD"
-                android:layout_marginTop="5dp"/>
-        </LinearLayout>
+
+        </ScrollView>
 
         <LinearLayout
             android:id="@+id/userHome_linearlayout_bottomMenu"
@@ -221,13 +244,12 @@
             android:layout_margin="0dp"
             android:layout_marginStart="15dp"
             android:layout_marginLeft="15dp"
-
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="10dp"
             android:layout_weight=".08"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/linearParent">
+            android:layout_below="@+id/graphDetails_scrollview_others">
 
             <ImageButton
                 android:id="@+id/userHome_btn_bottomMenuReport"
@@ -279,4 +301,8 @@
         </LinearLayout>
 
     </LinearLayout>
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

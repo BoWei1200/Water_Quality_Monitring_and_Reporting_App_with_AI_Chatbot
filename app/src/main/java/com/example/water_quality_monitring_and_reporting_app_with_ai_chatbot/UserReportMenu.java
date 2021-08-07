@@ -14,29 +14,12 @@ public class UserReportMenu extends AppCompatActivity {
         setContentView(R.layout.activity_user_report_menu);
     }
 
-
-    public void toHome(View view) {
-        Intent intent = new Intent(this, UserHome.class);
-        startActivity(intent);
-        finish();
-    }
-
-    public void toOtherPages_tableRow(View view) {
-        switch(view.getId()){
-
-        }
-    }
-
     public void toOtherPages(View view) {
         Intent intent = new Intent();
 
         Boolean needFinish = true;
 
         switch(view.getId()){
-            case R.id.userReportMenu_btn_bottomMenuHome:
-                intent = new Intent(this, UserHome.class);
-                break;
-
             case R.id.userReportMenu_btn_bottomMenuAIChat:
                 intent = new Intent(this, UserAIChatting.class);
                 break;
@@ -56,5 +39,9 @@ public class UserReportMenu extends AppCompatActivity {
 
         if(needFinish)
             finish();
+    }
+
+    public void toHome(View view) {
+        finish();
     }
 }
