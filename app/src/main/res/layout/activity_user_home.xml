@@ -32,9 +32,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
@@ -53,6 +53,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="1dp"
                             app:cardCornerRadius="7dp"
+
                             app:cardUseCompatPadding="false">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,6 +63,18 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="parent">
 
+                                <TextView
+                                    android:id="@+id/userHome_txt_graphWQI"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:padding="15dp"
+                                    android:text="Graph for WQI"
+                                    android:textSize="18dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
                                 <com.jjoe64.graphview.GraphView
                                     android:id="@+id/userHome_graph_WQI"
                                     android:layout_width="match_parent"
@@ -70,22 +83,75 @@
                                     android:onClick="viewGraphDetails"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                                    app:layout_constraintTop_toBottomOf="@+id/userHome_txt_graphWQI" />
 
                                 <LinearLayout
                                     android:id="@+id/userHome_linearlayout_graphDetails_hide"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    app:layout_constraintTop_toBottomOf="@+id/userHome_graph_WQI"
-                                    android:visibility="gone">
+                                    android:layout_height="180dp"
+                                    android:orientation="horizontal"
+                                    android:padding="10dp"
+                                    android:visibility="gone"
+                                    app:layout_constraintTop_toBottomOf="@+id/userHome_graph_WQI">
 
-                                    <TextView
-                                        android:layout_width="match_parent"
+                                    <LinearLayout
+                                        android:layout_width="0dp"
                                         android:layout_height="wrap_content"
-                                        android:text="5454"
-                                        android:textSize="100dp" />
+                                        android:layout_gravity="center"
+                                        android:layout_weight=".5"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/userHome_txt_currentWQI_title"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:fontFamily="@font/nunito_sans"
+                                            android:gravity="center"
+                                            android:paddingBottom="10dp"
+                                            android:text="Your Current WQI"
+                                            android:textSize="16dp" />
+
+                                        <TextView
+                                            android:id="@+id/userHome_txt_currentWQI"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:fontFamily="@font/nunito_sans"
+                                            android:gravity="center"
+                                            android:paddingBottom="10dp"
+                                            android:text="00.00"
+                                            android:textSize="50dp" />
+                                    </LinearLayout>
+
+                                    <Button
+                                        android:id="@+id/userHome_btn_WQIDetails"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_weight=".5"
+                                        android:background="@drawable/rounded_corners"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:onClick="toOtherPages"
+                                        android:text="WQI Details"
+                                        android:textAllCaps="false"
+                                        app:icon="@drawable/graphiconedit"
+                                        app:iconGravity="textTop"
+                                        app:iconSize="50dp" />
 
                                 </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/userHome_txt_clickToViewMore"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:padding="5dp"
+                                    android:text="@string/view_more"
+                                    android:textSize="14dp"
+                                    android:gravity="end"
+                                    android:onClick="viewGraphDetails"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/userHome_linearlayout_graphDetails_hide" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </androidx.cardview.widget.CardView>
@@ -126,8 +192,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:text="XX"
-                                        android:textSize="30dp"
-                                        />
+                                        android:textSize="30dp" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
                             </androidx.cardview.widget.CardView>
@@ -241,6 +306,7 @@
             android:id="@+id/userHome_linearlayout_bottomMenu"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_below="@+id/graphDetails_scrollview_others"
             android:layout_margin="0dp"
             android:layout_marginStart="15dp"
             android:layout_marginLeft="15dp"
@@ -248,8 +314,7 @@
             android:layout_marginRight="15dp"
             android:layout_marginBottom="10dp"
             android:layout_weight=".08"
-            android:orientation="horizontal"
-            android:layout_below="@+id/graphDetails_scrollview_others">
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/userHome_btn_bottomMenuReport"
@@ -265,7 +330,7 @@
                 android:onClick="toOtherPages"
                 android:padding="12dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/warningicon3"/>
+                android:src="@drawable/warningicon3" />
 
             <ImageButton
                 android:id="@+id/userHome_btn_bottomMenuHome"
@@ -291,18 +356,16 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_weight="1"
-                android:onClick="toOtherPages"
                 android:adjustViewBounds="true"
                 android:background="@drawable/fully_rounded_corners"
+                android:onClick="toOtherPages"
                 android:padding="10dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/aichatboticonedit"/>
+                android:src="@drawable/aichatboticonedit" />
 
         </LinearLayout>
 
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

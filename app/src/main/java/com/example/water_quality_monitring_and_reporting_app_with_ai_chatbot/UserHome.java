@@ -35,6 +35,7 @@ public class UserHome extends AppCompatActivity {
     private GraphView graphWQI;
     private IoTValues ioTValues;
     private LinearLayout userHome_linearlayout_graphDetails_hide;
+    private TextView userHome_txt_clickToViewMore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class UserHome extends AppCompatActivity {
         //pollutionLevel = findViewById(R.id.pollutionlevel);
         graphWQI = findViewById(R.id.userHome_graph_WQI);
         userHome_linearlayout_graphDetails_hide = findViewById(R.id.userHome_linearlayout_graphDetails_hide);
+        userHome_txt_clickToViewMore = findViewById(R.id.userHome_txt_clickToViewMore);
     }
 
     @Override
@@ -96,8 +98,6 @@ public class UserHome extends AppCompatActivity {
     public void toOtherPages(View view) {
         Intent intent = new Intent();
 
-        //Boolean needFinish = true;
-
         switch(view.getId()){
             case R.id.userHome_btn_bottomMenuReport :
             case R.id.userHome_btn_report:
@@ -108,24 +108,24 @@ public class UserHome extends AppCompatActivity {
                 intent = new Intent(this, UserAIChatting.class);
                 break;
 
-            case R.id.userHome_graph_WQI:
+            case R.id.userHome_btn_WQIDetails:
                 intent = new Intent(this, GraphDetails.class);
-                //needFinish = false;
                 break;
         }
 
         startActivity(intent);
-
-//        if(needFinish){
-//           finish();
-//        }
     }
 
     public void viewGraphDetails(View view) {
-        if(userHome_linearlayout_graphDetails_hide.getVisibility() == View.GONE)
+        if(userHome_linearlayout_graphDetails_hide.getVisibility() == View.GONE){
             userHome_linearlayout_graphDetails_hide.setVisibility(View.VISIBLE);
-        else
+            userHome_txt_clickToViewMore.setText(R.string.hide);
+        }
+        else{
             userHome_linearlayout_graphDetails_hide.setVisibility(View.GONE);
+            userHome_txt_clickToViewMore.setText(R.string.view_more);
+        }
+
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
@@ -139,11 +139,11 @@ public class UserHome extends AppCompatActivity {
         private final String VARIABLE_ID_pH = "6108d1e4636012000db3fb3b";
 
         TextView pollutionLevel;
-
+        TextView userHome_txt_currentWQI;
         @Override
         protected void onPreExecute(){
             pollutionLevel = findViewById(R.id.pollutionlevel);
-
+            userHome_txt_currentWQI = findViewById(R.id.userHome_txt_currentWQI);
         }
 
         @Override
@@ -188,7 +188,6 @@ public class UserHome extends AppCompatActivity {
             super.onPostExecute(variableValues);
 
             try{
-                pollutionLevel.setText(String.valueOf(variableValues[0].getValue()));
                 System.out.println(String.valueOf(variableValues[0].getValue()));
             }catch(Exception e){
                 System.out.println(e.toString());
@@ -218,6 +217,8 @@ public class UserHome extends AppCompatActivity {
                 dataPoints[i] = new DataPoint(i, calculatedWQI); //calculated WQI
                 //dataPoints[i] = new DataPoint(i, Double.parseDouble(String.valueOf(variableValues[y - i].getValue()))); //calculated WQI
             }
+
+            userHome_txt_currentWQI.setText(String.format("%.2f", calculatedWQI));
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
             graphWQI.removeAllSeries();

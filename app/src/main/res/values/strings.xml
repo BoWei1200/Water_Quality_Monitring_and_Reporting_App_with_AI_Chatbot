@@ -6,4 +6,13 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="WQI_desc">Your water quality is measured based on WQI from 0 - 100. \n
+       The higher WQI, the cleaner and safer your water for drinking. \n\n
+        0.00 - 31.0 : Heavily Polluted \n
+        31.0 - 51.9 : Polluted \n
+        51.9 – 76.5 : Neutral \n
+        76.5 – 92.7 : Clean \n
+        92.7 - 100  : Very Clean\n </string>
+    <string name="view_more"><u>View More ..</u></string>
+    <string name="hide"><u>Hide</u></string>
 </resources>
