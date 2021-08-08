@@ -30,7 +30,7 @@ public class UserReportMenu extends AppCompatActivity {
                 break;
 
             case R.id.userReportMenu_tableRow_addReport:
-                intent = new Intent(this, UserAddReportDraft.class);
+                intent = new Intent(this, UserAddReport.class);
                 needFinish = false;
                 break;
         }

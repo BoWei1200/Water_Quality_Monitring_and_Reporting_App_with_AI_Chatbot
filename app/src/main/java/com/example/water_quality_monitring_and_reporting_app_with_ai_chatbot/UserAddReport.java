@@ -36,7 +36,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import static android.text.TextUtils.split;
 
-public class UserAddReportDraft extends AppCompatActivity implements LocationListener{
+public class UserAddReport extends AppCompatActivity implements LocationListener{
     TextInputLayout textInputLayout_name, textInputLayout_phone, textInputLayout_nric,
             textInputLayout_nric_confirm, textInputLayout_addressLine, textInputLayout_city,
             textInputLayout_postcode, textInputLayout_state, textInputLayout_password,
@@ -51,7 +51,7 @@ public class UserAddReportDraft extends AppCompatActivity implements LocationLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_add_report_draft);
+        setContentView(R.layout.activity_user_add_report);
 
         Toolbar toolbar = findViewById(R.id.userAddReport_toolbar);
         setSupportActionBar(toolbar);
@@ -59,16 +59,10 @@ public class UserAddReportDraft extends AppCompatActivity implements LocationLis
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-//        textInputEditText_name = findViewById(R.id.et_register_name);
-//        textInputEditText_phone = findViewById(R.id.et_register_phone);
-//        textInputEditText_nric = findViewById(R.id.et_register_NRIC);
-//        textInputEditText_nric_confirm = findViewById(R.id.et_register_NRIC_confirm);
-        textInputEditText_addressLine = findViewById(R.id.et_register_address);
-        textInputEditText_city = findViewById(R.id.et_register_city);
-        textInputEditText_postcode = findViewById(R.id.et_register_postcode);
-        textInputEditText_state = findViewById(R.id.et_register_state);
-//        textInputEditText_password = findViewById(R.id.et_register_password);
-//        textInputEditText_password_confirm = findViewById(R.id.et_register_passwordConfirm);
+//        textInputEditText_addressLine = findViewById(R.id.et_register_address);
+//        textInputEditText_city = findViewById(R.id.et_register_city);
+//        textInputEditText_postcode = findViewById(R.id.et_register_postcode);
+//        textInputEditText_state = findViewById(R.id.et_register_state);
     }
 
     @Override //when back button clicked
@@ -115,7 +109,7 @@ public class UserAddReportDraft extends AppCompatActivity implements LocationLis
         }
 
         if (!gpsEnabled && !networkEnabled) { //if GPS is disabled
-            new AlertDialog.Builder(UserAddReportDraft.this) //create Dialog box
+            new AlertDialog.Builder(UserAddReport.this) //create Dialog box
                     .setTitle("Enable GPS Service")
                     .setCancelable(false)
                     .setPositiveButton("Enable", new DialogInterface.OnClickListener() {
@@ -129,13 +123,13 @@ public class UserAddReportDraft extends AppCompatActivity implements LocationLis
     }
 
     private void grantPermission() {
-        if (ActivityCompat.checkSelfPermission(UserAddReportDraft.this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(UserAddReport.this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(UserAddReportDraft.this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                ActivityCompat.checkSelfPermission(UserAddReport.this, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
 
             //grant permission
-            ActivityCompat.requestPermissions(UserAddReportDraft.this,
+            ActivityCompat.requestPermissions(UserAddReport.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
         }
@@ -195,8 +189,8 @@ public class UserAddReportDraft extends AppCompatActivity implements LocationLis
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            ImageView img = findViewById(R.id.imageView);
-            img.setImageBitmap(imageBitmap);
+//            ImageView img = findViewById(R.id.imageView);
+//            img.setImageBitmap(imageBitmap);
         }
     }
 }
