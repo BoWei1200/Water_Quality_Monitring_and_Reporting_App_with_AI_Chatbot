@@ -90,8 +90,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="180dp"
                                     android:orientation="horizontal"
-                                    android:padding="10dp"
-                                    android:visibility="gone"
+                                    android:padding="5dp"
+                                    android:visibility="visible"
                                     app:layout_constraintTop_toBottomOf="@+id/userHome_graph_WQI">
 
                                     <LinearLayout
@@ -118,7 +118,7 @@
                                             android:fontFamily="@font/nunito_sans"
                                             android:gravity="center"
                                             android:paddingBottom="10dp"
-                                            android:text="00.00"
+                                            android:text="--.--"
                                             android:textSize="50dp" />
                                     </LinearLayout>
 
@@ -126,7 +126,7 @@
                                         android:id="@+id/userHome_btn_WQIDetails"
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginLeft="15dp"
                                         android:layout_weight=".5"
                                         android:background="@drawable/rounded_corners"
                                         android:fontFamily="@font/nunito_sans"

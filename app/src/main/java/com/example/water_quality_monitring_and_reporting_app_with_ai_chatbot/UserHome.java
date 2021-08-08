@@ -1,12 +1,17 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
 import android.content.IntentFilter;
+import android.os.Build;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 
@@ -34,9 +39,9 @@ public class UserHome extends AppCompatActivity {
     //private TextView pollutionLevel;
     private GraphView graphWQI;
     private IoTValues ioTValues;
-    private LinearLayout userHome_linearlayout_graphDetails_hide;
+    private LinearLayout userHome_linearlayout_graphDetails_hide, userHome_linearlayout_others;
     private TextView userHome_txt_clickToViewMore;
-
+    private CardView userHome_cv_graph;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +50,9 @@ public class UserHome extends AppCompatActivity {
         //pollutionLevel = findViewById(R.id.pollutionlevel);
         graphWQI = findViewById(R.id.userHome_graph_WQI);
         userHome_linearlayout_graphDetails_hide = findViewById(R.id.userHome_linearlayout_graphDetails_hide);
+        userHome_linearlayout_others = findViewById(R.id.userHome_linearlayout_others);
         userHome_txt_clickToViewMore = findViewById(R.id.userHome_txt_clickToViewMore);
+        userHome_cv_graph = findViewById(R.id.userHome_cv_graph);
     }
 
     @Override
@@ -116,7 +123,9 @@ public class UserHome extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void viewGraphDetails(View view) {
+        TransitionManager.beginDelayedTransition(userHome_linearlayout_others, new AutoTransition());
         if(userHome_linearlayout_graphDetails_hide.getVisibility() == View.GONE){
             userHome_linearlayout_graphDetails_hide.setVisibility(View.VISIBLE);
             userHome_txt_clickToViewMore.setText(R.string.hide);
@@ -125,7 +134,7 @@ public class UserHome extends AppCompatActivity {
             userHome_linearlayout_graphDetails_hide.setVisibility(View.GONE);
             userHome_txt_clickToViewMore.setText(R.string.view_more);
         }
-
+        TransitionManager.beginDelayedTransition(userHome_cv_graph, new AutoTransition());
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
