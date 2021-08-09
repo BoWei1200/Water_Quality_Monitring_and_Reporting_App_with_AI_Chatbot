@@ -24,7 +24,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -32,22 +34,21 @@ import java.util.List;
 import java.util.Locale;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import static android.text.TextUtils.split;
 
 public class UserAddReport extends AppCompatActivity implements LocationListener{
-    TextInputLayout textInputLayout_name, textInputLayout_phone, textInputLayout_nric,
-            textInputLayout_nric_confirm, textInputLayout_addressLine, textInputLayout_city,
-            textInputLayout_postcode, textInputLayout_state, textInputLayout_password,
-            textInputLayout_password_confirm;
 
-    TextInputEditText textInputEditText_name, textInputEditText_phone, textInputEditText_nric,
-            textInputEditText_nric_confirm, textInputEditText_addressLine,
+    private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude;
+
+    private TextInputEditText textInputEditText_addressLine,
             textInputEditText_city, textInputEditText_postcode, textInputEditText_state,
-            textInputEditText_password, textInputEditText_password_confirm;
+            textInputEditText_password, textInputEditText_password_confirm, userAddReport_etxtInput_pollutionDesc;
+
+    private ImageView userAddReport_img_pollutionPhoto;
 
     LocationManager locationManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +60,14 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-//        textInputEditText_addressLine = findViewById(R.id.et_register_address);
-//        textInputEditText_city = findViewById(R.id.et_register_city);
-//        textInputEditText_postcode = findViewById(R.id.et_register_postcode);
-//        textInputEditText_state = findViewById(R.id.et_register_state);
+        userAddReport_txt_Address = findViewById(R.id.userAddReport_txt_Address);
+        userAddReport_txt_LongLatitude = findViewById(R.id.userAddReport_txt_LaLongtitude);
+
+        userAddReport_etxtInput_pollutionDesc = findViewById(R.id.userAddReport_etxtInput_pollutionDesc);
+
+        userAddReport_img_pollutionPhoto = findViewById(R.id.userAddReport_img_pollutionPhoto);
+
+        getLocation(userAddReport_etxtInput_pollutionDesc);
     }
 
     @Override //when back button clicked
@@ -146,11 +151,18 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                     location.getLongitude(), 1);
             // split the full address by ,
             String[] addressSplitList = split(addressList.get(0).getAddressLine(0), ",");
-            textInputEditText_addressLine.setText(addressSplitList[0] + addressSplitList[1] + addressSplitList[2]);
-            textInputEditText_city.setText(addressList.get(0).getLocality());
-            textInputEditText_state.setText(addressList.get(0).getAdminArea());
-            textInputEditText_postcode.setText(addressList.get(0).getPostalCode());
-//            progressBar.setVisibility(View.GONE);
+            userAddReport_txt_Address.setText(addressSplitList[0]
+                    + addressSplitList[1]
+                    + addressSplitList[2]
+                    + ", " + addressList.get(0).getLocality()
+                    + ", " + addressList.get(0).getAdminArea()
+                    + ", " + addressList.get(0).getPostalCode());
+
+
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+
+            userAddReport_txt_LongLatitude.setText( latitude+ ", " +longitude);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -189,8 +201,21 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            ImageView img = findViewById(R.id.imageView);
-//            img.setImageBitmap(imageBitmap);
+            //ImageView img = findViewById(R.id.imageView);
+            userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap);
+
+            userAddReport_img_pollutionPhoto.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+            userAddReport_img_pollutionPhoto.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            userAddReport_img_pollutionPhoto.requestLayout();
+
+            userAddReport_img_pollutionPhoto.setAdjustViewBounds(true);
+
+            userAddReport_img_pollutionPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
+    }
+
+    public void report(View view) {
+
     }
 }

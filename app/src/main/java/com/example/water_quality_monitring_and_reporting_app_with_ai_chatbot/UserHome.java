@@ -209,7 +209,7 @@ public class UserHome extends AppCompatActivity {
             int y = listSize - 1;
 
             IoTWQICalculation WQIcalc;
-            Double calculatedWQI = 0.0;
+            double calculatedWQI = 0.0;
             for (int i = 0; i < listSize; i++) {
                 // add new DataPoint object to the array for each of your list entries
                 Value[] DO = ioTValues.getValuesDO();
