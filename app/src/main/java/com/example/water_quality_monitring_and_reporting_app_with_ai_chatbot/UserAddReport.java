@@ -45,9 +45,9 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
     private TextInputEditText userAddReport_etxtInput_pollutionDesc;
 
-    private ImageView userAddReport_img_pollutionPhoto, userAddReport_img_previous, userAddReport_img_next;
+    private ImageView userAddReport_img_pollutionPhoto, userAddReport_img_previous, userAddReport_img_next, userAddReport_img_addIcon;
 
-    private Bitmap[] imageBitmap; private int photoIndex = 0;
+    private Bitmap[] imageBitmap; private int photoIndex = 0; private int currentDisplayingPhotoIndex = 0;
 
     LocationManager locationManager;
 
@@ -73,6 +73,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         userAddReport_img_pollutionPhoto = findViewById(R.id.userAddReport_img_pollutionPhoto);
         userAddReport_img_previous = findViewById(R.id.userAddReport_img_previous);
         userAddReport_img_next = findViewById(R.id.userAddReport_img_next);
+        userAddReport_img_addIcon = findViewById(R.id.userAddReport_img_addIcon);
 
         imageBitmap = new Bitmap[5];
 
@@ -214,7 +215,9 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             imageBitmap[photoIndex] = (Bitmap) extras.get("data");
             //Bitmap imageBitmap = (Bitmap) extras.get("data");
             //ImageView img = findViewById(R.id.imageView);
-            userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[photoIndex++]);
+            currentDisplayingPhotoIndex = photoIndex;
+
+            userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[photoIndex]);
 
             userAddReport_img_pollutionPhoto.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             userAddReport_img_pollutionPhoto.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -229,15 +232,57 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                 Intent intent = new Intent(UserAddReport.this, UserAddReportPhotoViewer.class);
                 startActivity(intent);
             });
+            photoIndex++;
+            prevNextandOtherBtnsDisplay();
 
-            userAddReport_linearLayout_previous.setVisibility(View.VISIBLE);
-            userAddReport_linearLayout_next.setVisibility(View.VISIBLE);
+            userAddReport_img_addIcon.setVisibility(View.VISIBLE);
+
             userAddReport_linearLayout_previous.bringToFront();
             userAddReport_linearLayout_next.bringToFront();
+            userAddReport_img_addIcon.bringToFront();
         }
     }
 
     public void report(View view) {
 
+    }
+
+    public void prevNextandOtherBtnsDisplay(){
+        if(photoIndex-1 > 0){
+            if(currentDisplayingPhotoIndex > 0){
+                userAddReport_linearLayout_previous.setVisibility(View.VISIBLE);
+            }
+            if(currentDisplayingPhotoIndex < photoIndex-1){
+                userAddReport_linearLayout_next.setVisibility(View.VISIBLE);
+            }
+            if(currentDisplayingPhotoIndex == 0){
+                userAddReport_linearLayout_previous.setVisibility(View.GONE);
+            }
+            if(currentDisplayingPhotoIndex == photoIndex-1){
+                userAddReport_linearLayout_next.setVisibility(View.GONE);
+            }
+        }else{
+            userAddReport_linearLayout_previous.setVisibility(View.GONE);
+            userAddReport_linearLayout_next.setVisibility(View.GONE);
+        }
+
+        if(photoIndex < 5){
+            userAddReport_img_addIcon.setVisibility(View.VISIBLE);
+            userAddReport_img_addIcon.bringToFront();
+        }else{
+            userAddReport_img_addIcon.setVisibility(View.GONE);
+        }
+    }
+
+    public void viewPrevious(View view) {
+        userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[--currentDisplayingPhotoIndex]);
+        prevNextandOtherBtnsDisplay();
+    }
+
+    public void viewNext(View view) {
+        userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[++currentDisplayingPhotoIndex]);
+        prevNextandOtherBtnsDisplay();
+        System.out.println(currentDisplayingPhotoIndex);
+        System.out.println(photoIndex);
     }
 }
