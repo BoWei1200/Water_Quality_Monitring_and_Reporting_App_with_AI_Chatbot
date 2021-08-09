@@ -5,7 +5,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -15,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot">
-        <activity android:name=".UserAIChatting"></activity>
+        <activity android:name=".UserAddReportPhotoViewer"></activity>
+        <activity android:name=".UserAIChatting" />
         <activity android:name=".UserMyReport" />
         <activity android:name=".UserAddReport" />
         <activity android:name=".GraphDetails" />

@@ -26,6 +26,7 @@ import android.location.LocationManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,13 +40,12 @@ import static android.text.TextUtils.split;
 
 public class UserAddReport extends AppCompatActivity implements LocationListener{
 
+    private LinearLayout userAddReport_linearLayout_previous, userAddReport_linearLayout_next;
     private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude;
 
-    private TextInputEditText textInputEditText_addressLine,
-            textInputEditText_city, textInputEditText_postcode, textInputEditText_state,
-            textInputEditText_password, textInputEditText_password_confirm, userAddReport_etxtInput_pollutionDesc;
+    private TextInputEditText userAddReport_etxtInput_pollutionDesc;
 
-    private ImageView userAddReport_img_pollutionPhoto;
+    private ImageView userAddReport_img_pollutionPhoto, userAddReport_img_previous, userAddReport_img_next;
 
     private Bitmap[] imageBitmap; private int photoIndex = 0;
 
@@ -62,12 +62,17 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        userAddReport_linearLayout_previous = findViewById(R.id.userAddReport_linearLayout_previous);
+        userAddReport_linearLayout_next = findViewById(R.id.userAddReport_linearLayout_next);
+
         userAddReport_txt_Address = findViewById(R.id.userAddReport_txt_Address);
         userAddReport_txt_LongLatitude = findViewById(R.id.userAddReport_txt_LaLongtitude);
 
         userAddReport_etxtInput_pollutionDesc = findViewById(R.id.userAddReport_etxtInput_pollutionDesc);
 
         userAddReport_img_pollutionPhoto = findViewById(R.id.userAddReport_img_pollutionPhoto);
+        userAddReport_img_previous = findViewById(R.id.userAddReport_img_previous);
+        userAddReport_img_next = findViewById(R.id.userAddReport_img_next);
 
         imageBitmap = new Bitmap[5];
 
@@ -220,13 +225,15 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
             userAddReport_img_pollutionPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-            userAddReport_img_pollutionPhoto.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v)
-                {
-                    Intent intent = new Intent(this, )
-                }
+            userAddReport_img_pollutionPhoto.setOnClickListener(v -> {
+                Intent intent = new Intent(UserAddReport.this, UserAddReportPhotoViewer.class);
+                startActivity(intent);
             });
+
+            userAddReport_linearLayout_previous.setVisibility(View.VISIBLE);
+            userAddReport_linearLayout_next.setVisibility(View.VISIBLE);
+            userAddReport_linearLayout_previous.bringToFront();
+            userAddReport_linearLayout_next.bringToFront();
         }
     }
 

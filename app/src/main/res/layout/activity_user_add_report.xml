@@ -57,14 +57,40 @@
                     android:layout_weight=".5"
                     android:layout_marginBottom="30dp">
 
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                    <LinearLayout
+                        android:id="@+id/userAddReport_linearLayout_previous"
+                        android:layout_width="50dp"
+                        android:layout_height="90dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/addreporticon" />
+                        android:padding="10dp"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/userAddReport_img_previous"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@drawable/arrowprevious" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/userAddReport_linearLayout_next"
+                        android:layout_width="50dp"
+                        android:layout_height="90dp"
+                        android:padding="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/userAddReport_img_next"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@drawable/arrownext" />
+                    </LinearLayout>
+
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/userAddReport_img_pollutionPhoto"
@@ -167,6 +193,7 @@
                                 android:gravity="top"
                                 android:textSize="14sp" />
                         </com.google.android.material.textfield.TextInputLayout>
+
                         <Button
                             android:id="@+id/userAddReport_btn_report"
                             android:layout_width="150dp"
@@ -181,16 +208,9 @@
                             android:padding="10dp"
                             android:layout_gravity="end"/>
                     </LinearLayout>
-
                 </androidx.cardview.widget.CardView>
-
-
             </LinearLayout>
-
         </ScrollView>
-
-        
-
     </LinearLayout>
 
 
