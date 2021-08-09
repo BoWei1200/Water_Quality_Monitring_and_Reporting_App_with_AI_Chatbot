@@ -47,6 +47,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
     private ImageView userAddReport_img_pollutionPhoto;
 
+    private Bitmap[] imageBitmap; private int photoIndex = 0;
+
     LocationManager locationManager;
 
     @Override
@@ -66,6 +68,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         userAddReport_etxtInput_pollutionDesc = findViewById(R.id.userAddReport_etxtInput_pollutionDesc);
 
         userAddReport_img_pollutionPhoto = findViewById(R.id.userAddReport_img_pollutionPhoto);
+
+        imageBitmap = new Bitmap[5];
 
         getLocation(userAddReport_etxtInput_pollutionDesc);
     }
@@ -158,7 +162,6 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                     + ", " + addressList.get(0).getAdminArea()
                     + ", " + addressList.get(0).getPostalCode());
 
-
             double longitude = location.getLongitude();
             double latitude = location.getLatitude();
 
@@ -187,12 +190,15 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     }
 
     public void takePhoto(View view) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            startActivityForResult(takePictureIntent, 1);
-        } catch (ActivityNotFoundException e) {
-            // display error state to the user
-        }
+        if(photoIndex < 5){
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            try {
+                startActivityForResult(takePictureIntent, 1);
+            } catch (ActivityNotFoundException e) {
+                // display error state to the user
+            }
+        }else
+            displayToast("You can only take 5 photos as evidence");
     }
 
     @Override
@@ -200,9 +206,10 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageBitmap[photoIndex] = (Bitmap) extras.get("data");
+            //Bitmap imageBitmap = (Bitmap) extras.get("data");
             //ImageView img = findViewById(R.id.imageView);
-            userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap);
+            userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[photoIndex++]);
 
             userAddReport_img_pollutionPhoto.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             userAddReport_img_pollutionPhoto.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -212,6 +219,14 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             userAddReport_img_pollutionPhoto.setAdjustViewBounds(true);
 
             userAddReport_img_pollutionPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            userAddReport_img_pollutionPhoto.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(this, )
+                }
+            });
         }
     }
 
