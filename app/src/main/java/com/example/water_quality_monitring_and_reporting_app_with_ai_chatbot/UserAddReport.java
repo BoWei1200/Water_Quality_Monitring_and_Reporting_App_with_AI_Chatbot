@@ -49,6 +49,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
     private Bitmap[] imageBitmap; private int photoIndex = 0; private int currentDisplayingPhotoIndex = 0;
 
+    private int getLocation = 0;
+
     LocationManager locationManager;
 
     @Override
@@ -77,7 +79,11 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
         imageBitmap = new Bitmap[5];
 
-        getLocation(userAddReport_etxtInput_pollutionDesc);
+        if(getLocation == 0){
+            getLocation(userAddReport_etxtInput_pollutionDesc);
+            getLocation++;
+        }
+
     }
 
     @Override //when back button clicked
@@ -234,12 +240,6 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             });
             photoIndex++;
             prevNextandOtherBtnsDisplay();
-
-            userAddReport_img_addIcon.setVisibility(View.VISIBLE);
-
-            userAddReport_linearLayout_previous.bringToFront();
-            userAddReport_linearLayout_next.bringToFront();
-            userAddReport_img_addIcon.bringToFront();
         }
     }
 
@@ -272,6 +272,10 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         }else{
             userAddReport_img_addIcon.setVisibility(View.GONE);
         }
+
+        userAddReport_linearLayout_previous.bringToFront();
+        userAddReport_linearLayout_next.bringToFront();
+        userAddReport_img_addIcon.bringToFront();
     }
 
     public void viewPrevious(View view) {
