@@ -95,13 +95,24 @@
 
                     <ImageView
                         android:id="@+id/userAddReport_img_addIcon"
-                        android:layout_width="50dp"
-                        android:layout_height="60dp"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_margin="10dp"
+                        android:layout_margin="15dp"
                         app:srcCompat="@drawable/addicon"
                         android:onClick="takePhoto"
+                        android:visibility="gone"/>
+
+                    <ImageView
+                        android:id="@+id/userAddReport_img_deleteIcon"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/userAddReport_img_addIcon"
+                        android:layout_margin="15dp"
+                        app:srcCompat="@drawable/deleteicon2edit"
+                        android:onClick="deletePhoto"
                         android:visibility="gone"/>
 
                     <com.google.android.material.imageview.ShapeableImageView

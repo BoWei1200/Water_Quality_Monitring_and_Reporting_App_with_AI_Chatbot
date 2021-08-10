@@ -45,11 +45,13 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
     private TextInputEditText userAddReport_etxtInput_pollutionDesc;
 
-    private ImageView userAddReport_img_pollutionPhoto, userAddReport_img_previous, userAddReport_img_next, userAddReport_img_addIcon;
+    private ImageView userAddReport_img_pollutionPhoto, userAddReport_img_previous, userAddReport_img_next, userAddReport_img_addIcon, userAddReport_img_deleteIcon;
 
     private Bitmap[] imageBitmap; private int photoIndex = 0; private int currentDisplayingPhotoIndex = 0;
 
     private int getLocation = 0;
+
+    Boolean discard = false;
 
     LocationManager locationManager;
 
@@ -76,6 +78,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         userAddReport_img_previous = findViewById(R.id.userAddReport_img_previous);
         userAddReport_img_next = findViewById(R.id.userAddReport_img_next);
         userAddReport_img_addIcon = findViewById(R.id.userAddReport_img_addIcon);
+        userAddReport_img_deleteIcon = findViewById(R.id.userAddReport_img_deleteIcon);
 
         imageBitmap = new Bitmap[5];
 
@@ -89,9 +92,17 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     @Override //when back button clicked
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()== android.R.id.home){
-            finish();
+            displayAlert();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        displayAlert();
+        if(discard){
+            super.onBackPressed();
+        }
     }
 
     public void getLocation(View view) { // WHEN USER CLICK ON 'location' ICON
@@ -266,16 +277,22 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             userAddReport_linearLayout_next.setVisibility(View.GONE);
         }
 
-        if(photoIndex < 5){
+        if(photoIndex > 0 && photoIndex < 5){
             userAddReport_img_addIcon.setVisibility(View.VISIBLE);
-            userAddReport_img_addIcon.bringToFront();
+            userAddReport_img_deleteIcon.setVisibility(View.VISIBLE);
         }else{
+            if(photoIndex == 5){
+                userAddReport_img_deleteIcon.setVisibility(View.VISIBLE);
+            }else{
+                userAddReport_img_deleteIcon.setVisibility(View.GONE);
+            }
             userAddReport_img_addIcon.setVisibility(View.GONE);
         }
 
         userAddReport_linearLayout_previous.bringToFront();
         userAddReport_linearLayout_next.bringToFront();
         userAddReport_img_addIcon.bringToFront();
+        userAddReport_img_deleteIcon.bringToFront();
     }
 
     public void viewPrevious(View view) {
@@ -286,7 +303,28 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     public void viewNext(View view) {
         userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[++currentDisplayingPhotoIndex]);
         prevNextandOtherBtnsDisplay();
-        System.out.println(currentDisplayingPhotoIndex);
-        System.out.println(photoIndex);
+    }
+
+    public void displayAlert(){
+        new AlertDialog.Builder(this)
+                .setTitle("Discard your report?")
+                .setMessage("The existing photos and description will be discarded.")
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        discard = true;
+                        finish();
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(R.drawable.warningiconedit)
+                .show();
+    }
+
+    public void deletePhoto(View view) {
     }
 }
