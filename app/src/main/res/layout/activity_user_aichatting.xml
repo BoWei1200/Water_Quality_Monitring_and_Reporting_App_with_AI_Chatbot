@@ -23,4 +23,97 @@
         app:titleMargin="2dp"
         app:titleTextColor="#FFFFFF" />
 
+    <LinearLayout
+        android:id="@+id/linearParent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:useDefaultMargins="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userAIChatting_toolbar" >
+
+        <ScrollView
+            android:id="@+id/userAIChatting_scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".92">
+
+            <LinearLayout
+                android:id="@+id/linearScroll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/userAIChatting_linearlayout_bottomMenu"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@+id/userAIChatting_scrollview_others"
+            android:layout_margin="0dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight=".08"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/userAIChatting_btn_bottomMenuReport"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@drawable/fully_rounded_corners"
+                android:onClick="toOtherPages"
+                android:padding="12dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/warningicon3" />
+
+            <ImageButton
+                android:id="@+id/userAIChatting_btn_bottomMenuHome"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@drawable/fully_rounded_corners"
+                android:padding="12dp"
+                android:scaleType="fitCenter"
+                android:onClick="toHome"
+                android:src="@drawable/homeiconedit" />
+
+            <ImageButton
+                android:id="@+id/userAIChatting_btn_bottomMenuAIChat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@drawable/fully_rounded_corners"
+                android:padding="1dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/aichatboticonedit" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
