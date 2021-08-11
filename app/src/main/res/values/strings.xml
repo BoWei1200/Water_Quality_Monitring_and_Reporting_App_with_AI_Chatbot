@@ -15,4 +15,8 @@
         92.7 - 100  : Very Clean\n </string>
     <string name="view_more"><u>View More ..</u></string>
     <string name="hide"><u>Hide</u></string>
+    <string name="discard_report_title">Discard your report?</string>
+    <string name="discard_report_desc">The existing photos and description will be discarded.</string>
+    <string name="delete_photo_title">Delete this photo?</string>
+    <string name="empty_string" />
 </resources>

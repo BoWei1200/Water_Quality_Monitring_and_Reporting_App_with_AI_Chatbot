@@ -1,11 +1,5 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -13,17 +7,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.Settings;
-import android.util.TypedValue;
-import android.view.MenuItem;
-
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -31,21 +26,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import static android.text.TextUtils.split;
 
 public class UserAddReport extends AppCompatActivity implements LocationListener{
 
     private LinearLayout userAddReport_linearLayout_previous, userAddReport_linearLayout_next;
-    private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude;
+    private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude, userAddReport_txt_photoAmount, userAddReport_txt_errorMsgDesc;
 
     private TextInputEditText userAddReport_etxtInput_pollutionDesc;
 
@@ -55,7 +53,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
     private int getLocation = 0;
 
-    Boolean discard = false;
+    Boolean discardOrNot = false, deleteOrNot = false;
 
     LocationManager locationManager;
 
@@ -75,6 +73,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
         userAddReport_txt_Address = findViewById(R.id.userAddReport_txt_Address);
         userAddReport_txt_LongLatitude = findViewById(R.id.userAddReport_txt_LaLongtitude);
+        userAddReport_txt_photoAmount = findViewById(R.id.userAddReport_txt_photoAmount);
+        userAddReport_txt_errorMsgDesc = findViewById(R.id.userAddReport_txt_errorMsgDesc);
 
         userAddReport_etxtInput_pollutionDesc = findViewById(R.id.userAddReport_etxtInput_pollutionDesc);
 
@@ -91,20 +91,43 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             getLocation++;
         }
 
+        userAddReport_etxtInput_pollutionDesc.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try{
+                    String descCheck = "";
+                    descCheck = userAddReport_etxtInput_pollutionDesc.getText().toString();
+                    if(descCheck.isEmpty()){
+                        userAddReport_txt_errorMsgDesc.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        userAddReport_txt_errorMsgDesc.setVisibility(View.GONE);
+                    }
+                }catch(Exception e) {
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override //when back button clicked
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()== android.R.id.home){
-            displayAlert();
+            displayAlert(R.string.discard_report_title, R.string.discard_report_desc, R.drawable.warningiconedit);
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        displayAlert();
-        if(discard){
+        displayAlert(R.string.discard_report_title, R.string.discard_report_desc, R.drawable.warningiconedit);
+        if(discardOrNot){
             super.onBackPressed();
         }
     }
@@ -170,7 +193,6 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                             Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
         }
     }
-
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
@@ -255,11 +277,24 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             });
             photoIndex++;
             prevNextandOtherBtnsDisplay();
+            setTxtPhotoAmount();
         }
     }
 
     public void report(View view) {
+        if(photoIndex != 0 && !userAddReport_etxtInput_pollutionDesc.getText().equals("")){
+            displayToast("Report Successfully!");
+        }else{
+            displayToast("Please make sure photo or description are taken and written");
+            //String errorMsg = ""; int errorAmount = 0;
+            if(photoIndex == 0){
+                userAddReport_txt_photoAmount.setTextColor(getResources().getColor(R.color.red));
+            }
 
+            if(userAddReport_etxtInput_pollutionDesc.getText().equals("") || userAddReport_etxtInput_pollutionDesc.getText().toString().isEmpty()){
+                userAddReport_txt_errorMsgDesc.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     public void prevNextandOtherBtnsDisplay(){
@@ -309,57 +344,72 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         prevNextandOtherBtnsDisplay();
     }
 
-    public void displayAlert(){
+    public void displayAlert(int title, int msg, int drawable){
         new AlertDialog.Builder(this)
-                .setTitle("Discard your report?")
-                .setMessage("The existing photos and description will be discarded.")
+                .setTitle(title)
+                .setMessage(msg)
 
                 // Specifying a listener allows you to take an action before dismissing the dialog.
                 // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        discard = true;
-                        finish();
+                        switch(title){
+                            case R.string.discard_report_title:
+                                discardOrNot = true;
+                                finish();
+                                break;
+
+                            case R.string.delete_photo_title:
+                                Bitmap[] anotherPhotoArray = new Bitmap[imageBitmap.length];
+
+                                for (int i = 0, k = 0; i < imageBitmap.length; i++) {
+                                    if (i == currentDisplayingPhotoIndex)
+                                        continue;
+
+                                    anotherPhotoArray[k++] = imageBitmap[i];
+                                }
+
+                                imageBitmap = anotherPhotoArray;
+                                photoIndex--;
+
+                                if(photoIndex == 0){
+                                    userAddReport_img_pollutionPhoto.setImageDrawable(getResources().getDrawable(R.drawable.takephoto));
+
+                                    int dimensionInDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics());
+                                    userAddReport_img_pollutionPhoto.getLayoutParams().height = dimensionInDp;
+                                    userAddReport_img_pollutionPhoto.getLayoutParams().width = dimensionInDp;
+
+                                    userAddReport_img_pollutionPhoto.requestLayout();
+
+                                    userAddReport_img_pollutionPhoto.setOnClickListener(UserAddReport.this::takePhoto);
+                                }else {
+                                    if(currentDisplayingPhotoIndex == 0){
+                                        userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[currentDisplayingPhotoIndex]);
+                                    }else{
+                                        userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[--currentDisplayingPhotoIndex]);
+                                    }
+                                }
+
+                                prevNextandOtherBtnsDisplay();
+
+                                setTxtPhotoAmount();
+                                break;
+                        }
                     }
                 })
 
                 // A null listener allows the button to dismiss the dialog and take no further action.
                 .setNegativeButton(android.R.string.no, null)
-                .setIcon(R.drawable.warningiconedit)
+                .setIcon(drawable)
                 .show();
     }
 
+    public void setTxtPhotoAmount(){
+        int num = photoIndex;
+        userAddReport_txt_photoAmount.setText(Integer.toString(num) + "/5");
+    }
+
     public void deletePhoto(View view) {
-        Bitmap[] anotherPhotoArray = new Bitmap[imageBitmap.length];
-
-        for (int i = 0, k = 0; i < imageBitmap.length; i++) {
-            if (i == currentDisplayingPhotoIndex)
-                continue;
-
-            anotherPhotoArray[k++] = imageBitmap[i];
-        }
-
-        imageBitmap = anotherPhotoArray;
-        photoIndex--;
-
-        if(photoIndex == 0){
-            userAddReport_img_pollutionPhoto.setImageDrawable(getResources().getDrawable(R.drawable.takephoto));
-
-            int dimensionInDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics());
-            userAddReport_img_pollutionPhoto.getLayoutParams().height = dimensionInDp;
-            userAddReport_img_pollutionPhoto.getLayoutParams().width = dimensionInDp;
-
-            userAddReport_img_pollutionPhoto.requestLayout();
-
-            userAddReport_img_pollutionPhoto.setOnClickListener(this::takePhoto);
-        }else {
-            if(currentDisplayingPhotoIndex == 0){
-                userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[currentDisplayingPhotoIndex]);
-            }else{
-                userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[--currentDisplayingPhotoIndex]);
-            }
-        }
-
-        prevNextandOtherBtnsDisplay();
+        displayAlert(R.string.delete_photo_title, R.string.empty_string, R.drawable.deleteicon2edit);
     }
 }
