@@ -282,7 +282,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     }
 
     public void report(View view) {
-        if(photoIndex != 0 && !userAddReport_etxtInput_pollutionDesc.getText().equals("")){
+        if(photoIndex != 0 && !userAddReport_etxtInput_pollutionDesc.getText().toString().isEmpty()){
             displayToast("Report Successfully!");
         }else{
             displayToast("Please make sure photo or description are taken and written");
@@ -291,7 +291,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                 userAddReport_txt_photoAmount.setTextColor(getResources().getColor(R.color.red));
             }
 
-            if(userAddReport_etxtInput_pollutionDesc.getText().equals("") || userAddReport_etxtInput_pollutionDesc.getText().toString().isEmpty()){
+            if(userAddReport_etxtInput_pollutionDesc.getText().toString().isEmpty()){
                 userAddReport_txt_errorMsgDesc.setVisibility(View.VISIBLE);
             }
         }
@@ -407,6 +407,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     public void setTxtPhotoAmount(){
         int num = photoIndex;
         userAddReport_txt_photoAmount.setText(Integer.toString(num) + "/5");
+        userAddReport_txt_photoAmount.setTextColor(getResources().getColor(R.color.gray));
     }
 
     public void deletePhoto(View view) {
