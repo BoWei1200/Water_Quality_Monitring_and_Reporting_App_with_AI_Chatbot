@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.TypedValue;
 import android.view.MenuItem;
 
 import android.location.Address;
@@ -31,8 +32,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -326,5 +330,36 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     }
 
     public void deletePhoto(View view) {
+        Bitmap[] anotherPhotoArray = new Bitmap[imageBitmap.length];
+
+        for (int i = 0, k = 0; i < imageBitmap.length; i++) {
+            if (i == currentDisplayingPhotoIndex)
+                continue;
+
+            anotherPhotoArray[k++] = imageBitmap[i];
+        }
+
+        imageBitmap = anotherPhotoArray;
+        photoIndex--;
+
+        if(photoIndex == 0){
+            userAddReport_img_pollutionPhoto.setImageDrawable(getResources().getDrawable(R.drawable.takephoto));
+
+            int dimensionInDp = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 70, getResources().getDisplayMetrics());
+            userAddReport_img_pollutionPhoto.getLayoutParams().height = dimensionInDp;
+            userAddReport_img_pollutionPhoto.getLayoutParams().width = dimensionInDp;
+
+            userAddReport_img_pollutionPhoto.requestLayout();
+
+            userAddReport_img_pollutionPhoto.setOnClickListener(this::takePhoto);
+        }else {
+            if(currentDisplayingPhotoIndex == 0){
+                userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[currentDisplayingPhotoIndex]);
+            }else{
+                userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[--currentDisplayingPhotoIndex]);
+            }
+        }
+
+        prevNextandOtherBtnsDisplay();
     }
 }
