@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="#008eb1 "
+        android:background="@color/mainTheme"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -182,13 +182,14 @@
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="1dp"
                                 android:layout_marginLeft="1dp"
-                                android:layout_marginEnd="4dp"
-                                android:layout_marginRight="4dp"
+                                android:layout_marginEnd="8dp"
                                 android:layout_marginTop="1dp"
-                                android:layout_marginBottom="1dp"
+                                android:layout_marginBottom="16dp"
                                 android:layout_weight=".5"
                                 app:cardCornerRadius="7dp"
-                                app:cardUseCompatPadding="false">
+                                android:backgroundTint="#8AD3DD"
+                                app:cardUseCompatPadding="false"
+                                android:layout_marginRight="8dp">
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
                                     android:layout_width="match_parent"
@@ -201,12 +202,25 @@
                                         android:id="@+id/graphDetails_txt_DO"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="DO"
+                                        android:textSize="20dp"
+                                        android:textColor="@color/white"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_DOval"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
                                         android:gravity="center"
                                         android:text="00.00"
                                         android:textSize="50dp"
-                                        app:layout_constraintTop_toTopOf="parent"
-                                        tools:layout_editor_absoluteX="10dp"
-                                        android:fontFamily="@font/nunito_sans"/>
+                                        android:textColor="@color/white"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintTop_toTopOf="@+id/graphDetails_txt_DO"
+                                        tools:layout_editor_absoluteX="10dp" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
                             </androidx.cardview.widget.CardView>
@@ -215,14 +229,15 @@
                                 android:id="@+id/graphDetails_cv_BOD"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginLeft="4dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginLeft="8dp"
                                 android:layout_marginEnd="1dp"
                                 android:layout_marginRight="1dp"
                                 android:layout_marginTop="1dp"
-                                android:layout_marginBottom="1dp"
+                                android:layout_marginBottom="16dp"
                                 android:layout_weight=".5"
                                 app:cardCornerRadius="7dp"
+                                android:backgroundTint="#bef1e9"
                                 app:cardUseCompatPadding="false">
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -231,6 +246,30 @@
                                     android:padding="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent">
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_BOD"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="BOD"
+                                        android:textSize="20dp"
+                                        android:textColor="#70BDB1"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_BODval"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="00.00"
+                                        android:textSize="50dp"
+                                        android:textColor="#70BDB1"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintTop_toTopOf="@+id/graphDetails_txt_BOD"
+                                        tools:layout_editor_absoluteX="10dp" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
                             </androidx.cardview.widget.CardView>
@@ -248,12 +287,13 @@
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="1dp"
                                 android:layout_marginLeft="1dp"
-                                android:layout_marginEnd="4dp"
-                                android:layout_marginRight="4dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginRight="8dp"
                                 android:layout_marginTop="1dp"
-                                android:layout_marginBottom="1dp"
+                                android:layout_marginBottom="16dp"
                                 android:layout_weight=".5"
                                 app:cardCornerRadius="7dp"
+                                android:backgroundTint="#6f89a2"
                                 app:cardUseCompatPadding="false">
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -262,6 +302,30 @@
                                     android:padding="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent">
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_COD"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="COD"
+                                        android:textSize="20dp"
+                                        android:textColor="@color/white"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_CODval"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="00.00"
+                                        android:textSize="50dp"
+                                        android:textColor="@color/white"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintTop_toTopOf="@+id/graphDetails_txt_COD"
+                                        tools:layout_editor_absoluteX="10dp" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
                             </androidx.cardview.widget.CardView>
@@ -270,14 +334,15 @@
                                 android:id="@+id/graphDetails_cv_NH3N"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginLeft="4dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginLeft="8dp"
                                 android:layout_marginEnd="1dp"
                                 android:layout_marginRight="1dp"
                                 android:layout_marginTop="1dp"
-                                android:layout_marginBottom="1dp"
+                                android:layout_marginBottom="16dp"
                                 android:layout_weight=".5"
                                 app:cardCornerRadius="7dp"
+                                android:backgroundTint="#D6F2FA"
                                 app:cardUseCompatPadding="false">
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -286,6 +351,30 @@
                                     android:padding="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent">
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_NH3N"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="NH3N"
+                                        android:textSize="20dp"
+                                        android:textColor="#93C6D5"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_NH3Nval"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="00.00"
+                                        android:textSize="50dp"
+                                        android:textColor="#93C6D5"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintTop_toTopOf="@+id/graphDetails_txt_NH3N"
+                                        tools:layout_editor_absoluteX="10dp" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
                             </androidx.cardview.widget.CardView>
@@ -304,12 +393,13 @@
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="1dp"
                                 android:layout_marginLeft="1dp"
-                                android:layout_marginEnd="4dp"
-                                android:layout_marginRight="4dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginRight="8dp"
                                 android:layout_marginTop="1dp"
-                                android:layout_marginBottom="1dp"
+                                android:layout_marginBottom="16dp"
                                 android:layout_weight=".5"
                                 app:cardCornerRadius="7dp"
+                                android:backgroundTint="#7FC6DF"
                                 app:cardUseCompatPadding="false">
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -318,6 +408,30 @@
                                     android:padding="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent">
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_SS"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="SS"
+                                        android:textSize="20dp"
+                                        android:textColor="@color/white"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_SSval"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="00.00"
+                                        android:textSize="50dp"
+                                        android:textColor="@color/white"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintTop_toTopOf="@+id/graphDetails_txt_SS"
+                                        tools:layout_editor_absoluteX="10dp" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
                             </androidx.cardview.widget.CardView>
@@ -326,14 +440,15 @@
                                 android:id="@+id/graphDetails_cv_pH"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginLeft="4dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginLeft="8dp"
                                 android:layout_marginEnd="1dp"
                                 android:layout_marginRight="1dp"
                                 android:layout_marginTop="1dp"
-                                android:layout_marginBottom="1dp"
+                                android:layout_marginBottom="16dp"
                                 android:layout_weight=".5"
                                 app:cardCornerRadius="7dp"
+                                android:backgroundTint="#EFEFEF"
                                 app:cardUseCompatPadding="false">
 
                                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -342,6 +457,30 @@
                                     android:padding="10dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="parent">
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_pH"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="pH"
+                                        android:textSize="20dp"
+                                        android:textColor="#9EB2C3"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <TextView
+                                        android:id="@+id/graphDetails_txt_pHval"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:gravity="center"
+                                        android:text="00.00"
+                                        android:textSize="50dp"
+                                        android:textColor="#9EB2C3"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintTop_toTopOf="@+id/graphDetails_txt_pH"
+                                        tools:layout_editor_absoluteX="10dp" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
                             </androidx.cardview.widget.CardView>

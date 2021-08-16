@@ -18,7 +18,8 @@ import android.widget.Toast;
 public class GraphDetails extends AppCompatActivity {
     private IoTWQICalculation WQIcalc;
 
-    private TextView graphDetails_txt_WQI, graphDetails_txt_WQIper100, graphDetails_txt_WQIStatus;
+    private TextView graphDetails_txt_WQI, graphDetails_txt_WQIper100, graphDetails_txt_WQIStatus,
+            graphDetails_txt_DO;
 
     private CardView graphDetails_cv_graph;
 
@@ -38,6 +39,7 @@ public class GraphDetails extends AppCompatActivity {
         graphDetails_txt_WQI = findViewById(R.id.graphDetails_txt_WQI);
         graphDetails_txt_WQIper100 = findViewById(R.id.graphDetails_txt_WQIper100);
         graphDetails_txt_WQIStatus = findViewById(R.id.graphDetails_txt_WQIStatus);
+        graphDetails_txt_DO = findViewById(R.id.graphDetails_txt_DOval);
 
         graphDetails_cv_graph = findViewById(R.id.graphDetails_cv_graph);
 
@@ -47,18 +49,35 @@ public class GraphDetails extends AppCompatActivity {
         WQIcalc = (IoTWQICalculation) getIntent().getSerializableExtra("WQIIndices");
         graphDetails_txt_WQI.setText(String.format("%.2f", WQIcalc.getWQI()));
 
+        graphDetails_txt_DO.setText(String.format("%.2f", WQIcalc.getDO()));
         setWQITextColorAndStatus();
     }
 
     private void setWQITextColorAndStatus() {
-        int color = 0;
+        int color = getResources().getColor(R.color.black);
+        String status = "";
+
         if(WQIcalc.getWQI() > 92.6){
             color = getResources().getColor(R.color.WQIBlue);
-            graphDetails_txt_WQI.setTextColor(color);
-            graphDetails_txt_WQIper100.setTextColor(getResources().getColor(R.color.WQIBlue));
-            graphDetails_txt_WQIStatus.setText(R.string.WQIStatusPolluted);
-            graphDetails_txt_WQIStatus.setTextColor(getResources().getColor(R.color.WQIBlue));
+            status = getString(R.string.WQIStatusVeryClean);
+        }else if(WQIcalc.getWQI() > 76.4){
+            color = getResources().getColor(R.color.WQIGreen);
+            status = getString(R.string.WQIStatusClean);
+        }else if(WQIcalc.getWQI() > 51.8){
+            color = getResources().getColor(R.color.WQIYellow);
+            status = getString(R.string.WQIStatusNeutral);
+        }else if(WQIcalc.getWQI() > 30.9){
+            color = getResources().getColor(R.color.WQIOrange);
+            status = getString(R.string.WQIStatusPolluted);
+        }else{
+            color = getResources().getColor(R.color.WQIRed);
+            status = getString(R.string.WQIStatusHeavilyPolluted);
         }
+
+        graphDetails_txt_WQI.setTextColor(color);
+        graphDetails_txt_WQIper100.setTextColor(color);
+        graphDetails_txt_WQIStatus.setText(status);
+        graphDetails_txt_WQIStatus.setTextColor(color);
     }
 
     @Override //when back button clicked

@@ -19,5 +19,9 @@
     <string name="discard_report_desc">The existing photos and description will be discarded.</string>
     <string name="delete_photo_title">Delete this photo?</string>
     <string name="empty_string" />
+    <string name="WQIStatusHeavilyPolluted">- Heavily Polluted -</string>
     <string name="WQIStatusPolluted">- Polluted -</string>
+    <string name="WQIStatusNeutral">- Neutral -</string>
+    <string name="WQIStatusClean">- Clean -</string>
+    <string name="WQIStatusVeryClean">- Very Clean -</string>
 </resources>
