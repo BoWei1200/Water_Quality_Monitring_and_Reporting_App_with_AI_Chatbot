@@ -183,7 +183,13 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                             //Intent is used to redirect to GPS setting
                             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                         }
-                    }).setNegativeButton("Cancel", null).show();
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Intent is used to redirect to GPS setting
+                            finish();
+                        }
+                    }).show();
         }
     }
 

@@ -19,7 +19,7 @@ public class GraphDetails extends AppCompatActivity {
     private IoTWQICalculation WQIcalc;
 
     private TextView graphDetails_txt_WQI, graphDetails_txt_WQIper100, graphDetails_txt_WQIStatus,
-            graphDetails_txt_DO;
+            graphDetails_txt_DO, graphDetails_txt_BODval, graphDetails_txt_CODval, graphDetails_txt_NH3Nval, graphDetails_txt_SSval, graphDetails_txt_pHval;
 
     private CardView graphDetails_cv_graph;
 
@@ -39,7 +39,13 @@ public class GraphDetails extends AppCompatActivity {
         graphDetails_txt_WQI = findViewById(R.id.graphDetails_txt_WQI);
         graphDetails_txt_WQIper100 = findViewById(R.id.graphDetails_txt_WQIper100);
         graphDetails_txt_WQIStatus = findViewById(R.id.graphDetails_txt_WQIStatus);
+
         graphDetails_txt_DO = findViewById(R.id.graphDetails_txt_DOval);
+        graphDetails_txt_BODval = findViewById(R.id.graphDetails_txt_BODval);
+        graphDetails_txt_CODval = findViewById(R.id.graphDetails_txt_CODval);
+        graphDetails_txt_NH3Nval = findViewById(R.id.graphDetails_txt_NH3Nval);
+        graphDetails_txt_SSval = findViewById(R.id.graphDetails_txt_SSval);
+        graphDetails_txt_pHval = findViewById(R.id.graphDetails_txt_pHval);
 
         graphDetails_cv_graph = findViewById(R.id.graphDetails_cv_graph);
 
@@ -50,6 +56,12 @@ public class GraphDetails extends AppCompatActivity {
         graphDetails_txt_WQI.setText(String.format("%.2f", WQIcalc.getWQI()));
 
         graphDetails_txt_DO.setText(String.format("%.2f", WQIcalc.getDO()));
+        graphDetails_txt_BODval.setText(String.format("%.2f", WQIcalc.getBOD()));
+        graphDetails_txt_CODval.setText(String.format("%.2f", WQIcalc.getCOD()));
+        graphDetails_txt_NH3Nval.setText(String.format("%.2f", WQIcalc.getNH3N()));
+        graphDetails_txt_SSval.setText(String.format("%.2f", WQIcalc.getSS()));
+        graphDetails_txt_pHval.setText(String.format("%.2f", WQIcalc.getpH()));
+
         setWQITextColorAndStatus();
     }
 
