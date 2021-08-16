@@ -10,4 +10,10 @@
     <color name="mainTheme">#008eb1</color>
     <color name="red">#ff0000</color>
     <color name="gray">#757575</color>
+
+    <color name="WQIRed">#f44336</color>
+    <color name="WQIOrange">#ff9800</color>
+    <color name="WQIYellow">#ffd760</color>
+    <color name="WQIGreen">#7ee76b</color>
+    <color name="WQIBlue">#64baf0</color>
 </resources>

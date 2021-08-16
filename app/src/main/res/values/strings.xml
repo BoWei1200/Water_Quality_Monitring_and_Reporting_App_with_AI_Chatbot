@@ -8,10 +8,10 @@
     <string name="title_notifications">Notifications</string>
     <string name="WQI_desc">Your water quality is measured based on WQI from 0 - 100. \n
        The higher WQI, the cleaner and safer your water for drinking. \n\n
-        0.00 - 31.0 : Heavily Polluted \n
-        31.0 - 51.9 : Polluted \n
-        51.9 – 76.5 : Neutral \n
-        76.5 – 92.7 : Clean \n
+        0.00 - 30.9 : Heavily Polluted \n
+        31.0 - 51.8 : Polluted \n
+        51.9 – 76.4 : Neutral \n
+        76.5 – 92.6 : Clean \n
         92.7 - 100  : Very Clean\n </string>
     <string name="view_more"><u>View More ..</u></string>
     <string name="hide"><u>Hide</u></string>
@@ -19,4 +19,5 @@
     <string name="discard_report_desc">The existing photos and description will be discarded.</string>
     <string name="delete_photo_title">Delete this photo?</string>
     <string name="empty_string" />
+    <string name="WQIStatusPolluted">- Polluted -</string>
 </resources>

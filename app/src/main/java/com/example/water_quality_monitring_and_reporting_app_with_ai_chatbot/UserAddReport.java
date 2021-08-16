@@ -2,6 +2,7 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -34,6 +36,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -49,13 +52,16 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
     private ImageView userAddReport_img_pollutionPhoto, userAddReport_img_previous, userAddReport_img_next, userAddReport_img_addIcon, userAddReport_img_deleteIcon;
 
-    private Bitmap[] imageBitmap; private int photoIndex = 0; private int currentDisplayingPhotoIndex = 0;
+    private Uri[] imageUri; Uri currentTakenImage; private int photoIndex = 0; private int currentDisplayingPhotoIndex = 0;
 
     private int getLocation = 0;
 
     Boolean discardOrNot = false, deleteOrNot = false;
 
     LocationManager locationManager;
+
+    private static final int IMAGE_PICK_CAMERA_CODE = 1001;
+    Uri image_uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +90,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         userAddReport_img_addIcon = findViewById(R.id.userAddReport_img_addIcon);
         userAddReport_img_deleteIcon = findViewById(R.id.userAddReport_img_deleteIcon);
 
-        imageBitmap = new Bitmap[5];
+        imageUri = new Uri[5];
 
         if(getLocation == 0){
             getLocation(userAddReport_etxtInput_pollutionDesc);
@@ -242,7 +248,12 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         if(photoIndex < 5){
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             try {
-                startActivityForResult(takePictureIntent, 1);
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.TITLE, "New Picture");
+                values.put(MediaStore.Images.Media.DESCRIPTION, "From Camera");
+                currentTakenImage = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentTakenImage);
+                startActivityForResult(takePictureIntent, IMAGE_PICK_CAMERA_CODE);
             } catch (ActivityNotFoundException e) {
                 // display error state to the user
             }
@@ -253,14 +264,16 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            imageBitmap[photoIndex] = (Bitmap) extras.get("data");
-            //Bitmap imageBitmap = (Bitmap) extras.get("data");
-            //ImageView img = findViewById(R.id.imageView);
+        if (requestCode == IMAGE_PICK_CAMERA_CODE && resultCode == RESULT_OK) {
+//                Bundle extras = data.getExtras();
+//                imageUri[photoIndex] = (Uri) extras.get("data");
+                //Bitmap imageBitmap = (Bitmap) extras.get("data");
+                //ImageView img = findViewById(R.id.imageView);
+
+            imageUri[photoIndex] = currentTakenImage;
             currentDisplayingPhotoIndex = photoIndex;
 
-            userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[photoIndex]);
+            userAddReport_img_pollutionPhoto.setImageURI(imageUri[photoIndex]);
 
             userAddReport_img_pollutionPhoto.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             userAddReport_img_pollutionPhoto.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -273,6 +286,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
             userAddReport_img_pollutionPhoto.setOnClickListener(v -> {
                 Intent intent = new Intent(UserAddReport.this, UserAddReportPhotoViewer.class);
+                intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
                 startActivity(intent);
             });
             photoIndex++;
@@ -335,12 +349,12 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     }
 
     public void viewPrevious(View view) {
-        userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[--currentDisplayingPhotoIndex]);
+        userAddReport_img_pollutionPhoto.setImageURI(imageUri[--currentDisplayingPhotoIndex]);
         prevNextandOtherBtnsDisplay();
     }
 
     public void viewNext(View view) {
-        userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[++currentDisplayingPhotoIndex]);
+        userAddReport_img_pollutionPhoto.setImageURI(imageUri[++currentDisplayingPhotoIndex]);
         prevNextandOtherBtnsDisplay();
     }
 
@@ -360,16 +374,16 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                                 break;
 
                             case R.string.delete_photo_title:
-                                Bitmap[] anotherPhotoArray = new Bitmap[imageBitmap.length];
+                                Uri[] anotherPhotoArray = new Uri[imageUri.length];
 
-                                for (int i = 0, k = 0; i < imageBitmap.length; i++) {
+                                for (int i = 0, k = 0; i < imageUri.length; i++) {
                                     if (i == currentDisplayingPhotoIndex)
                                         continue;
 
-                                    anotherPhotoArray[k++] = imageBitmap[i];
+                                    anotherPhotoArray[k++] = imageUri[i];
                                 }
 
-                                imageBitmap = anotherPhotoArray;
+                                imageUri = anotherPhotoArray;
                                 photoIndex--;
 
                                 if(photoIndex == 0){
@@ -384,9 +398,9 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                                     userAddReport_img_pollutionPhoto.setOnClickListener(UserAddReport.this::takePhoto);
                                 }else {
                                     if(currentDisplayingPhotoIndex == 0){
-                                        userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[currentDisplayingPhotoIndex]);
+                                        userAddReport_img_pollutionPhoto.setImageURI(imageUri[currentDisplayingPhotoIndex]);
                                     }else{
-                                        userAddReport_img_pollutionPhoto.setImageBitmap(imageBitmap[--currentDisplayingPhotoIndex]);
+                                        userAddReport_img_pollutionPhoto.setImageURI(imageUri[--currentDisplayingPhotoIndex]);
                                     }
                                 }
 

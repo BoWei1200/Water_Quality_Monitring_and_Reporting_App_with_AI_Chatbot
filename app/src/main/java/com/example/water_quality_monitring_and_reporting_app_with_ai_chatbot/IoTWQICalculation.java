@@ -1,9 +1,21 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
+import java.io.Serializable;
+
 import static java.lang.Math.*;
 
-public class IoTWQICalculation {
+public class IoTWQICalculation implements Serializable {
     private double DO, BOD, COD, NH3N, SS, pH, WQI;
+
+    public IoTWQICalculation() {
+        DO = 0.0;
+        BOD = 0.0;
+        COD = 0.0;
+        NH3N = 0.0;
+        SS = 0.0;
+        pH = 0.0;
+        WQI = 0.0;
+    }
 
     public IoTWQICalculation(double DO, double BOD, double COD, double NH3N, double SS, double pH) {
         this.DO = DO;

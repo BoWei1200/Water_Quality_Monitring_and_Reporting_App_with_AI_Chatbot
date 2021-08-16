@@ -33,7 +33,9 @@ import com.ubidots.Variable;
 
 import com.jjoe64.graphview.GraphView;
 
-public class UserHome extends AppCompatActivity {
+import java.io.Serializable;
+
+public class UserHome extends AppCompatActivity{
     private static int i = 0;
     private static final String POLLUTION_LEVEL = "level";
     //private TextView pollutionLevel;
@@ -42,6 +44,7 @@ public class UserHome extends AppCompatActivity {
     private LinearLayout userHome_linearlayout_graphDetails_hide, userHome_linearlayout_others;
     private TextView userHome_txt_clickToViewMore;
     private CardView userHome_cv_graph;
+    private IoTWQICalculation WQIcalc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,8 @@ public class UserHome extends AppCompatActivity {
         userHome_linearlayout_others = findViewById(R.id.userHome_linearlayout_others);
         userHome_txt_clickToViewMore = findViewById(R.id.userHome_txt_clickToViewMore);
         userHome_cv_graph = findViewById(R.id.userHome_cv_graph);
+
+        WQIcalc = new IoTWQICalculation();
     }
 
     @Override
@@ -116,7 +121,15 @@ public class UserHome extends AppCompatActivity {
                 break;
 
             case R.id.userHome_btn_WQIDetails:
+
                 intent = new Intent(this, GraphDetails.class);
+//                intent.putExtra("DO", WQIcalc.getDO());
+//                intent.putExtra("BOD", WQIcalc.getBOD());
+//                intent.putExtra("COD", WQIcalc.getCOD());
+//                intent.putExtra("NH3N", WQIcalc.getNH3N());
+//                intent.putExtra("SS", WQIcalc.getSS());
+//                intent.putExtra("pH", WQIcalc.getpH());
+                intent.putExtra("WQIIndices", WQIcalc);
                 break;
         }
 
@@ -208,7 +221,6 @@ public class UserHome extends AppCompatActivity {
             DataPoint[] dataPoints = new DataPoint[listSize]; // declare an array of DataPoint objects with the same size as your list
             int y = listSize - 1;
 
-            IoTWQICalculation WQIcalc;
             double calculatedWQI = 0.0;
             for (int i = 0; i < listSize; i++) {
                 // add new DataPoint object to the array for each of your list entries
