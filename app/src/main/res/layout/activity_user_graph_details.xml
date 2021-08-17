@@ -125,7 +125,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:layout_constraintTop_toBottomOf="@+id/graphDetails_txt_WQIStatus"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:orientation="vertical"
                             android:padding="10dp">
 

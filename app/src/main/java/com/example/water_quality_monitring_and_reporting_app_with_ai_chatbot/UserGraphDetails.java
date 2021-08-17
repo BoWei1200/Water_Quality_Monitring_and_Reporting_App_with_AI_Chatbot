@@ -124,25 +124,37 @@ public class UserGraphDetails extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-
     public void toOtherPages(View view) {
-        Intent intent = new Intent();
-
+        Intent intent = new Intent(this, UserWQIDetails.class);
         switch(view.getId()){
             case R.id.graphDetails_btn_aboutMyWQI:
-                intent = new Intent(this, UserReportMenu.class);
+                intent.putExtra("WQIInfoIndicator", "WQI");
                 break;
 
-            case R.id.userHome_btn_bottomMenuAIChat:
-                intent = new Intent(this, UserAIChatting.class);
+            case R.id.graphDetails_cv_DO:
+                intent.putExtra("WQIInfoIndicator", "DO");
                 break;
 
-            case R.id.userHome_btn_WQIDetails:
-                intent = new Intent(this, UserGraphDetails.class);
-                intent.putExtra("WQIIndices", WQIcalc);
+            case R.id.graphDetails_cv_BOD:
+                intent.putExtra("WQIInfoIndicator", "BOD");
+                break;
+
+            case R.id.graphDetails_cv_COD:
+                intent.putExtra("WQIInfoIndicator", "COD");
+                break;
+
+            case R.id.graphDetails_cv_NH3N:
+                intent.putExtra("WQIInfoIndicator", "NH3N");
+                break;
+
+            case R.id.graphDetails_cv_SS:
+                intent.putExtra("WQIInfoIndicator", "SS");
+                break;
+
+            case R.id.graphDetails_cv_pH:
+                intent.putExtra("WQIInfoIndicator", "pH");
                 break;
         }
-
         startActivity(intent);
     }
 }

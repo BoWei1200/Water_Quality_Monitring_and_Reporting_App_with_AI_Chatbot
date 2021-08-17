@@ -6,4 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".UserWQIDetails">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/userWQIDetails_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/mainTheme"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/Toolbar_back_button_style"
+        app:title=""
+        app:titleMargin="2dp"
+        app:titleTextColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/userWQIDetails_txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title Title Title"
+        android:fontFamily="@font/nunito_sans"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userWQIDetails_toolbar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
