@@ -11,6 +11,7 @@ import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,8 @@ public class GraphDetails extends AppCompatActivity {
     private CardView graphDetails_cv_graph;
 
     private LinearLayout graphDetails_linearLayout_WQIDesc, graphDetails_linearlayout_others;
+
+    private Button graphDetails_btn_howToCalc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class GraphDetails extends AppCompatActivity {
 
         graphDetails_linearLayout_WQIDesc = findViewById(R.id.graphDetails_linearLayout_WQIDesc);
         graphDetails_linearlayout_others = findViewById(R.id.graphDetails_linearlayout_others);
+
+        graphDetails_btn_howToCalc = findViewById(R.id.graphDetails_btn_howToCalc);
 
         WQIcalc = (IoTWQICalculation) getIntent().getSerializableExtra("WQIIndices");
         graphDetails_txt_WQI.setText(String.format("%.2f", WQIcalc.getWQI()));
@@ -90,6 +95,7 @@ public class GraphDetails extends AppCompatActivity {
         graphDetails_txt_WQIper100.setTextColor(color);
         graphDetails_txt_WQIStatus.setText(status);
         graphDetails_txt_WQIStatus.setTextColor(color);
+        graphDetails_btn_howToCalc.setBackgroundColor(color);
     }
 
     @Override //when back button clicked
