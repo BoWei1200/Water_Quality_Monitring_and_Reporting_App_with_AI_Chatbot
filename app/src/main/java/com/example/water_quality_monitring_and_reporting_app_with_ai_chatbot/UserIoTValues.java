@@ -2,10 +2,10 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import com.ubidots.Value;
 
-public class IoTValues {
+public class UserIoTValues {
     private Value[] valuesDO, valuesBOD, valuesCOD, valuesNH3N, valuesSS, valuespH;
 
-    public IoTValues(Value[] valuesDO, Value[] valuesBOD, Value[] valuesCOD, Value[] valuesNH3N, Value[] valuesSS, Value[] valuespH) {
+    public UserIoTValues(Value[] valuesDO, Value[] valuesBOD, Value[] valuesCOD, Value[] valuesNH3N, Value[] valuesSS, Value[] valuespH) {
         this.valuesDO = valuesDO;
         this.valuesBOD = valuesBOD;
         this.valuesCOD = valuesCOD;

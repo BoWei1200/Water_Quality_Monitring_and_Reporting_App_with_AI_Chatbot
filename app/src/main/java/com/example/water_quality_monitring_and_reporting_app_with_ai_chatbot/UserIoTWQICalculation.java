@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 import static java.lang.Math.*;
 
-public class IoTWQICalculation implements Serializable {
+public class UserIoTWQICalculation implements Serializable {
     private double DO, BOD, COD, NH3N, SS, pH, WQI;
 
-    public IoTWQICalculation() {
+    public UserIoTWQICalculation() {
         DO = 0.0;
         BOD = 0.0;
         COD = 0.0;
@@ -17,7 +17,7 @@ public class IoTWQICalculation implements Serializable {
         WQI = 0.0;
     }
 
-    public IoTWQICalculation(double DO, double BOD, double COD, double NH3N, double SS, double pH) {
+    public UserIoTWQICalculation(double DO, double BOD, double COD, double NH3N, double SS, double pH) {
         this.DO = DO;
         this.BOD = BOD;
         this.COD = COD;

@@ -17,11 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot">
-        <activity android:name=".UserAddReportPhotoViewer"></activity>
+        <activity android:name=".UserWQIDetails"></activity>
+        <activity android:name=".UserAddReportPhotoViewer" />
         <activity android:name=".UserAIChatting" />
         <activity android:name=".UserMyReport" />
         <activity android:name=".UserAddReport" />
-        <activity android:name=".GraphDetails" />
+        <activity android:name=".UserGraphDetails" />
         <activity android:name=".UserReportMenu" />
         <activity android:name=".AdminHome" />
         <activity

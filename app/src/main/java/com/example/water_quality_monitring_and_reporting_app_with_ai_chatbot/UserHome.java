@@ -4,47 +4,37 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 
-import android.content.IntentFilter;
 import android.os.Build;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.View;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.ubidots.ApiClient;
-import com.ubidots.DataSource;
 import com.ubidots.Value;
 import com.ubidots.Variable;
 
 import com.jjoe64.graphview.GraphView;
-
-import java.io.Serializable;
 
 public class UserHome extends AppCompatActivity{
     private static int i = 0;
     private static final String POLLUTION_LEVEL = "level";
     //private TextView pollutionLevel;
     private GraphView graphWQI;
-    private IoTValues ioTValues;
+    private UserIoTValues userIoTValues;
     private LinearLayout userHome_linearlayout_graphDetails_hide, userHome_linearlayout_others;
     private TextView userHome_txt_clickToViewMore;
     private CardView userHome_cv_graph;
-    private IoTWQICalculation WQIcalc;
+    private UserIoTWQICalculation WQIcalc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +47,7 @@ public class UserHome extends AppCompatActivity{
         userHome_txt_clickToViewMore = findViewById(R.id.userHome_txt_clickToViewMore);
         userHome_cv_graph = findViewById(R.id.userHome_cv_graph);
 
-        WQIcalc = new IoTWQICalculation();
+        WQIcalc = new UserIoTWQICalculation();
     }
 
     @Override
@@ -122,13 +112,7 @@ public class UserHome extends AppCompatActivity{
 
             case R.id.userHome_btn_WQIDetails:
 
-                intent = new Intent(this, GraphDetails.class);
-//                intent.putExtra("DO", WQIcalc.getDO());
-//                intent.putExtra("BOD", WQIcalc.getBOD());
-//                intent.putExtra("COD", WQIcalc.getCOD());
-//                intent.putExtra("NH3N", WQIcalc.getNH3N());
-//                intent.putExtra("SS", WQIcalc.getSS());
-//                intent.putExtra("pH", WQIcalc.getpH());
+                intent = new Intent(this, UserGraphDetails.class);
                 intent.putExtra("WQIIndices", WQIcalc);
                 break;
         }
@@ -199,7 +183,7 @@ public class UserHome extends AppCompatActivity{
             Value[] valuesSS = SS.getValues();
             Value[] valuespH = pH.getValues();
 
-            ioTValues = new IoTValues(valuesDO, valuesBOD, valuesCOD, valuesNH3N, valuesSS, valuespH);
+            userIoTValues = new UserIoTValues(valuesDO, valuesBOD, valuesCOD, valuesNH3N, valuesSS, valuespH);
 
             return valuesDO;
         }
@@ -224,14 +208,14 @@ public class UserHome extends AppCompatActivity{
             double calculatedWQI = 0.0;
             for (int i = 0; i < listSize; i++) {
                 // add new DataPoint object to the array for each of your list entries
-                Value[] DO = ioTValues.getValuesDO();
-                WQIcalc = new IoTWQICalculation(
-                        Double.parseDouble(String.valueOf(ioTValues.getValuesDO()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(ioTValues.getValuesBOD()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(ioTValues.getValuesCOD()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(ioTValues.getValuesNH3N()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(ioTValues.getValuesSS()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(ioTValues.getValuespH()[y - i].getValue()))
+                Value[] DO = userIoTValues.getValuesDO();
+                WQIcalc = new UserIoTWQICalculation(
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesDO()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesBOD()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesCOD()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesNH3N()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesSS()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuespH()[y - i].getValue()))
                 );
                 WQIcalc.calculateWQI();
                 calculatedWQI = WQIcalc.getWQI();

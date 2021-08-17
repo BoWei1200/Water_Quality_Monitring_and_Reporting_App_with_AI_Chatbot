@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.AutoTransition;
@@ -16,8 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GraphDetails extends AppCompatActivity {
-    private IoTWQICalculation WQIcalc;
+public class UserGraphDetails extends AppCompatActivity {
+    private UserIoTWQICalculation WQIcalc;
 
     private TextView graphDetails_txt_WQI, graphDetails_txt_WQIper100, graphDetails_txt_WQIStatus,
             graphDetails_txt_DO, graphDetails_txt_BODval, graphDetails_txt_CODval, graphDetails_txt_NH3Nval, graphDetails_txt_SSval, graphDetails_txt_pHval;
@@ -26,12 +27,12 @@ public class GraphDetails extends AppCompatActivity {
 
     private LinearLayout graphDetails_linearLayout_WQIDesc, graphDetails_linearlayout_others;
 
-    private Button graphDetails_btn_howToCalc;
+    private Button graphDetails_btn_aboutMyWQI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_graph_details);
+        setContentView(R.layout.activity_user_graph_details);
 
         Toolbar toolbar = findViewById(R.id.graphDetails_toolbar);
         setSupportActionBar(toolbar);
@@ -55,9 +56,9 @@ public class GraphDetails extends AppCompatActivity {
         graphDetails_linearLayout_WQIDesc = findViewById(R.id.graphDetails_linearLayout_WQIDesc);
         graphDetails_linearlayout_others = findViewById(R.id.graphDetails_linearlayout_others);
 
-        graphDetails_btn_howToCalc = findViewById(R.id.graphDetails_btn_howToCalc);
+        graphDetails_btn_aboutMyWQI = findViewById(R.id.graphDetails_btn_aboutMyWQI);
 
-        WQIcalc = (IoTWQICalculation) getIntent().getSerializableExtra("WQIIndices");
+        WQIcalc = (UserIoTWQICalculation) getIntent().getSerializableExtra("WQIIndices");
         graphDetails_txt_WQI.setText(String.format("%.2f", WQIcalc.getWQI()));
 
         graphDetails_txt_DO.setText(String.format("%.2f", WQIcalc.getDO()));
@@ -95,7 +96,7 @@ public class GraphDetails extends AppCompatActivity {
         graphDetails_txt_WQIper100.setTextColor(color);
         graphDetails_txt_WQIStatus.setText(status);
         graphDetails_txt_WQIStatus.setTextColor(color);
-        graphDetails_btn_howToCalc.setBackgroundColor(color);
+        graphDetails_btn_aboutMyWQI.setBackgroundColor(color);
     }
 
     @Override //when back button clicked
@@ -121,5 +122,27 @@ public class GraphDetails extends AppCompatActivity {
 
     public void displayToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void toOtherPages(View view) {
+        Intent intent = new Intent();
+
+        switch(view.getId()){
+            case R.id.graphDetails_btn_aboutMyWQI:
+                intent = new Intent(this, UserReportMenu.class);
+                break;
+
+            case R.id.userHome_btn_bottomMenuAIChat:
+                intent = new Intent(this, UserAIChatting.class);
+                break;
+
+            case R.id.userHome_btn_WQIDetails:
+                intent = new Intent(this, UserGraphDetails.class);
+                intent.putExtra("WQIIndices", WQIcalc);
+                break;
+        }
+
+        startActivity(intent);
     }
 }
