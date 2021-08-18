@@ -111,4 +111,8 @@ public class Login extends AppCompatActivity {
         startActivity(new Intent (this, UserHome.class));
         finish();
     }
+
+    public void toUserRegister(View view) {
+        startActivity(new Intent (this, Registration.class));
+    }
 }

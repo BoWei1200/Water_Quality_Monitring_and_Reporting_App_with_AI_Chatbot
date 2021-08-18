@@ -123,7 +123,7 @@
                 android:textAllCaps="false"
                 android:textColor="#009688"
                 android:textSize="15dp"
-                android:onClick="goUserRegister"
+                android:onClick="toUserRegister"
                 app:backgroundTint="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
