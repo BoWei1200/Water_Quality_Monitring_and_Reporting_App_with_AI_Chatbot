@@ -6,4 +6,132 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        app:cardCornerRadius="7dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/conCardNumRegis"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_login_Avatar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_user_icon" />
+
+            <TextView
+                android:id="@+id/txt_login_loginTitle"
+                android:fontFamily="@font/nunito_sans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="30dp"
+                android:text="@string/app_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_login_Avatar" />
+
+            <EditText
+                android:id="@+id/ed_Login_NRIC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:fontFamily="@font/nunito_sans"
+                android:hint="NRIC"
+                android:paddingLeft="20dp"
+                android:textSize="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_login_loginTitle" />
+
+            <TextView
+                android:id="@+id/txt_login_errorMsgNRIC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_sans"
+                android:gravity="right"
+
+                android:text="@string/required"
+                android:textColor="#db4442"
+                app:layout_constraintTop_toBottomOf="@+id/ed_Login_NRIC"
+                tools:layout_editor_absoluteX="20dp" />
+
+            <EditText
+                android:id="@+id/ed_Login_Password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_sans"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:paddingLeft="20dp"
+                android:textSize="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_login_errorMsgNRIC" />
+
+            <TextView
+                android:id="@+id/txt_login_errorMsgPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_sans"
+                android:gravity="right"
+                android:text="@string/required"
+                android:textColor="#db4442"
+                app:layout_constraintTop_toBottomOf="@+id/ed_Login_Password"
+                tools:layout_editor_absoluteX="20dp" />
+
+            <Button
+                android:id="@+id/btn_Login_login"
+                android:layout_width="match_parent"
+                android:layout_height="59dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/nunito_sans"
+                android:text="Login"
+                android:onClick="login"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_login_errorMsgPassword" />
+
+            <TextView
+                android:id="@+id/btn_login_toRegis"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/nunito_sans"
+                android:gravity="center"
+                android:text="@string/login_to_regis_text"
+                android:textAllCaps="false"
+                android:textColor="#009688"
+                android:textSize="15dp"
+                android:onClick="goUserRegister"
+                app:backgroundTint="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_Login_login" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

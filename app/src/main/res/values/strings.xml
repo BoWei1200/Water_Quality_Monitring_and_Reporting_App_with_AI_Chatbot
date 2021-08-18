@@ -65,4 +65,6 @@
         + (0.16 x SubIndex of SS) \n
         + (0.12 x SubIndex of pH value);
     </string>
+    <string name="required">Required</string>
+    <string name="login_to_regis_text"><u>Don\'t have an account? Register now!</u></string>
 </resources>
