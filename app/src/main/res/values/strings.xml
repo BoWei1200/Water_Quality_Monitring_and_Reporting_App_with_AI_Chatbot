@@ -11,7 +11,7 @@
         31.0 - 51.8 : Polluted \n
         51.9 – 76.4 : Neutral \n
         76.5 – 92.6 : Clean \n
-        92.7 - 100  : Very Clean \n</string>
+        92.7 - 100  : Very Clean \n\n</string>
     <string name="view_more"><u>View More ..</u></string>
     <string name="hide"><u>Hide</u></string>
     <string name="discard_report_title">Discard your report?</string>
@@ -23,4 +23,46 @@
     <string name="WQIStatusNeutral">- Neutral -</string>
     <string name="WQIStatusClean">- Clean -</string>
     <string name="WQIStatusVeryClean">- Very Clean -</string>
+
+    <string name="DO_desc">Dissolved oxygen (DO) is considered as one of the most crucial parameters in monitoring water quality as it represents the amount of oxygen contained in the water and health of the water.
+        as well as a direct indicator of an aquatic resource’s ability to support aquatic life.\n\n
+
+        Subindex of DO = 100.0, if DO >= 92.0)\n
+        Subindex of DO = -0.395 + 0.030(DO^2) - 0.00020(DO^3), if 8 &lt; DO &lt; 92\n
+        Subindex of DO = 0, if DO &lt;= 8\n
+    </string>
+    <string name="BOD_desc">Biochemical oxygen demand (BOD) is another important parameter, it is an indicator of organic pollution in the water which correlated to the requirement of dissolved oxygen (DO).
+        High BOD values might lead to reduction of oxygen availability to oxygen-demanding species, degrade aquatic environment and habitats.
+    </string>
+    <string name="COD_desc">Chemical oxygen demand (COD) is a measurement of the oxygen demand for organic substances or pollutants which are difficult to be oxidized.</string>
+    <string name="NH3N_desc">Ammonia (NH3-N / NH3+) is a colorless gas with a strong pungent odor.NH3 is the principal form of toxic ammonia. It has been reported toxic to fresh water organisms at concentrations ranging from 0.53 to 22.8 mg/L.
+        When ammonia is present in water at high enough levels, it is difficult for aquatic organisms to sufficiently excrete the toxicant, leading to toxic buildup in internal tissues and blood, and potentially death.
+        Environmental factors, such as pH and temperature, can affect ammonia toxicity to aquatic animals.
+    </string>
+    <string name="SS_desc">Suspended solids (SS) refers to small solid particles which remain in suspension in water as a colloid or due to motion of the water.
+        Suspended solids can be removed by sedimentation because of their comparatively large size.
+        It is used as one indicator of water quality, if the value of SS is greater, it represents that the water quality is poorer.
+    </string>
+    <string name="pH_desc">pH value of water is a very important measurement concerning water quality. pH is a measure of how acidic/basic water is.
+        The range goes from 0 to 14, with 7 being neutral. pHs of less than 7 indicate acidity, whereas a pH of greater than 7 indicates a base.
+        pH is really a measure of the relative amount of free hydrogen and hydroxyl ions in the water. Water that has more free hydrogen ions is acidic, whereas water that has more free hydroxyl ions is basic.
+        Since pH can be affected by chemicals in the water, pH is an important indicator of water that is changing chemically. pH is reported in "logarithmic units".
+        Each number represents a 10-fold change in the acidity/basicness of the water. Water with a pH of five is ten times more acidic than water having a pH of six.
+    </string>
+    <string name="WQI_desc_detail">Your water quality is measured based on WQI from 0 - 100. \n\n
+        0.00 - 30.9 : Heavily Polluted \n
+        31.0 - 51.8 : Polluted \n
+        51.9 – 76.4 : Neutral \n
+        76.5 – 92.6 : Clean \n
+        92.7 - 100  : Very Clean \n\n
+        It is for measuring water quality by applying some water quality measurements as parameters. The calculation as below: \n\n
+
+        WQI = \n
+        (0.22 x SubIndex of DO)\n
+        + (0.19 x SubIndex of BOD) \n
+        + (0.16 x SubIndex of COD) \n
+        + (0.15 x SubIndex of NH3-N) \n
+        + (0.16 x SubIndex of SS) \n
+        + (0.12 x SubIndex of pH value);
+    </string>
 </resources>
