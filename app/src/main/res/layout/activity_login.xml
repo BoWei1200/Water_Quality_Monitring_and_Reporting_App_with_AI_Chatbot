@@ -108,6 +108,7 @@
                 android:fontFamily="@font/nunito_sans"
                 android:text="Login"
                 android:onClick="login"
+                android:textSize="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_login_errorMsgPassword" />
