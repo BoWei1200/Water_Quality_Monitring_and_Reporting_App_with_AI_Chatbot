@@ -329,8 +329,7 @@
                     android:layout_height="50dp"
                     android:hint="Password"
                     android:textSize="15dp"
-                    android:fontFamily="@font/nunito_sans"
-                    />
+                    android:fontFamily="@font/nunito_sans" />
 
                 <EditText
                     android:id="@+id/registration_txtInputET_confirmPassword"
