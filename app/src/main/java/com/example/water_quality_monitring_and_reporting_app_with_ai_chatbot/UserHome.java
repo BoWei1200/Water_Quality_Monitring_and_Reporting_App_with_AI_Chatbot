@@ -25,6 +25,8 @@ import com.ubidots.Variable;
 
 import com.jjoe64.graphview.GraphView;
 
+import java.util.Arrays;
+
 public class UserHome extends AppCompatActivity{
     private static int i = 0;
     private static final String POLLUTION_LEVEL = "level";

@@ -19,5 +19,10 @@ public class Registration extends AppCompatActivity {
         // address,
         // password,
         // confirm password
+
+        //setup ubidots acc // redirect to the page to register for new account copy API credentials
+        //enter API key
+        //enter variables ID // register
+
     }
 }
