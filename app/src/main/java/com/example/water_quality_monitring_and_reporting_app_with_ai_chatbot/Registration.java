@@ -12,10 +12,8 @@ public class Registration extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         // email,
-        // IC no.
         // firstname, lastname,
         // phone no.,
-        // gender,
         // address,
         // password,
         // confirm password
