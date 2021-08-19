@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.regex.Pattern;
 
 public class Registration extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private TextInputEditText registration_txtInputET_fName, registration_txtInputET_lName,
@@ -27,6 +31,8 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
             registration_txt_errorAddress, registration_txt_errorPassword;
 
     private Boolean nameValid = false, emailValid = false, phoneValid = false, addressValid = false, postCode = false;
+
+    private static final Pattern phone_pattern = Pattern.compile("^(01)[0-46-9][0-9]{7,8}$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,27 +58,69 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
         registration_txt_errorAddress = findViewById(R.id.registration_txt_errorAddress);
         registration_txt_errorPassword = findViewById(R.id.registration_txt_errorPassword);
 
-        RegistrationValidation registrationValidation = new RegistrationValidation();
+        //RegistrationValidation registrationValidation = new RegistrationValidation();
 
         registration_txtInputET_fName.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try{
-                    String fNameCheck = "", LNameCheck = "";
-                    fNameCheck = registration_txtInputET_fName.getText().toString();
-                    LNameCheck = registration_txtInputET_lName.getText().toString();
+                nameValidation();
+            }
 
-                    if(fNameCheck.isEmpty() || LNameCheck.isEmpty()){
-                        registration_txt_errorName.setText("Required");
-                        nameValid = false;
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        registration_txtInputET_lName.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                nameValidation();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        registration_txtInputET_email.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!TextUtils.isEmpty(s) ){
+                    if(Patterns.EMAIL_ADDRESS.matcher(s).matches()){
+                        registration_txt_errorEmail.setText("");
+                        emailValid = true;
+                    }else{
+                        registration_txt_errorEmail.setText("Invalid Email");
+                        emailValid = false;
                     }
-                    else{
-                        registration_txt_errorName.setText("");
-                        nameValid = true;
+                }else{
+                    registration_txt_errorEmail.setText("Required");
+                    emailValid = false;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        registration_txtInputET_phone.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!registration_txtInputET_phone.getText().toString().isEmpty()){
+                    if (phone_pattern.matcher(registration_txtInputET_phone.getText().toString()).matches()) {
+                        registration_txt_errorPhone.setText("");
+                        phoneValid = true;
+                    } else {
+                        registration_txt_errorPhone.setText("Invalid Phone No.");
+                        phoneValid = false;
                     }
-                }catch(Exception e) {
-                    //txtErrorIC.setText(e.toString());
+                }else{
+                    registration_txt_errorPhone.setText("Required");
                 }
             }
 
@@ -118,5 +166,24 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    public void nameValidation(){
+        try{
+            String fNameCheck = "", LNameCheck = "";
+            fNameCheck = registration_txtInputET_fName.getText().toString();
+            LNameCheck = registration_txtInputET_lName.getText().toString();
+
+            if(fNameCheck.isEmpty() || LNameCheck.isEmpty()){
+                registration_txt_errorName.setText("Required");
+                nameValid = false;
+            }
+            else{
+                registration_txt_errorName.setText("");
+                nameValid = true;
+            }
+        }catch(Exception e) {
+            //txtErrorIC.setText(e.toString());
+        }
     }
 }
