@@ -30,7 +30,7 @@
         <activity android:name=".AdminHome" />
         <activity
             android:name=".UserHome"
-            android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot.ActionBar" />
+            />
         <activity android:name=".Registration" />
         <activity android:name=".Login" />
         <activity android:name=".SplashScreen">

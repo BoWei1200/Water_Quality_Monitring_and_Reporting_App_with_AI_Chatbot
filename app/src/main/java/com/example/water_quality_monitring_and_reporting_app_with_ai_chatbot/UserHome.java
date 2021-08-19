@@ -136,6 +136,10 @@ public class UserHome extends AppCompatActivity{
         TransitionManager.beginDelayedTransition(userHome_cv_graph, new AutoTransition());
     }
 
+    public void settings(View view) {
+
+    }
+
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
         private final String API_KEY = "BBFF-d0da8e6ab1cdee030aa24fe674d2a051330";
 

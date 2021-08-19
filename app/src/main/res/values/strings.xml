@@ -67,4 +67,19 @@
     </string>
     <string name="required">Required</string>
     <string name="login_to_regis_text"><u>Don\'t have an account? Register now!</u></string>
+    <string-array name="state_array">
+        <item>Johor</item>
+        <item>Kedah</item>
+        <item>Kelantan</item>
+        <item>Malacca</item>
+        <item>Negeri Sembilan</item>
+        <item>Pahang</item>
+        <item>Penang</item>
+        <item>Perak</item>
+        <item>Perlis</item>
+        <item>Sabah</item>
+        <item>Sarawak</item>
+        <item>Selangor</item>
+        <item>Terengganu</item>
+    </string-array>
 </resources>

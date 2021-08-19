@@ -14,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //user table
     private static final String TABLE_USER = "user";
     private static final String TABLE_USER_ADDRESS = "userAddress";
-    //userUbidotsCredentials (credentialID, ubidotsAPI, varDO, varBOD, varVOD, varNH3N, varSS, varPH, userID)
+    private static final String TABLE_USER_UBIDOTS_CREDENTIALS = "userUbidotsCredentials";// (credentialID, ubidotsAPI, varDO, varBOD, varVOD, varNH3N, varSS, varPH, userID)
 
     private static final String COLUMN_IC = "ic";
     private static final String COLUMN_NAME = "name";
