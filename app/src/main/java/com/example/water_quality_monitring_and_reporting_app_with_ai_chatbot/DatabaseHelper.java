@@ -13,7 +13,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = ".db";
     //user table
     private static final String TABLE_USER = "user";
-    private static final String TABLE_VACCINE = "vaccine";
+    private static final String TABLE_USER_ADDRESS = "userAddress";
+    //userUbidotsCredentials (credentialID, ubidotsAPI, varDO, varBOD, varVOD, varNH3N, varSS, varPH, userID)
+
     private static final String COLUMN_IC = "ic";
     private static final String COLUMN_NAME = "name";
     private static final String COLUMN_PASSWORD = "password";
@@ -43,7 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER + ";");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_VACCINE + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_ADDRESS + ";");
         onCreate(db);
     }
 
@@ -68,10 +70,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_isADMIN + " TEXT NOT NULL, " +
                 COLUMN_VACCINE_ID + " TEXT NOT NULL," +
                 "CONSTRAINT fk_vaccine FOREIGN KEY (" + COLUMN_VACCINE_ID + ") " +
-                "REFERENCES " + TABLE_VACCINE + "(" + COLUMN_VACCINE_ID + "));");
+                "REFERENCES " + TABLE_USER_ADDRESS + "(" + COLUMN_VACCINE_ID + "));");
 
         //create SECOND table in the database
-        db.execSQL("CREATE TABLE " + TABLE_VACCINE + " (" +
+        db.execSQL("CREATE TABLE " + TABLE_USER_ADDRESS + " (" +
                 COLUMN_VACCINE_ID + " TEXT PRIMARY KEY , " +
                 COLUMN_VACCINE_NAME + " TEXT NOT NULL );");
     }
@@ -103,7 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "('admin03','BOO TING','admin03','21','0109948573','2A, JALAN DAMAR LAUT 2B TELOK GONG 42000 KLANG, SELANGOR','N/A','-','1','1')");
 
         //Default vaccine data is inserted into database
-        db.execSQL("INSERT INTO " + TABLE_VACCINE + "(" +
+        db.execSQL("INSERT INTO " + TABLE_USER_ADDRESS + "(" +
                 COLUMN_VACCINE_ID + "," + COLUMN_VACCINE_NAME + ")" +
                 "VALUES('1','PFIZER'),('2','SINOVAC'),('3','AZ');");
 
