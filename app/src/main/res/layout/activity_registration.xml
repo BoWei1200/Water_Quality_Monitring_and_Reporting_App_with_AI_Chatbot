@@ -9,25 +9,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:orientation="vertical"
-        android:layout_margin="5dp">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".1"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
-            
+
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".2"
-                android:src="@mipmap/ic_launcher_icon"/>
-            
+                android:src="@mipmap/ic_launcher_icon" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -38,17 +37,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".3"
-                    android:textSize="20dp"
+                    android:fontFamily="@font/nunito_sans"
                     android:text="@string/app_name"
-                    android:fontFamily="@font/nunito_sans"/>
+                    android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight=".7"
+                    android:fontFamily="@font/nunito_sans"
                     android:text="Registration"
-                    android:textSize="30dp"
-                    android:fontFamily="@font/nunito_sans"/>
+                    android:textSize="30dp" />
 
             </LinearLayout>
 
@@ -57,13 +56,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
-            android:background="#FF909090"
-            android:layout_margin="5dp" />
+            android:layout_margin="5dp"
+            android:background="#FF909090" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".9"
+            android:layout_height="wrap_content"
+
             android:padding="10dp">
 
             <ScrollView
@@ -78,29 +77,29 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Personal Information"
                         android:fontFamily="@font/roboto"
+                        android:text="Personal Information"
                         android:textSize="20dp"
                         android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="5dp">
+                        android:layout_height="50dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/registration_txtInputLayout_fName"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
-                            android:layout_height="60dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="5dp"
                             android:layout_weight=".5"
                             android:hint="First Name"
                             app:boxCornerRadiusBottomEnd="10dp"
                             app:boxCornerRadiusBottomStart="10dp"
                             app:boxCornerRadiusTopEnd="10dp"
                             app:boxCornerRadiusTopStart="10dp"
-                            android:layout_marginRight="5dp"
                             app:startIconDrawable="@drawable/ic_user_icon"
                             app:startIconTint="@color/mainTheme">
 
@@ -119,9 +118,9 @@
                             android:id="@+id/registration_txtInputLayout_lName"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
-                            android:layout_weight=".5"
-                            android:layout_height="60dp"
+                            android:layout_height="match_parent"
                             android:layout_marginLeft="5dp"
+                            android:layout_weight=".5"
                             android:hint="Last Name"
                             app:boxCornerRadiusBottomEnd="10dp"
                             app:boxCornerRadiusBottomStart="10dp"
@@ -147,16 +146,16 @@
                         android:id="@+id/registration_txt_errorName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="end"
                         android:text="@string/required"
                         android:textColor="@color/WQIRed"
-                        android:gravity="end"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/registration_txtInputLayout_email"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="50dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Email"
@@ -182,16 +181,16 @@
                         android:id="@+id/registration_txt_errorEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="end"
                         android:text="@string/required"
                         android:textColor="@color/WQIRed"
-                        android:gravity="end"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/registration_txtInputLayout_phone"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="50dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Phone no."
@@ -217,18 +216,18 @@
                         android:id="@+id/registration_txt_errorPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="end"
                         android:text="@string/required"
                         android:textColor="@color/WQIRed"
-                        android:gravity="end"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Address"
-                        android:fontFamily="@font/roboto"
-                        android:textSize="20dp"
                         android:layout_marginTop="25dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="Address"
+                        android:textSize="20dp"
                         android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -267,8 +266,8 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
                             android:layout_height="50dp"
-                            android:layout_marginBottom="10dp"
                             android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
                             android:layout_weight=".33"
                             android:hint="Postcode"
                             app:boxCornerRadiusBottomEnd="10dp"
@@ -282,11 +281,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/nunito_sans"
+                                android:gravity="center"
                                 android:inputType="textPersonName"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp"
-                                android:textSize="15sp"
-                                android:gravity="center"/>
+                                android:textSize="15sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -294,10 +293,10 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
                             android:layout_height="50dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight=".33"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight=".33"
                             android:hint="City"
                             app:boxCornerRadiusBottomEnd="10dp"
                             app:boxCornerRadiusBottomStart="10dp"
@@ -310,11 +309,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/nunito_sans"
+                                android:gravity="center"
                                 android:inputType="textPersonName"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp"
-                                android:textSize="15sp"
-                                android:gravity="center"/>
+                                android:textSize="15sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -322,8 +321,8 @@
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
                             android:layout_height="50dp"
-                            android:layout_marginBottom="10dp"
                             android:layout_marginLeft="5dp"
+                            android:layout_marginBottom="10dp"
                             android:layout_weight=".33"
 
                             android:hint="State"
@@ -338,11 +337,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/nunito_sans"
+                                android:gravity="center"
                                 android:inputType="textPersonName"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp"
-                                android:textSize="15sp"
-                                android:gravity="center"/>
+                                android:textSize="15sp" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
@@ -350,60 +349,60 @@
                         android:id="@+id/registration_txt_errorAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="end"
                         android:text="@string/required"
                         android:textColor="@color/WQIRed"
-                        android:gravity="end"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Password"
+                        android:layout_marginTop="25dp"
                         android:fontFamily="@font/roboto"
+                        android:text="Password"
                         android:textSize="20dp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="25dp"/>
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/registration_txtInputET_password"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
+                        android:fontFamily="@font/nunito_sans"
                         android:hint="Password"
-                        android:textSize="15dp"
-                        android:fontFamily="@font/nunito_sans" />
+                        android:inputType="textPassword"
+                        android:textSize="15dp" />
 
                     <EditText
                         android:id="@+id/registration_txtInputET_confirmPassword"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:hint="Confirm Password"
-                        android:textSize="15dp"
                         android:fontFamily="@font/nunito_sans"
-                        />
+                        android:hint="Confirm Password"
+                        android:inputType="textPassword"
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/registration_txt_errorPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="end"
                         android:text="@string/required"
                         android:textColor="@color/WQIRed"
-                        android:gravity="end"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
 
                     <Button
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Register"
                         android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
                         android:padding="15dp"
-                        android:layout_marginTop="20dp"/>
+                        android:text="Register" />
                 </LinearLayout>
 
             </ScrollView>
 
         </LinearLayout>
-
 
 
     </LinearLayout>

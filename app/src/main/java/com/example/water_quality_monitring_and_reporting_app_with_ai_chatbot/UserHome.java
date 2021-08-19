@@ -227,6 +227,15 @@ public class UserHome extends AppCompatActivity{
 
             userHome_txt_currentWQI.setText(String.format("%.2f", calculatedWQI));
 
+
+            System.out.println(userHome_txt_currentWQI.getText() + "  from txt");
+            if(!Double.toString(calculatedWQI).isEmpty())
+            if(userHome_txt_currentWQI.getText().equals("--.--")){
+                finish();
+                startActivity(getIntent());
+
+            }
+
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
             graphWQI.removeAllSeries();
             graphWQI.addSeries(series);
@@ -246,5 +255,7 @@ public class UserHome extends AppCompatActivity{
 //            gridLabel.setHorizontalAxisTitle("WQI");
 //            gridLabel.setVerticalAxisTitle("WQI");
         }
+
+
     }
 }
