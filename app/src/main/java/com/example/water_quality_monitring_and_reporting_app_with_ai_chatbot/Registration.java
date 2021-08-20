@@ -265,14 +265,46 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
 
     public void register(View view) {
         if(nameValid && emailValid && phoneValid && addressValid && paswordValid){
+            try{
+                DatabaseHelper dbHelper = new DatabaseHelper(this);
+                if(!dbHelper.isEmail_Exist(registration_txtInputET_email.getText().toString())){
+                    if(dbHelper.addUser(
+                        registration_txtInputET_email.getText().toString(),
+                        registration_txtInputET_fName.getText().toString(),
+                        registration_txtInputET_lName.getText().toString(),
+                        registration_txtInputET_phone.getText().toString(),
+                        "NA",
+                        registration_txtInputET_confirmPassword.getText().toString(),
+                        registration_txtInputET_addressLine.getText().toString(),
+                        registration_txtInputET_postcode.getText().toString(),
+                        registration_txtInputET_city.getText().toString(),
+                        registration_spinner_state.getSelectedItem().toString()
+                    )){
+                        displayToast("Registered Successfully!");
+                        startActivity(new Intent(this, ActivitySuccessfulDisplay.class));
+                        finish();
+                    }
+
+                }else{
+                    registration_txt_errorEmail.setText("This email has been registered");
+                    displayToast("This email has been registered");
+                }
+
+            }catch(Exception e){
+                System.out.println("\t" + e.toString());
+            }
+
 
             //store data to db
 
-            startActivity(new Intent(this, ActivitySuccessfulDisplay.class));
-            finish();
+
         }else{
-            Toast.makeText(this,"Please ensure every credential is filled in correctly",Toast.LENGTH_SHORT).show();
+            displayToast("Please ensure every credential is filled in correctly");
         }
+    }
+
+    public void displayToast(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
 

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,66 +12,66 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Login extends AppCompatActivity {
-    private EditText edLoginIC;
-    private EditText edLoginPassword;
-    private Button btnLogin;
-    private TextView txtErrorIC, txtErrorPass;
+    private EditText login_eTxt_email;
+    private EditText login_eTxt_password;
+    private Button login_btn_login;
+    private TextView login_txt_errorMsgEmail, login_txt_errorMsgPassword;
     private DatabaseHelper dbHelper;
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
 
     // Key for current NRIC
-    private final String NRICPreference = "NRIC";
+    private final String emailPreference = "NRIC";
     // Key for current isAdmin
-    private final String isAdminPreference = "isAdmin"; //usertype
+    private final String userTypePreference = "isAdmin";
     private final String passwordPreference = "password";
 
-    Boolean edLoginICValid = false, edPasswordValid = false;
-
+    Boolean edLoginEmailValid = false, edPasswordValid = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        edLoginIC = findViewById(R.id.ed_Login_NRIC);
-        edLoginPassword = findViewById(R.id.ed_Login_Password);
-        btnLogin = findViewById(R.id.btn_Login_login);
-        txtErrorIC = findViewById(R.id.txt_login_errorMsgNRIC);
-        txtErrorPass = findViewById(R.id.txt_login_errorMsgPassword);
+        login_eTxt_email = findViewById(R.id.login_eTxt_email);
+        login_eTxt_password = findViewById(R.id.login_eTxt_password);
+        login_btn_login = findViewById(R.id.login_btn_login);
+        login_txt_errorMsgEmail = findViewById(R.id.login_txt_errorMsgEmail);
+        login_txt_errorMsgPassword = findViewById(R.id.login_txt_errorMsgPassword);
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-        String getNRICPreference = mPreferences.getString(NRICPreference, null);
-        String getisAdminPreference = mPreferences.getString(isAdminPreference, null);
+        String getEmailPreference = mPreferences.getString(emailPreference, null);
+        String getUserTypePreference = mPreferences.getString(userTypePreference, null);
         String getPasswordPreference = mPreferences.getString(passwordPreference, null);
 
-        if(getNRICPreference != null && getPasswordPreference != null){
-            if(getisAdminPreference.equals("1")){ //normal user or admin?
-                startActivity(new Intent(this,AdminHome.class));
-            }else{
+        if(getEmailPreference != null && getPasswordPreference != null){
+            if(getUserTypePreference.equals("NA")){ //normal user
                 startActivity(new Intent(this,UserHome.class));
+            }else{
+                startActivity(new Intent(this,AdminHome.class));
             }
         }
 
-        edLoginIC.addTextChangedListener(new TextWatcher() {
+        login_eTxt_email.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try{
-                    String ICCheck = "";
-                    ICCheck = edLoginIC.getText().toString();
-                    if(ICCheck.isEmpty()){
-                        txtErrorIC.setText("Required");
-                        edLoginICValid = false;
+                    String emailCheck = "";
+                    emailCheck = login_eTxt_email.getText().toString();
+                    if(emailCheck.isEmpty()){
+                        login_txt_errorMsgEmail.setText("Required");
+                        edLoginEmailValid = false;
                     }
                     else{
-                        txtErrorIC.setText("");
-                        edLoginICValid = true;
+                        login_txt_errorMsgEmail.setText("");
+                        edLoginEmailValid = true;
                     }
                 }catch(Exception e) {
-                    txtErrorIC.setText(e.toString());
+                    login_txt_errorMsgEmail.setText(e.toString());
                 }
             }
 
@@ -79,18 +80,18 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        edLoginPassword.addTextChangedListener(new TextWatcher() {
+        login_eTxt_password.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String passCheck = "";
-                passCheck = edLoginPassword.getText().toString();
+                passCheck = login_eTxt_password.getText().toString();
                 if(passCheck.isEmpty()){
-                    txtErrorPass.setText("Required");
+                    login_txt_errorMsgPassword.setText("Required");
                     edPasswordValid = false;
                 }
                 else{
-                    txtErrorPass.setText("");
+                    login_txt_errorMsgPassword.setText("");
                     edPasswordValid = true;
                 }
             }
@@ -108,12 +109,63 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(View view) {
+        if(edLoginEmailValid && edPasswordValid){
+            String edEmail = login_eTxt_email.getText().toString();
+            String edPassword = login_eTxt_password.getText().toString();
 
-        startActivity(new Intent (this, UserHome.class));
-        finish();
+            try{
+                dbHelper = new DatabaseHelper(this);
+
+                if(dbHelper.isEmail_Exist(edEmail)){ // iC existing or not?
+                    Cursor cursor = dbHelper.readInfo(edEmail);
+                    cursor.moveToFirst();
+                    String passwordDb = cursor.getString(cursor.getColumnIndex("password"));
+                    String userType = cursor.getString(cursor.getColumnIndex("userType"));
+                    String name = cursor.getString(cursor.getColumnIndex("fName") + cursor.getColumnIndex("lName"));
+
+                    if(!edPassword.equals(passwordDb)){
+                        Toast.makeText(Login.this, "Invalid NRIC or password!",Toast.LENGTH_SHORT).show();
+                    }else{
+                        SharedPreferences.Editor editor = mPreferences.edit();
+
+                        editor.putString(emailPreference, edEmail);
+                        editor.putString(userTypePreference, userType); //user or admin
+                        editor.putString(passwordPreference, edPassword);
+                        editor.commit();
+
+                        //To show the account holder name that the user logged in
+                        displayToast("Welcome, "+name+" !");
+
+                        if(userType.equals("NA")){
+                            startActivity(new Intent (this, UserHome.class));
+                            finish();
+                        }else{
+                            startActivity(new Intent (this, AdminHome.class));
+                            finish();
+                        }
+                    }
+                }else{
+                    displayToast("Invalid NRIC or password!");
+                }
+
+            }catch(Exception e){
+                System.out.println(e.toString());
+            }
+        }
+        else{
+            displayToast("Please make sure every credential is filled in correctly");
+        }
+
+        //shortcut to app
+//        startActivity(new Intent (this, UserHome.class));
+//        finish();
     }
 
     public void toUserRegister(View view) {
         startActivity(new Intent (this, Registration.class));
+    }
+
+    public void displayToast(String message){
+        Toast.makeText(Login.this,message,Toast.LENGTH_SHORT).show();
     }
 }

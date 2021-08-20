@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/img_login_Avatar"
+                android:id="@+id/login_img_avatar"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_marginTop="5dp"
@@ -49,15 +49,15 @@
                 android:text="@string/app_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_login_Avatar" />
+                app:layout_constraintTop_toBottomOf="@+id/login_img_avatar" />
 
             <EditText
-                android:id="@+id/ed_Login_NRIC"
+                android:id="@+id/login_eTxt_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
                 android:fontFamily="@font/nunito_sans"
-                android:hint="NRIC"
+                android:hint="Email"
                 android:paddingLeft="20dp"
                 android:textSize="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -65,19 +65,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/txt_login_loginTitle" />
 
             <TextView
-                android:id="@+id/txt_login_errorMsgNRIC"
+                android:id="@+id/login_txt_errorMsgEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_sans"
                 android:gravity="right"
-
                 android:text="@string/required"
                 android:textColor="#db4442"
-                app:layout_constraintTop_toBottomOf="@+id/ed_Login_NRIC"
+                app:layout_constraintTop_toBottomOf="@+id/login_eTxt_email"
                 tools:layout_editor_absoluteX="20dp" />
 
             <EditText
-                android:id="@+id/ed_Login_Password"
+                android:id="@+id/login_eTxt_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_sans"
@@ -87,21 +86,21 @@
                 android:textSize="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_login_errorMsgNRIC" />
+                app:layout_constraintTop_toBottomOf="@+id/login_txt_errorMsgEmail" />
 
             <TextView
-                android:id="@+id/txt_login_errorMsgPassword"
+                android:id="@+id/login_txt_errorMsgPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_sans"
                 android:gravity="right"
                 android:text="@string/required"
                 android:textColor="#db4442"
-                app:layout_constraintTop_toBottomOf="@+id/ed_Login_Password"
+                app:layout_constraintTop_toBottomOf="@+id/login_eTxt_password"
                 tools:layout_editor_absoluteX="20dp" />
 
             <Button
-                android:id="@+id/btn_Login_login"
+                android:id="@+id/login_btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="59dp"
                 android:layout_marginTop="24dp"
@@ -111,10 +110,10 @@
                 android:textSize="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txt_login_errorMsgPassword" />
+                app:layout_constraintTop_toBottomOf="@+id/login_txt_errorMsgPassword" />
 
             <TextView
-                android:id="@+id/btn_login_toRegis"
+                android:id="@+id/login_txt_loginToRegis"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="8dp"
@@ -128,7 +127,7 @@
                 app:backgroundTint="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_Login_login" />
+                app:layout_constraintTop_toBottomOf="@+id/login_btn_login" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
