@@ -2,6 +2,7 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -30,7 +32,7 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
     private TextView registration_txt_errorName, registration_txt_errorEmail, registration_txt_errorPhone,
             registration_txt_errorAddress, registration_txt_errorPassword;
 
-    private Boolean nameValid = false, emailValid = false, phoneValid = false, addressValid = false, postCode = false;
+    private Boolean nameValid = false, emailValid = false, phoneValid = false, addressValid = false, paswordValid = false;
 
     private static final Pattern phone_pattern = Pattern.compile("^(01)[0-46-9][0-9]{7,8}$");
 
@@ -60,29 +62,8 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
 
         //RegistrationValidation registrationValidation = new RegistrationValidation();
 
-        registration_txtInputET_fName.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                nameValidation();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        registration_txtInputET_lName.addTextChangedListener(new TextWatcher() {
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                nameValidation();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        nameValidation(registration_txtInputET_fName);
+        nameValidation(registration_txtInputET_lName);
 
         registration_txtInputET_email.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -116,11 +97,12 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
                         registration_txt_errorPhone.setText("");
                         phoneValid = true;
                     } else {
-                        registration_txt_errorPhone.setText("Invalid Phone No.");
+                        registration_txt_errorPhone.setText("Invalid Malaysia Phone No.");
                         phoneValid = false;
                     }
                 }else{
                     registration_txt_errorPhone.setText("Required");
+                    phoneValid = false;
                 }
             }
 
@@ -128,6 +110,10 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
             public void afterTextChanged(Editable s) {
             }
         });
+
+        addressValidation(registration_txtInputET_addressLine);
+        addressValidation(registration_txtInputET_postcode);
+        addressValidation(registration_txtInputET_city);
 
         if (registration_spinner_state != null) {
             registration_spinner_state.setOnItemSelectedListener(this);
@@ -143,6 +129,9 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
                 registration_spinner_state.setAdapter(adapter);
             }
         }
+
+        passwordValidation(registration_txtInputET_password);
+        passwordValidation(registration_txtInputET_confirmPassword);
 
         // email,
         // firstname, lastname,
@@ -164,26 +153,124 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> parent) {}
 
+    public void nameValidation(TextInputEditText txtInputET_nameAttribute){
+        txtInputET_nameAttribute.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try{
+                    String fNameCheck = "", LNameCheck = "";
+                    fNameCheck = registration_txtInputET_fName.getText().toString();
+                    LNameCheck = registration_txtInputET_lName.getText().toString();
+
+                    if(fNameCheck.isEmpty() || LNameCheck.isEmpty()){
+                        registration_txt_errorName.setText("Required");
+                        nameValid = false;
+                    }
+                    else{
+                        registration_txt_errorName.setText("");
+                        nameValid = true;
+                    }
+                }catch(Exception e) {
+                    System.out.println(e.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
-    public void nameValidation(){
-        try{
-            String fNameCheck = "", LNameCheck = "";
-            fNameCheck = registration_txtInputET_fName.getText().toString();
-            LNameCheck = registration_txtInputET_lName.getText().toString();
+    public void addressValidation(TextInputEditText txtInputET_addressAttribute){
+        txtInputET_addressAttribute.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-            if(fNameCheck.isEmpty() || LNameCheck.isEmpty()){
-                registration_txt_errorName.setText("Required");
-                nameValid = false;
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try{
+                    String addressLineCheck = "", postcodeCheck = "", cityCheck = "";
+
+                    addressLineCheck = registration_txtInputET_addressLine.getText().toString();
+                    postcodeCheck = registration_txtInputET_postcode.getText().toString();
+                    cityCheck = registration_txtInputET_city.getText().toString();
+
+                    if(addressLineCheck.isEmpty() || postcodeCheck.isEmpty() || cityCheck.isEmpty()){
+                        String errorMsgAddress = "Require: "; int errorAmount = 0;
+
+                        if(addressLineCheck.isEmpty()){
+                            errorMsgAddress += "address line";
+                            errorAmount++;
+                        }
+
+                        if(postcodeCheck.isEmpty()){
+                            errorMsgAddress += (errorAmount > 0) ? ", postcode" : "postcode";
+                            errorAmount++;
+                        }
+
+                        if(cityCheck.isEmpty()){
+                            errorMsgAddress += (errorAmount > 0) ? ", city" : "city";
+                            errorAmount++;
+                        }
+
+                        registration_txt_errorAddress.setText(errorMsgAddress);
+                        addressValid = false;
+                    }
+                    else{
+                        registration_txt_errorAddress.setText("");
+                        addressValid = true;
+                    }
+                }catch(Exception e){
+                    System.out.println(e.toString());
+                }
             }
-            else{
-                registration_txt_errorName.setText("");
-                nameValid = true;
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    public void passwordValidation(EditText txtInputET_passwordAttribute){
+        txtInputET_passwordAttribute.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try{
+                    String passwordCheck = "", confirmPasswordCheck = "";
+                    passwordCheck = registration_txtInputET_password.getText().toString();
+                    confirmPasswordCheck = registration_txtInputET_confirmPassword.getText().toString();
+
+                    if(passwordCheck.isEmpty() || confirmPasswordCheck.isEmpty()){
+                        registration_txt_errorPassword.setText("Required");
+                        paswordValid = false;
+                    }
+                    else{
+                        if(passwordCheck.equals(confirmPasswordCheck)){
+                            registration_txt_errorPassword.setText("");
+                            paswordValid = true;
+                        }else{
+                            registration_txt_errorPassword.setText("Password not matched");
+                            paswordValid = false;
+                        }
+                    }
+                }catch(Exception e) {
+                    System.out.println(e.toString());
+                }
             }
-        }catch(Exception e) {
-            //txtErrorIC.setText(e.toString());
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    public void register(View view) {
+        if(nameValid && emailValid && phoneValid && addressValid && paswordValid){
+            startActivity(new Intent(this, ActivitySuccessfulDisplay.class));
+            finish();
+        }else{
+            Toast.makeText(this,"Please ensure every credential is filled in correctly",Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

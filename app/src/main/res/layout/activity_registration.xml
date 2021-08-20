@@ -85,7 +85,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="55dp"
                         android:layout_marginBottom="5dp"
                         android:orientation="horizontal">
 
@@ -156,7 +156,7 @@
                         android:id="@+id/registration_txtInputLayout_email"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="55dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Email"
@@ -191,7 +191,7 @@
                         android:id="@+id/registration_txtInputLayout_phone"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="55dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="5dp"
                         android:hint="Phone no."
@@ -207,7 +207,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:fontFamily="@font/nunito_sans"
-                            android:inputType="textPersonName"
+                            android:inputType="numberDecimal"
                             android:paddingTop="10dp"
                             android:paddingBottom="10dp"
                             android:textSize="15sp" />
@@ -235,9 +235,8 @@
                         android:id="@+id/registration_txtInputLayout_addressLine"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="55dp"
                         android:layout_marginBottom="10dp"
-
                         android:hint="Address line"
                         app:boxCornerRadiusBottomEnd="10dp"
                         app:boxCornerRadiusBottomStart="10dp"
@@ -249,7 +248,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/registration_txtInputET_addressLine"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:fontFamily="@font/nunito_sans"
                             android:inputType="textPersonName"
                             android:paddingTop="10dp"
@@ -259,17 +258,17 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginBottom="5dp">
+                        android:layout_height="55dp"
+                        android:layout_marginBottom="10dp">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/registration_txtInputLayout_postcode"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
-                            android:layout_height="50dp"
+                            android:layout_height="match_parent"
                             android:layout_marginRight="5dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight=".33"
+
+                            android:layout_weight=".5"
                             android:hint="Postcode"
                             app:boxCornerRadiusBottomEnd="10dp"
                             app:boxCornerRadiusBottomStart="10dp"
@@ -280,10 +279,10 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/registration_txtInputET_postcode"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:fontFamily="@font/nunito_sans"
                                 android:gravity="center"
-                                android:inputType="textPersonName"
+                                android:inputType="numberDecimal"
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp"
                                 android:textSize="15sp" />
@@ -293,11 +292,9 @@
                             android:id="@+id/registration_txtInputLayout_city"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
-                            android:layout_height="50dp"
+                            android:layout_height="match_parent"
                             android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginBottom="10dp"
-                            android:layout_weight=".33"
+                            android:layout_weight=".5"
                             android:hint="City"
                             app:boxCornerRadiusBottomEnd="10dp"
                             app:boxCornerRadiusBottomStart="10dp"
@@ -308,7 +305,7 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/registration_txtInputET_city"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:fontFamily="@font/nunito_sans"
                                 android:gravity="center"
                                 android:inputType="textPersonName"
@@ -316,13 +313,13 @@
                                 android:paddingBottom="10dp"
                                 android:textSize="15sp" />
                         </com.google.android.material.textfield.TextInputLayout>
-
-                        <Spinner
-                            android:id="@+id/registration_spinner_state"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight=".33" />
                     </LinearLayout>
+
+                    <Spinner
+                        android:id="@+id/registration_spinner_state"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        style="@style/spinner_style"/>
 
                     <TextView
                         android:id="@+id/registration_txt_errorAddress"
@@ -375,7 +372,8 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="20dp"
                         android:padding="15dp"
-                        android:text="Register" />
+                        android:text="Register"
+                        android:onClick="register"/>
                 </LinearLayout>
 
             </ScrollView>
