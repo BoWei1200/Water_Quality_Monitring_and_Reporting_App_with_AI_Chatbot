@@ -20,13 +20,11 @@ public class Login extends AppCompatActivity {
     private Button login_btn_login;
     private TextView login_txt_errorMsgEmail, login_txt_errorMsgPassword;
     private DatabaseHelper dbHelper;
+
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
-
-    // Key for current NRIC
     private final String emailPreference = "NRIC";
-    // Key for current isAdmin
-    private final String userTypePreference = "isAdmin";
+    private final String userTypePreference = "userType";
     private final String passwordPreference = "password";
 
     Boolean edLoginEmailValid = false, edPasswordValid = false;
@@ -47,7 +45,7 @@ public class Login extends AppCompatActivity {
         String getUserTypePreference = mPreferences.getString(userTypePreference, null);
         String getPasswordPreference = mPreferences.getString(passwordPreference, null);
 
-        if(getEmailPreference != null && getPasswordPreference != null){
+        if(getEmailPreference != null && getPasswordPreference != null && getUserTypePreference != null){
             if(getUserTypePreference.equals("NA")){ //normal user
                 startActivity(new Intent(this,UserHome.class));
             }else{
@@ -121,7 +119,7 @@ public class Login extends AppCompatActivity {
                     cursor.moveToFirst();
                     String passwordDb = cursor.getString(cursor.getColumnIndex("password"));
                     String userType = cursor.getString(cursor.getColumnIndex("userType"));
-                    String name = cursor.getString(cursor.getColumnIndex("fName") + cursor.getColumnIndex("lName"));
+                    String name = cursor.getString(cursor.getColumnIndex("fName")) +  " " +cursor.getString(cursor.getColumnIndex("lName"));
 
                     if(!edPassword.equals(passwordDb)){
                         Toast.makeText(Login.this, "Invalid NRIC or password!",Toast.LENGTH_SHORT).show();

@@ -6,14 +6,18 @@ import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,22 +29,32 @@ import com.ubidots.Variable;
 
 import com.jjoe64.graphview.GraphView;
 
-import java.util.Arrays;
-
 public class UserHome extends AppCompatActivity{
     private static int i = 0;
     private static final String POLLUTION_LEVEL = "level";
     //private TextView pollutionLevel;
+
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
+    private final String emailPreference = "NRIC";
+    private final String userTypePreference = "userType";
+    private final String passwordPreference = "password";
+
     private GraphView graphWQI;
     private UserIoTValues userIoTValues;
     private LinearLayout userHome_linearlayout_graphDetails_hide, userHome_linearlayout_others;
     private TextView userHome_txt_clickToViewMore;
     private CardView userHome_cv_graph;
     private UserIoTWQICalculation WQIcalc;
+    private ImageView userHome_img_setting;
+    private PopupMenu userHome_popupMenu_setting;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
+
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
         //pollutionLevel = findViewById(R.id.pollutionlevel);
         graphWQI = findViewById(R.id.userHome_graph_WQI);
@@ -48,8 +62,38 @@ public class UserHome extends AppCompatActivity{
         userHome_linearlayout_others = findViewById(R.id.userHome_linearlayout_others);
         userHome_txt_clickToViewMore = findViewById(R.id.userHome_txt_clickToViewMore);
         userHome_cv_graph = findViewById(R.id.userHome_cv_graph);
+        userHome_img_setting = findViewById(R.id.userHome_img_setting);
 
         WQIcalc = new UserIoTWQICalculation();
+
+        userHome_popupMenu_setting = new PopupMenu(this, userHome_img_setting);
+        userHome_popupMenu_setting.getMenuInflater().inflate(R.menu.user_setting_menu, userHome_popupMenu_setting.getMenu());
+        userHome_popupMenu_setting.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.userSettingMenu_logout:
+                        // calling method to edit values in shared prefs.
+                        SharedPreferences.Editor editor = mPreferences.edit();
+
+                        // below line will clear
+                        // the data in shared prefs.
+                        editor.clear();
+
+                        // below line will apply empty
+                        // data to shared prefs.
+                        editor.apply();
+
+                        // starting mainactivity after
+                        // clearing values in shared preferences.
+                        Intent i = new Intent(UserHome.this, Login.class);
+                        startActivity(i);
+                        finish();
+                        break;
+
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -137,7 +181,7 @@ public class UserHome extends AppCompatActivity{
     }
 
     public void settings(View view) {
-
+        userHome_popupMenu_setting.show();
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
