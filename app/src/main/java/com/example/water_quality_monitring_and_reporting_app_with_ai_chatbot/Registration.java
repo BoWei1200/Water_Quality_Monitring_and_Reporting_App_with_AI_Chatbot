@@ -265,6 +265,9 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
 
     public void register(View view) {
         if(nameValid && emailValid && phoneValid && addressValid && paswordValid){
+
+            //store data to db
+
             startActivity(new Intent(this, ActivitySuccessfulDisplay.class));
             finish();
         }else{

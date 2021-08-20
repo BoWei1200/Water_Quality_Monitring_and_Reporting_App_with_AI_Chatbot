@@ -59,23 +59,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //COLUMN_IC is the primary key for TABLE_USER
         //constraint foreign key COLUMN_VACCINE_ID to the PRIMARY KEY OF TABLE_VACCINE
         db.execSQL("CREATE TABLE " + TABLE_USER + " (" +
-                COLUMN_IC + " TEXT PRIMARY KEY , " +
-                COLUMN_NAME + " TEXT NOT NULL, " +
-                COLUMN_PASSWORD + " TEXT NOT NULL, " +
-                COLUMN_AGE + " TEXT NOT NULL, " +
-                COLUMN_PHONE + " TEXT NOT NULL, " +
-                COLUMN_ADDRESS + " TEXT NOT NULL, " +
-                COLUMN_NOTES + " TEXT NOT NULL, " +
-                COLUMN_VACCINE_STATUS + " TEXT NOT NULL, " +
-                COLUMN_isADMIN + " TEXT NOT NULL, " +
-                COLUMN_VACCINE_ID + " TEXT NOT NULL," +
-                "CONSTRAINT fk_vaccine FOREIGN KEY (" + COLUMN_VACCINE_ID + ") " +
-                "REFERENCES " + TABLE_USER_ADDRESS + "(" + COLUMN_VACCINE_ID + "));");
+                "userID TEXT PRIMARY KEY, " +
+                "userEmail TEXT NOT NULL, " +
+                "fName TEXT NOT NULL, " +
+                "lName TEXT NOT NULL, " +
+                "phoneNo TEXT NOT NULL, " +
+                "userType TEXT NOT NULL, " +
+                "password_hash  TEXT NOT NULL);");
 
         //create SECOND table in the database
-        db.execSQL("CREATE TABLE " + TABLE_USER_ADDRESS + " (" +
-                COLUMN_VACCINE_ID + " TEXT PRIMARY KEY , " +
-                COLUMN_VACCINE_NAME + " TEXT NOT NULL );");
+        db.execSQL("CREATE TABLE " + TABLE_USER_ADDRESS + " ( " +
+                "addressID TEXT PRIMARY KEY, " +
+                "addressLine TEXT NOT NULL, " +
+                "postcode TEXT NOT NULL, " +
+                "city TEXT NOT NULL, " +
+                "state TEXT NOT NULL, " +
+                "addressUserID TEXT NOT NULL, " +
+                "FOREIGN KEY (addressUserID) REFERENCES user (userID));");
+
+        db.execSQL("CREATE TABLE " + TABLE_USER_UBIDOTS_CREDENTIALS +"(" +
+                "credentialID TEXT PRIMARY KEY, " +
+                "ubidotsAPI TEXT NOT NULL, " +
+                "varID_DO TEXT NOT NULL, " +
+                "varID_BOD TEXT NOT NULL, " +
+                "varID_COD TEXT NOT NULL, " +
+                "varID_NH3N TEXT NOT NULL, " +
+                "varID_SS TEXT NOT NULL, " +
+                "varID_PH TEXT NOT NULL, " +
+                "ubidotsUserID TEXT NOT NULL, " +
+                "FOREIGN KEY (ubidotsUserID) REFERENCES user (userID));");
+
     }
 
     /**
