@@ -17,7 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot">
-        <activity android:name=".UserUbidotsInfoGathering"></activity>
+        <activity android:name=".UserUbidotsVarIDGathering"></activity>
         <activity android:name=".UserUbidotsAccSetup" />
         <activity android:name=".ActivitySuccessfulDisplay" />
         <activity android:name=".UserWQIDetails" />
@@ -28,9 +28,7 @@
         <activity android:name=".UserGraphDetails" />
         <activity android:name=".UserReportMenu" />
         <activity android:name=".AdminHome" />
-        <activity
-            android:name=".UserHome"
-            />
+        <activity android:name=".UserHome" />
         <activity android:name=".Registration" />
         <activity android:name=".Login" />
         <activity android:name=".SplashScreen">

@@ -281,7 +281,10 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
                         registration_spinner_state.getSelectedItem().toString()
                     )){
                         displayToast("Registered Successfully!");
-                        startActivity(new Intent(this, ActivitySuccessfulDisplay.class));
+
+                        Intent intent = new Intent(this, ActivitySuccessfulDisplay.class);
+                        intent.putExtra("successfulDisplayIndicator", "registration");
+                        startActivity(intent);
                         finish();
                     }
 

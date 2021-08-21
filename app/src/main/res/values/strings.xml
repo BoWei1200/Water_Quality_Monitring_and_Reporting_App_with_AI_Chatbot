@@ -67,6 +67,12 @@
     </string>
     <string name="required">Required</string>
     <string name="login_to_regis_text"><u>Don\'t have an account? Register now!</u></string>
+    <string name="ubidotsAccSetupStep1">Please register or login your Ubidots account \n\n
+
+        Click the link below for: \n
+        1. \tRegistration: <a href="https://industrial.ubidots.com/accounts/signup_industrial/">https://industrial.ubidots.com/accounts/signup_industrial/</a> \n
+        2. \tLogin: <a href="https://industrial.ubidots.com/accounts/signin/">https://industrial.ubidots.com/accounts/signin/</a>
+    </string>
     <string-array name="state_array">
         <item>Johor</item>
         <item>Kedah</item>

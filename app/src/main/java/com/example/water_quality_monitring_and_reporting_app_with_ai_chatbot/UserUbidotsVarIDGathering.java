@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class UserUbidotsInfoGathering extends AppCompatActivity {
+public class UserUbidotsVarIDGathering extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_ubidots_info_gathering);
+        setContentView(R.layout.activity_user_ubidots_var_idgathering);
     }
 }
