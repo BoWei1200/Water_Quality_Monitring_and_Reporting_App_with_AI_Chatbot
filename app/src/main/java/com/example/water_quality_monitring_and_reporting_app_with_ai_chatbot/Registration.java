@@ -296,13 +296,13 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
             }catch(Exception e){
                 System.out.println("\t" + e.toString());
             }
-
-
-            //store data to db
-
-
         }else{
             displayToast("Please ensure every credential is filled in correctly");
+            //shortcut
+            Intent intent = new Intent(this, ActivitySuccessfulDisplay.class);
+            intent.putExtra("successfulDisplayIndicator", "registration");
+            startActivity(intent);
+            finish();
         }
     }
 

@@ -277,12 +277,11 @@ public class UserHome extends AppCompatActivity{
 
 
             System.out.println(userHome_txt_currentWQI.getText() + "  from txt");
-            if(!Double.toString(calculatedWQI).isEmpty())
-            if(userHome_txt_currentWQI.getText().equals("--.--")){
-                finish();
-                startActivity(getIntent());
-
-            }
+//            if(!Double.toString(calculatedWQI).isEmpty())
+//            if(userHome_txt_currentWQI.getText().equals("--.--")){
+//                finish();
+//                startActivity(getIntent());
+//            }
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
             graphWQI.removeAllSeries();

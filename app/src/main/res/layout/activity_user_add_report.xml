@@ -54,8 +54,7 @@
                     android:layout_height="300dp"
                     android:background="@drawable/dashlineborder"
                     android:onClick="takePhoto"
-                    android:layout_weight=".5"
-                    >
+                    android:layout_weight=".5">
 
                     <LinearLayout
                         android:id="@+id/userAddReport_linearLayout_previous"
