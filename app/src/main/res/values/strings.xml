@@ -73,6 +73,8 @@
         1. \tRegistration: <a href="https://industrial.ubidots.com/accounts/signup_industrial/">https://industrial.ubidots.com/accounts/signup_industrial/</a> \n
         2. \tLogin: <a href="https://industrial.ubidots.com/accounts/signin/">https://industrial.ubidots.com/accounts/signin/</a>
     </string>
+    <string name="loading_searching_text">Please wait for a while..\n
+        We are linking your Ubidots account\n\n Please don\'t exit and refresh this page</string>
     <string-array name="state_array">
         <item>Johor</item>
         <item>Kedah</item>

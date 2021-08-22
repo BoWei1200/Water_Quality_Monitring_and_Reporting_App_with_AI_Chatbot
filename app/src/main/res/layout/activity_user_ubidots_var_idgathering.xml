@@ -6,4 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".UserUbidotsVarIDGathering">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/userUbidotsVarIdGather_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/mainTheme"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/Toolbar_back_button_style"
+        app:title="Connect your variable"
+        app:titleMargin="2dp"
+        app:titleTextColor="#FFFFFF" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

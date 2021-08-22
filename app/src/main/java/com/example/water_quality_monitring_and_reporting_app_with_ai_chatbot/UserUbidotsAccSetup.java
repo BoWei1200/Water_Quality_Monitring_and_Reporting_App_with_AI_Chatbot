@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,6 +30,13 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
     private TextView userUbidotsAccSetup_txt_step1Desc, userUbidotsAccSetup_txt_errorMsgAPI;
     private TextInputEditText userUbidotsAccSetup_txtInputET_step3APIKey;
 
+
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
+    private final String APIExistPreference = "APIExist";
+    SharedPreferences.Editor editor;
+
+
     private Boolean APIValid = false, apiKeyisExist = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,13 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+
+        editor = mPreferences.edit();
+
+        editor.putString(APIExistPreference, "0"); //set to not exist initially
+        editor.commit();
 
         userUbidotsAccSetup_txt_step1Desc = findViewById(R.id.userUbidotsAccSetup_txt_step1Desc);
         userUbidotsAccSetup_txtInputET_step3APIKey = findViewById(R.id.userUbidotsAccSetup_txtInputET_step3APIKey);
@@ -96,11 +111,11 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                 //ApiUbidots ubidots = new ApiUbidots(API_KEY);
                 new ApiUbidotsSetup().execute();
 
-                startActivity(new Intent(this, UserUbidotsVarIDGathering.class));
+                startActivity(new Intent(this, APIkeyLoading_Searching.class));
                 finish();
 
             }catch(Exception e){
-                System.out.println(e.toString());
+                System.out.println("ERROR OUTSIDE CLASS     "+ e.toString());
             }
         }else{
             Toast.makeText(this,"Ubidots API key is required to enter",Toast.LENGTH_SHORT).show();
@@ -108,9 +123,13 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
         }
     }
 
+    public void displayToast(String msg){
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+    }
+
     public class ApiUbidotsSetup extends AsyncTask<Integer, Void, Value[]> {
         private final String API_KEY = userUbidotsAccSetup_txtInputET_step3APIKey.getText().toString();
-
+        private ApiClient apiClient;
         @Override
         protected void onPreExecute(){
 
@@ -120,20 +139,59 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
         protected Value[] doInBackground(Integer... params) {
             try{
                 System.out.println("\n\n API key: " + userUbidotsAccSetup_txtInputET_step3APIKey.getText().toString());
-                ApiClient apiClient = new ApiClient(userUbidotsAccSetup_txtInputET_step3APIKey.getText().toString());
+                apiClient = new ApiClient(userUbidotsAccSetup_txtInputET_step3APIKey.getText().toString());
 
                 DataSource newDevice = apiClient.createDataSource("Water Quality Monitoring");
 
-                newDevice.createVariable("DO");
-                newDevice.createVariable("BOD");
-                newDevice.createVariable("COD");
-                newDevice.createVariable("NH3N");
-                newDevice.createVariable("SS");
-                newDevice.createVariable("pH");
+                newDevice.createVariable("do");
+                newDevice.createVariable("bod");
+                newDevice.createVariable("cod");
+                newDevice.createVariable("nh3n");
+                newDevice.createVariable("ss");
+                newDevice.createVariable("ph");
 
-                Variable[] variable = newDevice.getVariables();
+                try{
+                    Variable[] variable = apiClient.getVariables();
+
+//                    editor.putString(APIExistPreference, "1"); //set to not exist initially
+//                    editor.commit();
+                    startActivity(new Intent(UserUbidotsAccSetup.this, UserUbidotsVarIDGathering.class));
+                    finish();
+                }catch(Exception e){
+                    new Thread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    try{
+                                        displayToast("API key not existing");
+
+//                                        editor.putString(APIExistPreference, "0"); //set to not exist initially
+//                                        editor.commit();
+                                    }catch(Exception e){
+                                    }
+                                }
+                            });
+
+//                                try {
+//                                    Thread.sleep(1000);
+//                                } catch (InterruptedException e) {
+//                                }
+                        }
+                    }).start();
+
+                    System.out.println("ERROR!!      "+ e.toString());
+                    startActivity(getIntent());
+                    finish();
+                }
+//                System.out.println(mPreferences.getString(APIExistPreference, null));
+
+
             }catch (Exception e){
-                Toast.makeText(this,"Ubidots API key is required to enter",Toast.LENGTH_SHORT).show();
+                System.out.println("HIHIH  " + e.toString());
             }
             Value[] valuesDO = new Value[0];
             return valuesDO;
@@ -142,6 +200,8 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
         @Override
         protected void onPostExecute(Value[] variableValues) {
             super.onPostExecute(variableValues);
+
+
         }
     }
 }
