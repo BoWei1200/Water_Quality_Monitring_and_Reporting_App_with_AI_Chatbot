@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserUbidotsVarIDGathering">
+    tools:context=".UserUbidotsScanDevice">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/userUbidotsVarIdGather_toolbar"
@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:theme="@style/Toolbar_back_button_style"
-        app:title="Connect your variable"
+        app:title="Scan your sensor"
         app:titleMargin="2dp"
         app:titleTextColor="#FFFFFF" />
 

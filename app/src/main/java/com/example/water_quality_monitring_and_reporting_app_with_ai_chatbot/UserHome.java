@@ -188,13 +188,6 @@ public class UserHome extends AppCompatActivity{
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
         private final String API_KEY = "BBFF-d0da8e6ab1cdee030aa24fe674d2a051330";
 
-        private final String VARIABLE_ID_DO = "6108d1e334efb5000a66154f";
-        private final String VARIABLE_ID_BOD = "6108d1e234efb5000b53ece6";
-        private final String VARIABLE_ID_COD = "6108d1e3636012000c64ab6a";
-        private final String VARIABLE_ID_NH3N = "6108d1e334efb5000b53ece7";
-        private final String VARIABLE_ID_SS = "6108d1e3636012000db3fb3a";
-        private final String VARIABLE_ID_pH = "6108d1e4636012000db3fb3b";
-
         TextView pollutionLevel;
         TextView userHome_txt_currentWQI;
         @Override
@@ -208,24 +201,45 @@ public class UserHome extends AppCompatActivity{
 
             ApiClient apiClient = new ApiClient(API_KEY);
 
-//            if(i == 0){
-//                DataSource newDevice = apiClient.createDataSource("Water Quality Monitoring");
-//                newDevice.createVariable("DO");
-//                newDevice.createVariable("BOD");
-//                newDevice.createVariable("COD");
-//                newDevice.createVariable("NH3N");
-//                newDevice.createVariable("SS");
-//                newDevice.createVariable("pH");
-//
-//                i++;
-//            }
+            DataSource[] devices = apiClient.getDataSources();
 
-            Variable DO = apiClient.getVariable(VARIABLE_ID_DO);
-            Variable BOD = apiClient.getVariable(VARIABLE_ID_BOD);
-            Variable COD = apiClient.getVariable(VARIABLE_ID_COD);
-            Variable NH3N = apiClient.getVariable(VARIABLE_ID_NH3N);
-            Variable SS = apiClient.getVariable(VARIABLE_ID_SS);
-            Variable pH = apiClient.getVariable(VARIABLE_ID_pH);
+            DataSource device = null;
+
+            for (int i = 0; i < devices.length; i++){
+                if(devices[i].getName().equals("Water Quality Monitoring")){
+                    device = devices[i];
+                    break;
+                }
+            }
+
+            Variable[] variables = device.getVariables();
+
+            Variable BOD = null;
+            Variable COD = null;
+            Variable DO = null;
+            Variable NH3N = null;
+            Variable pH = null;
+            Variable SS = null;
+
+            for (int j=0; j < variables.length; j++){
+                if(variables[j].getName().equals("bod"))
+                    BOD = variables[j];
+
+                if(variables[j].getName().equals("cod"))
+                    COD = variables[j];
+
+                if(variables[j].getName().equals("do"))
+                    DO = variables[j];
+
+                if(variables[j].getName().equals("nh3n"))
+                    NH3N = variables[j];
+
+                if(variables[j].getName().equals("ph"))
+                    pH = variables[j];
+
+                if(variables[j].getName().equals("ss"))
+                    SS = variables[j];
+            }
 
             Value[] valuesDO = DO.getValues();
             Value[] valuesBOD = BOD.getValues();

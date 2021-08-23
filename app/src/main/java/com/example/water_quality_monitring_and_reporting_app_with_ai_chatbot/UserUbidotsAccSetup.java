@@ -9,18 +9,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.LineGraphSeries;
 import com.ubidots.ApiClient;
 import com.ubidots.DataSource;
 import com.ubidots.Value;
@@ -111,7 +107,7 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                 //ApiUbidots ubidots = new ApiUbidots(API_KEY);
                 new ApiUbidotsSetup().execute();
 
-                startActivity(new Intent(this, APIkeyLoading_Searching.class));
+                startActivity(new Intent(this, UserUbidotsAPIkeyLoading_Searching.class));
                 finish();
 
             }catch(Exception e){
@@ -153,9 +149,7 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                 try{
                     Variable[] variable = apiClient.getVariables();
 
-//                    editor.putString(APIExistPreference, "1"); //set to not exist initially
-//                    editor.commit();
-                    startActivity(new Intent(UserUbidotsAccSetup.this, UserUbidotsVarIDGathering.class));
+                    startActivity(new Intent(UserUbidotsAccSetup.this, UserUbidotsScanDevice.class));
                     finish();
                 }catch(Exception e){
                     new Thread(new Runnable() {
@@ -168,9 +162,6 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                                 public void run() {
                                     try{
                                         displayToast("API key not existing");
-
-//                                        editor.putString(APIExistPreference, "0"); //set to not exist initially
-//                                        editor.commit();
                                     }catch(Exception e){
                                     }
                                 }
@@ -189,7 +180,6 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                 }
 //                System.out.println(mPreferences.getString(APIExistPreference, null));
 
-
             }catch (Exception e){
                 System.out.println("HIHIH  " + e.toString());
             }
@@ -200,8 +190,6 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
         @Override
         protected void onPostExecute(Value[] variableValues) {
             super.onPostExecute(variableValues);
-
-
         }
     }
 }

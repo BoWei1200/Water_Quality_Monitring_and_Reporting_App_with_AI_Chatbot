@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class UserUbidotsVarIDGathering extends AppCompatActivity {
+public class UserUbidotsScanDevice extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_ubidots_var_idgathering);
+        setContentView(R.layout.activity_user_ubidots_scan_device);
     }
 }
