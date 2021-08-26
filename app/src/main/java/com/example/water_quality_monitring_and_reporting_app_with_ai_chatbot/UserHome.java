@@ -30,6 +30,8 @@ import com.ubidots.Variable;
 
 import com.jjoe64.graphview.GraphView;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class UserHome extends AppCompatActivity{
     private static int i = 0;
     private static final String POLLUTION_LEVEL = "level";
@@ -40,6 +42,14 @@ public class UserHome extends AppCompatActivity{
     private final String emailPreference = "NRIC";
     private final String userTypePreference = "userType";
     private final String passwordPreference = "password";
+    private final String ubidotsThreadStopPreference = "ubidotsThreadStop";
+
+    private UserWaterSensor userWaterSensor;
+    //private ThreadUbidots threadUbidots;
+    private ApiUbidots apiUbidots;
+    private Boolean ubidotsExecuteStop = false;
+
+    private AsyncTask ubidotsAsyncTask;
 
     private GraphView graphWQI;
     private UserIoTValues userIoTValues;
@@ -55,7 +65,16 @@ public class UserHome extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
 
+        apiUbidots = new ApiUbidots();
+        //threadUbidots = new ThreadUbidots();
+
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+
+        try{
+            userWaterSensor.start();
+        }catch(Exception e){
+            System.out.println(e.toString());
+        }
 
         //pollutionLevel = findViewById(R.id.pollutionlevel);
         graphWQI = findViewById(R.id.userHome_graph_WQI);
@@ -79,6 +98,20 @@ public class UserHome extends AppCompatActivity{
                         // below line will clear
                         // the data in shared prefs.
                         editor.clear();
+                        //userWaterSensor.stopThread();
+
+                        //ubidotsExecuteStop = true;
+                        //threadUbidots.stopThread();
+                        //threadUbidots.interrupt();
+
+//                        ubidotsExecuteStop = true;
+//                        try{
+//                            apiUbidots.cancel(true);
+//                        }catch(Exception e){
+//
+//                        }
+
+                        ubidotsAsyncTask.cancel(true);
 
                         // below line will apply empty
                         // data to shared prefs.
@@ -100,7 +133,23 @@ public class UserHome extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
-        new ApiUbidots().execute();
+
+//        try{
+//            if(!ubidotsExecuteStop){
+//                apiUbidots.execute();
+//            }
+//        }catch(Exception e){
+//            //apiUbidots.cancel(true);
+//            System.out.println(e.toString());
+//        }
+
+
+//        new ApiUbidots().execute();
+//        if(!threadUbidots.isAlive())
+//            threadUbidots.start();
+
+        ubidotsAsyncTask = new ApiUbidots().execute();
+
         //registerReceiver(pollutionLevelReceiver, new IntentFilter(Intent.ACTION_ATTACH_DATA));
         Toast.makeText(this,"Start!",Toast.LENGTH_SHORT).show();
     }
@@ -108,7 +157,21 @@ public class UserHome extends AppCompatActivity{
     @Override
     protected void onRestart(){
         super.onRestart();
-        new ApiUbidots().execute();
+
+//        try{
+//            if(!ubidotsExecuteStop){
+//                apiUbidots.execute();
+//            }
+//        }catch(Exception e){
+//            //apiUbidots.cancel(true);
+//            System.out.println(e.toString());
+//        }
+
+//        if(!threadUbidots.isAlive())
+//            threadUbidots.start();
+
+        ubidotsAsyncTask = new ApiUbidots().execute();
+
         //registerReceiver(pollutionLevelReceiver, new IntentFilter(Intent.ACTION_ATTACH_DATA));
         Toast.makeText(this,"Restart!",Toast.LENGTH_SHORT).show();
     }
@@ -116,33 +179,66 @@ public class UserHome extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-        // we're going to simulate real time with thread that append data to the graph
+
         Toast.makeText(this,"Resume!",Toast.LENGTH_SHORT).show();
+
+        //threadUbidots.start();
         new Thread(new Runnable() {
 
             @Override
             public void run() {
                 // we add 100 new entries
-                for (int i = 0; i < 10; i++) {
+                //while(!ubidotsExecuteStop){
                     runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
-                            try{
-                                new ApiUbidots().execute();
-                            }catch(Exception e){
-                            }
+//                            try{
+//                                apiUbidots.execute();
+//                            }catch(Exception e){
+//                                apiUbidots.cancel(true);
+//                                System.out.println("In thread: " + e.toString());
+//                            }
+
+                            ubidotsAsyncTask = new ApiUbidots().execute();
                         }
                     });
 
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(10000);
                     } catch (InterruptedException e) {
                     }
-                }
+                //}
             }
         }).start();
     }
+
+//    private class ThreadUbidots extends Thread{
+//        private final AtomicBoolean ubidotsExecuteStop = new AtomicBoolean(false);
+//
+//        @Override
+//        public void run() {
+//            // we add 100 new entries
+//            System.out.println("Thread stop: " + ubidotsExecuteStop);
+//            while(!ubidotsExecuteStop.get()){
+//                System.out.println(ubidotsExecuteStop.get());
+//                try{
+//                    new ApiUbidots().execute();
+//                }catch(Exception e){
+//                    System.out.println(e.toString());
+//                }
+//
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                }
+//            }
+//        }
+//
+//        public void stopThread(){
+//            ubidotsExecuteStop.set(true);
+//        }
+//    }
 
     public void toOtherPages(View view) {
         Intent intent = new Intent();

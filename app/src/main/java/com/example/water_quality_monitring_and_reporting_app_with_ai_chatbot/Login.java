@@ -26,6 +26,7 @@ public class Login extends AppCompatActivity {
     private final String emailPreference = "NRIC";
     private final String userTypePreference = "userType";
     private final String passwordPreference = "password";
+    private final String ubidotsThreadPreference = "ubidotsThread";
 
     Boolean edLoginEmailValid = false, edPasswordValid = false;
 
@@ -129,6 +130,7 @@ public class Login extends AppCompatActivity {
                         editor.putString(emailPreference, edEmail);
                         editor.putString(userTypePreference, userType); //user or admin
                         editor.putString(passwordPreference, edPassword);
+                        editor.putString(ubidotsThreadPreference, "0");
                         editor.commit();
 
                         //To show the account holder name that the user logged in
