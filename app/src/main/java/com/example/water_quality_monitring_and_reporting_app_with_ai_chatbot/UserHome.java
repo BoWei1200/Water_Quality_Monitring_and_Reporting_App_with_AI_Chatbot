@@ -100,7 +100,7 @@ public class UserHome extends AppCompatActivity{
                         editor.clear();
                         //userWaterSensor.stopThread();
 
-                        //ubidotsExecuteStop = true;
+                        ubidotsExecuteStop = true;
                         //threadUbidots.stopThread();
                         //threadUbidots.interrupt();
 
@@ -199,13 +199,13 @@ public class UserHome extends AppCompatActivity{
 //                                apiUbidots.cancel(true);
 //                                System.out.println("In thread: " + e.toString());
 //                            }
-
+                            System.out.println("RunApiUbidots");
                             ubidotsAsyncTask = new ApiUbidots().execute();
                         }
                     });
 
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                     }
                 //}
@@ -279,6 +279,11 @@ public class UserHome extends AppCompatActivity{
 
     public void settings(View view) {
         userHome_popupMenu_setting.show();
+    }
+
+    public void refresh(View view) {
+        startActivity(getIntent());
+        finish();
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
