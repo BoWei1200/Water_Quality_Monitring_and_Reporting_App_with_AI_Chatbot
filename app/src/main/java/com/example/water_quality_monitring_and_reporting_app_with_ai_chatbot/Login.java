@@ -23,10 +23,11 @@ public class Login extends AppCompatActivity {
 
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
-    private final String emailPreference = "NRIC";
+    private final String userIDPreference = "userID";
+    private final String emailPreference = "email";
     private final String userTypePreference = "userType";
     private final String passwordPreference = "password";
-    private final String ubidotsThreadPreference = "ubidotsThread";
+    private final String apiPreference = "api";
 
     Boolean edLoginEmailValid = false, edPasswordValid = false;
 
@@ -42,11 +43,12 @@ public class Login extends AppCompatActivity {
         login_txt_errorMsgPassword = findViewById(R.id.login_txt_errorMsgPassword);
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        String getuserIDPreference = mPreferences.getString(userIDPreference, null);
         String getEmailPreference = mPreferences.getString(emailPreference, null);
         String getUserTypePreference = mPreferences.getString(userTypePreference, null);
         String getPasswordPreference = mPreferences.getString(passwordPreference, null);
 
-        if(getEmailPreference != null && getPasswordPreference != null && getUserTypePreference != null){
+        if(getuserIDPreference != null && getEmailPreference != null && getPasswordPreference != null && getUserTypePreference != null){
             if(getUserTypePreference.equals("NA")){ //normal user
                 startActivity(new Intent(this,UserHome.class));
             }else{
@@ -115,7 +117,7 @@ public class Login extends AppCompatActivity {
             try{
                 dbHelper = new DatabaseHelper(this);
 
-                if(dbHelper.isEmail_Exist(edEmail)){ // iC existing or not?
+                if(dbHelper.isEmail_Exist(edEmail)){ // email existing or not?
                     Cursor cursor = dbHelper.readInfo(edEmail);
                     cursor.moveToFirst();
                     String passwordDb = cursor.getString(cursor.getColumnIndex("password"));
@@ -127,10 +129,12 @@ public class Login extends AppCompatActivity {
                     }else{
                         SharedPreferences.Editor editor = mPreferences.edit();
 
+                        editor.putString(userIDPreference, dbHelper.getUserID(edEmail));
                         editor.putString(emailPreference, edEmail);
                         editor.putString(userTypePreference, userType); //user or admin
                         editor.putString(passwordPreference, edPassword);
-                        editor.putString(ubidotsThreadPreference, "0");
+                        editor.putString(apiPreference, dbHelper.getAPIKey(dbHelper.getUserID(edEmail)));
+
                         editor.commit();
 
                         //To show the account holder name that the user logged in

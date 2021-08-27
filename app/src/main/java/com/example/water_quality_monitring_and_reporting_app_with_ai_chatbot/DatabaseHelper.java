@@ -80,12 +80,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE " + TABLE_USER_UBIDOTS_CREDENTIALS +"(" +
                 "ubidotsAPI TEXT PRIMARY KEY NOT NULL, " +
-                "varID_DO TEXT NOT NULL, " +
-                "varID_BOD TEXT NOT NULL, " +
-                "varID_COD TEXT NOT NULL, " +
-                "varID_NH3N TEXT NOT NULL, " +
-                "varID_SS TEXT NOT NULL, " +
-                "varID_PH TEXT NOT NULL, " +
                 "ubidotsUserID TEXT NOT NULL, " +
                 "FOREIGN KEY (ubidotsUserID) REFERENCES user (userID));");
     }
@@ -101,18 +95,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_USER + "(userEmail, fName, lName, phoneNo, userType, password) VALUES " +
                 "('i12@gmail.com','JASON', 'NG','0111111111','NA','i12')");
 
-        String email = "i12@gmail.com";
-
-        String userID = "";
-        Cursor cursor = db.rawQuery("SELECT userID FROM " + TABLE_USER + " WHERE userEmail=? ", new String[]{email});;
-
-        if (cursor.moveToFirst()) {
-            userID = cursor.getString(cursor.getColumnIndex("userID"));
-        }
-
         //Default vaccine data is inserted into database
         db.execSQL("INSERT INTO " + TABLE_USER_ADDRESS + "(addressLine, postcode, city, state, addressUserID)" +
-                "VALUES('5 JLN PINGGIRAN 34 MEDAN DAMAI UKAY HULU AMPANG', '68000', 'Klang', 'Selangor', '" + userID + "')");
+                "VALUES('5 JLN PINGGIRAN 34 MEDAN DAMAI UKAY HULU AMPANG', '68000', 'Klang', 'Selangor', '1')");
     }
 
 
@@ -131,12 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Boolean insertUserStatus = db.insert(TABLE_USER, null, conValUser) != -1;
 
-        String userID = "";
-        Cursor cursor = db.rawQuery("SELECT userID FROM " + TABLE_USER + " WHERE userEmail=? ", new String[]{userEmail});;
-
-        if (cursor.moveToFirst()) {
-            userID = cursor.getString(cursor.getColumnIndex("userID"));
-        }
+        String userID = getUserID(userEmail);
 
         ContentValues conValUserAddress = new ContentValues();
         conValUserAddress.put("addressLine", addressLine);
@@ -148,10 +128,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return insertUserStatus && db.insert(TABLE_USER_ADDRESS, null, conValUserAddress) != -1;
     }
 
+    public Boolean addAPIKey(String API, String userID){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues conValUserUbidotsCredentials = new ContentValues();
+        conValUserUbidotsCredentials.put("ubidotsAPI", API);
+        conValUserUbidotsCredentials.put("ubidotsUserID", userID);
+
+        return db.insert(TABLE_USER_UBIDOTS_CREDENTIALS, null, conValUserUbidotsCredentials) != -1;
+    }
+
     public boolean isEmail_Exist(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE userEmail=?", new String[]{email});
         return (cursor.getCount() > 0); //true if exists
+    }
+
+    public boolean isPhone_Exist(String phone) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE phoneNo=?", new String[]{phone});
+        return (cursor.getCount() > 0); //true if exists
+    }
+
+    public boolean isAPIKey_exist(String API){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER_UBIDOTS_CREDENTIALS + " WHERE ubidotsAPI=?", new String[]{API});
+        return (cursor.getCount() > 0);
+    }
+
+    public String getUserID(String userEmail){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT userID FROM " + TABLE_USER + " WHERE userEmail=? ", new String[]{userEmail});;
+
+        return (cursor.moveToFirst()) ? cursor.getString(cursor.getColumnIndex("userID")) : "";
+    }
+
+    public String getAPIKey(String userID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT ubidotsAPI FROM " + TABLE_USER_UBIDOTS_CREDENTIALS + " WHERE ubidotsUserID=? ", new String[]{userID});;
+
+        return (cursor.moveToFirst()) ? cursor.getString(cursor.getColumnIndex("ubidotsAPI")) : "";
     }
 
     // Registered user info

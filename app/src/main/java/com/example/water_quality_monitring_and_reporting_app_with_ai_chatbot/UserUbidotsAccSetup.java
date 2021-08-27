@@ -26,11 +26,11 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
     private TextView userUbidotsAccSetup_txt_step1Desc, userUbidotsAccSetup_txt_errorMsgAPI;
     private TextInputEditText userUbidotsAccSetup_txtInputET_step3APIKey;
 
-
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
-    private final String APIExistPreference = "APIExist";
-    SharedPreferences.Editor editor;
+    private final String emailPreference = "email";
+
+    AsyncTask abidotsSetup;
 
 
     private Boolean APIValid = false, apiKeyisExist = false;
@@ -45,13 +45,8 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
-        editor = mPreferences.edit();
-
-        editor.putString(APIExistPreference, "0"); //set to not exist initially
-        editor.commit();
 
         userUbidotsAccSetup_txt_step1Desc = findViewById(R.id.userUbidotsAccSetup_txt_step1Desc);
         userUbidotsAccSetup_txtInputET_step3APIKey = findViewById(R.id.userUbidotsAccSetup_txtInputET_step3APIKey);
@@ -100,15 +95,21 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
     }
 
     public void next(View view) {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+
         if(APIValid){
             try{
                 String API_KEY = userUbidotsAccSetup_txtInputET_step3APIKey.getText().toString();
                 System.out.println(API_KEY);
-                //ApiUbidots ubidots = new ApiUbidots(API_KEY);
-                new ApiUbidotsSetup().execute();
 
-                startActivity(new Intent(this, UserUbidotsAPIkeyLoading_Searching.class));
-                finish();
+                if(!dbHelper.isAPIKey_exist(API_KEY)){
+                    abidotsSetup = new ApiUbidotsSetup().execute();
+
+                    startActivity(new Intent(this, UserUbidotsAPIkeyLoading_Searching.class));
+                    finish();
+                }else{
+                    displayToast("This API key already exists");
+                }
 
             }catch(Exception e){
                 System.out.println("ERROR OUTSIDE CLASS     "+ e.toString());
@@ -135,7 +136,8 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
         protected Value[] doInBackground(Integer... params) {
             try{
                 System.out.println("\n\n API key: " + userUbidotsAccSetup_txtInputET_step3APIKey.getText().toString());
-                apiClient = new ApiClient(userUbidotsAccSetup_txtInputET_step3APIKey.getText().toString());
+
+                apiClient = new ApiClient(API_KEY);
 
                 DataSource newDevice = apiClient.createDataSource("Water Quality Monitoring");
 
@@ -149,7 +151,17 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                 try{
                     Variable[] variable = apiClient.getVariables();
 
+                    String getEmailPreference = mPreferences.getString(emailPreference, null);
+
+                    DatabaseHelper dbHelper = new DatabaseHelper(UserUbidotsAccSetup.this);
+
+                    String userID = dbHelper.getUserID(getEmailPreference);
+                    dbHelper.addAPIKey(API_KEY, userID);
+
+                    //store API key based on the userID
+
                     startActivity(new Intent(UserUbidotsAccSetup.this, UserUbidotsScanDevice.class));
+                    abidotsSetup.cancel(true);
                     finish();
                 }catch(Exception e){
                     new Thread(new Runnable() {
@@ -161,7 +173,7 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     try{
-                                        displayToast("API key not existing");
+                                        displayToast("Invalid API key");
                                     }catch(Exception e){
                                     }
                                 }
@@ -181,7 +193,7 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
 //                System.out.println(mPreferences.getString(APIExistPreference, null));
 
             }catch (Exception e){
-                System.out.println("HIHIH  " + e.toString());
+                //System.out.println("HIHIH  " + e.toString());
             }
             Value[] valuesDO = new Value[0];
             return valuesDO;

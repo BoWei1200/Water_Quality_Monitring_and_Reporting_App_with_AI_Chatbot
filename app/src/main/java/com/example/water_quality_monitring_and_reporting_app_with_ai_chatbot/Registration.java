@@ -3,6 +3,7 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -21,6 +22,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.regex.Pattern;
 
 public class Registration extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
+    private final String emailPreference = "email";
+
     private TextInputEditText registration_txtInputET_fName, registration_txtInputET_lName,
             registration_txtInputET_email, registration_txtInputET_phone, registration_txtInputET_addressLine,
             registration_txtInputET_postcode, registration_txtInputET_city;
@@ -40,6 +45,9 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        String getEmailPreference = mPreferences.getString(emailPreference, null);
 
         registration_txtInputET_fName = findViewById(R.id.registration_txtInputET_fName);
         registration_txtInputET_lName = findViewById(R.id.registration_txtInputET_lName);
@@ -267,7 +275,11 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
         if(nameValid && emailValid && phoneValid && addressValid && paswordValid){
             try{
                 DatabaseHelper dbHelper = new DatabaseHelper(this);
-                if(!dbHelper.isEmail_Exist(registration_txtInputET_email.getText().toString())){
+
+                Boolean emailExist = dbHelper.isEmail_Exist(registration_txtInputET_email.getText().toString());
+                Boolean phoneExist = dbHelper.isPhone_Exist(registration_txtInputET_phone.getText().toString());
+
+                if(!(emailExist || phoneExist)){
                     if(dbHelper.addUser(
                         registration_txtInputET_email.getText().toString(),
                         registration_txtInputET_fName.getText().toString(),
@@ -282,6 +294,11 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
                     )){
                         displayToast("Registered Successfully!");
 
+                        SharedPreferences.Editor editor = mPreferences.edit();
+
+                        editor.putString(emailPreference, registration_txtInputET_email.getText().toString());
+                        editor.commit();
+
                         Intent intent = new Intent(this, ActivitySuccessfulDisplay.class);
                         intent.putExtra("successfulDisplayIndicator", "registration");
                         startActivity(intent);
@@ -289,8 +306,15 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
                     }
 
                 }else{
-                    registration_txt_errorEmail.setText("This email has been registered");
-                    displayToast("This email has been registered");
+                    if(emailExist){
+                        registration_txt_errorEmail.setText("This email is alredy registered");
+                        displayToast("This email has been registered");
+                    }
+
+                    if(phoneExist){
+                        registration_txt_errorPhone.setText("This phone no. is already registered");
+                        displayToast("This phone no. is already registered");
+                    }
                 }
 
             }catch(Exception e){
@@ -298,11 +322,12 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
             }
         }else{
             displayToast("Please ensure every credential is filled in correctly");
+
             //shortcut
-            Intent intent = new Intent(this, ActivitySuccessfulDisplay.class);
-            intent.putExtra("successfulDisplayIndicator", "registration");
-            startActivity(intent);
-            finish();
+//            Intent intent = new Intent(this, ActivitySuccessfulDisplay.class);
+//            intent.putExtra("successfulDisplayIndicator", "registration");
+//            startActivity(intent);
+//            finish();
         }
     }
 

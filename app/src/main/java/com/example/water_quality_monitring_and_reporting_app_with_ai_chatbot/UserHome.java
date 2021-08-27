@@ -39,10 +39,11 @@ public class UserHome extends AppCompatActivity{
 
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
-    private final String emailPreference = "NRIC";
+    private final String userIDPreference = "userID";
+    private final String emailPreference = "email";
     private final String userTypePreference = "userType";
     private final String passwordPreference = "password";
-    private final String ubidotsThreadStopPreference = "ubidotsThreadStop";
+    private final String apiPreference = "api";
 
     private UserWaterSensor userWaterSensor;
     //private ThreadUbidots threadUbidots;
@@ -53,12 +54,13 @@ public class UserHome extends AppCompatActivity{
 
     private GraphView graphWQI;
     private UserIoTValues userIoTValues;
-    private LinearLayout userHome_linearlayout_graphDetails_hide, userHome_linearlayout_others;
+    private LinearLayout userHome_linearlayout_graphDetails_hide, userHome_linearlayout_others, userHome_linearlayout_callToSetup;
     private TextView userHome_txt_clickToViewMore;
     private CardView userHome_cv_graph;
     private UserIoTWQICalculation WQIcalc;
     private ImageView userHome_img_setting;
     private PopupMenu userHome_popupMenu_setting;
+    private String getAPIPreference = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,8 @@ public class UserHome extends AppCompatActivity{
         //threadUbidots = new ThreadUbidots();
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        String currentUserID = mPreferences.getString(userIDPreference, null);
+        getAPIPreference = mPreferences.getString(apiPreference, null);
 
         try{
             userWaterSensor.start();
@@ -80,6 +84,8 @@ public class UserHome extends AppCompatActivity{
         graphWQI = findViewById(R.id.userHome_graph_WQI);
         userHome_linearlayout_graphDetails_hide = findViewById(R.id.userHome_linearlayout_graphDetails_hide);
         userHome_linearlayout_others = findViewById(R.id.userHome_linearlayout_others);
+        userHome_linearlayout_callToSetup = findViewById(R.id.userHome_linearlayout_callToSetup);
+
         userHome_txt_clickToViewMore = findViewById(R.id.userHome_txt_clickToViewMore);
         userHome_cv_graph = findViewById(R.id.userHome_cv_graph);
         userHome_img_setting = findViewById(R.id.userHome_img_setting);
@@ -110,8 +116,7 @@ public class UserHome extends AppCompatActivity{
 //                        }catch(Exception e){
 //
 //                        }
-
-                        ubidotsAsyncTask.cancel(true);
+                        runApiUbidots(false);
 
                         // below line will apply empty
                         // data to shared prefs.
@@ -128,6 +133,12 @@ public class UserHome extends AppCompatActivity{
                 return true;
             }
         });
+
+        if(getAPIPreference.equals("")){
+            userHome_txt_clickToViewMore.setVisibility(View.GONE);
+            userHome_linearlayout_callToSetup.setVisibility(View.VISIBLE);
+            graphWQI.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -148,7 +159,9 @@ public class UserHome extends AppCompatActivity{
 //        if(!threadUbidots.isAlive())
 //            threadUbidots.start();
 
-        ubidotsAsyncTask = new ApiUbidots().execute();
+        //check whether this user is having his api key or not,
+
+        runApiUbidots(true);
 
         //registerReceiver(pollutionLevelReceiver, new IntentFilter(Intent.ACTION_ATTACH_DATA));
         Toast.makeText(this,"Start!",Toast.LENGTH_SHORT).show();
@@ -170,7 +183,7 @@ public class UserHome extends AppCompatActivity{
 //        if(!threadUbidots.isAlive())
 //            threadUbidots.start();
 
-        ubidotsAsyncTask = new ApiUbidots().execute();
+        runApiUbidots(true);
 
         //registerReceiver(pollutionLevelReceiver, new IntentFilter(Intent.ACTION_ATTACH_DATA));
         Toast.makeText(this,"Restart!",Toast.LENGTH_SHORT).show();
@@ -200,7 +213,7 @@ public class UserHome extends AppCompatActivity{
 //                                System.out.println("In thread: " + e.toString());
 //                            }
                             System.out.println("RunApiUbidots");
-                            ubidotsAsyncTask = new ApiUbidots().execute();
+                            runApiUbidots(true);
                         }
                     });
 
@@ -211,6 +224,18 @@ public class UserHome extends AppCompatActivity{
                 //}
             }
         }).start();
+    }
+
+    public void runApiUbidots(Boolean run){
+        if(!getAPIPreference.equals(null)){
+            if(!getAPIPreference.equals("")){
+                if(run){
+                    ubidotsAsyncTask = new ApiUbidots().execute();
+                }else{
+                    ubidotsAsyncTask.cancel(true);
+                }
+            }
+        }
     }
 
 //    private class ThreadUbidots extends Thread{
@@ -265,16 +290,18 @@ public class UserHome extends AppCompatActivity{
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void viewGraphDetails(View view) {
-        TransitionManager.beginDelayedTransition(userHome_linearlayout_others, new AutoTransition());
-        if(userHome_linearlayout_graphDetails_hide.getVisibility() == View.GONE){
-            userHome_linearlayout_graphDetails_hide.setVisibility(View.VISIBLE);
-            userHome_txt_clickToViewMore.setText(R.string.hide);
+        if(!getAPIPreference.equals("")){
+            TransitionManager.beginDelayedTransition(userHome_linearlayout_others, new AutoTransition());
+            if(userHome_linearlayout_graphDetails_hide.getVisibility() == View.GONE){
+                userHome_linearlayout_graphDetails_hide.setVisibility(View.VISIBLE);
+                userHome_txt_clickToViewMore.setText(R.string.hide);
+            }
+            else{
+                userHome_linearlayout_graphDetails_hide.setVisibility(View.GONE);
+                userHome_txt_clickToViewMore.setText(R.string.view_more);
+            }
+            TransitionManager.beginDelayedTransition(userHome_cv_graph, new AutoTransition());
         }
-        else{
-            userHome_linearlayout_graphDetails_hide.setVisibility(View.GONE);
-            userHome_txt_clickToViewMore.setText(R.string.view_more);
-        }
-        TransitionManager.beginDelayedTransition(userHome_cv_graph, new AutoTransition());
     }
 
     public void settings(View view) {
@@ -287,7 +314,7 @@ public class UserHome extends AppCompatActivity{
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
-        private final String API_KEY = "BBFF-d0da8e6ab1cdee030aa24fe674d2a051330";
+        private String API_KEY = ""; //BBFF-d0da8e6ab1cdee030aa24fe674d2a051330
 
         TextView pollutionLevel;
         TextView userHome_txt_currentWQI;
@@ -295,61 +322,76 @@ public class UserHome extends AppCompatActivity{
         protected void onPreExecute(){
             pollutionLevel = findViewById(R.id.pollutionlevel);
             userHome_txt_currentWQI = findViewById(R.id.userHome_txt_currentWQI);
+
+            String getuserIDPreference = mPreferences.getString(userIDPreference, null);
+
+            DatabaseHelper dbHelper = new DatabaseHelper(UserHome.this);
+
+            API_KEY = dbHelper.getAPIKey(getuserIDPreference);
+
+            System.out.println("Running onPreExecute ...");
         }
 
         @Override
         protected Value[] doInBackground(Integer... params) {
+            System.out.println("Running doInBackGround ...");
 
+            Value[] valuesDO = new Value[0];
             ApiClient apiClient = new ApiClient(API_KEY);
 
-            DataSource[] devices = apiClient.getDataSources();
+            try{
+                DataSource[] devices = apiClient.getDataSources();
 
-            DataSource device = null;
+                DataSource device = null;
 
-            for (int i = 0; i < devices.length; i++){
-                if(devices[i].getName().equals("Water Quality Monitoring")){
-                    device = devices[i];
-                    break;
+                for (int i = 0; i < devices.length; i++){
+                    if(devices[i].getName().equals("Water Quality Monitoring")){
+                        device = devices[i];
+                        break;
+                    }
                 }
+
+                Variable[] variables = device.getVariables();
+
+                Variable BOD = null;
+                Variable COD = null;
+                Variable DO = null;
+                Variable NH3N = null;
+                Variable pH = null;
+                Variable SS = null;
+
+                for (int j=0; j < variables.length; j++){
+                    if(variables[j].getName().equals("bod"))
+                        BOD = variables[j];
+
+                    if(variables[j].getName().equals("cod"))
+                        COD = variables[j];
+
+                    if(variables[j].getName().equals("do"))
+                        DO = variables[j];
+
+                    if(variables[j].getName().equals("nh3n"))
+                        NH3N = variables[j];
+
+                    if(variables[j].getName().equals("ph"))
+                        pH = variables[j];
+
+                    if(variables[j].getName().equals("ss"))
+                        SS = variables[j];
+                }
+
+                valuesDO = DO.getValues();
+                Value[] valuesBOD = BOD.getValues();
+                Value[] valuesCOD = COD.getValues();
+                Value[] valuesNH3N = NH3N.getValues();
+                Value[] valuesSS = SS.getValues();
+                Value[] valuespH = pH.getValues();
+
+                userIoTValues = new UserIoTValues(valuesDO, valuesBOD, valuesCOD, valuesNH3N, valuesSS, valuespH);
+            }catch(Exception e){
+
             }
 
-            Variable[] variables = device.getVariables();
-
-            Variable BOD = null;
-            Variable COD = null;
-            Variable DO = null;
-            Variable NH3N = null;
-            Variable pH = null;
-            Variable SS = null;
-
-            for (int j=0; j < variables.length; j++){
-                if(variables[j].getName().equals("bod"))
-                    BOD = variables[j];
-
-                if(variables[j].getName().equals("cod"))
-                    COD = variables[j];
-
-                if(variables[j].getName().equals("do"))
-                    DO = variables[j];
-
-                if(variables[j].getName().equals("nh3n"))
-                    NH3N = variables[j];
-
-                if(variables[j].getName().equals("ph"))
-                    pH = variables[j];
-
-                if(variables[j].getName().equals("ss"))
-                    SS = variables[j];
-            }
-
-            Value[] valuesDO = DO.getValues();
-            Value[] valuesBOD = BOD.getValues();
-            Value[] valuesCOD = COD.getValues();
-            Value[] valuesNH3N = NH3N.getValues();
-            Value[] valuesSS = SS.getValues();
-            Value[] valuespH = pH.getValues();
-
-            userIoTValues = new UserIoTValues(valuesDO, valuesBOD, valuesCOD, valuesNH3N, valuesSS, valuespH);
 
             return valuesDO;
         }
@@ -367,22 +409,28 @@ public class UserHome extends AppCompatActivity{
 
             // Update your views here
 
+             // declare an array of DataPoint objects with the same size as your list
             int listSize = 11;
-            DataPoint[] dataPoints = new DataPoint[listSize]; // declare an array of DataPoint objects with the same size as your list
+            DataPoint[] dataPoints = new DataPoint[listSize];
             int y = listSize - 1;
 
             double calculatedWQI = 0.0;
             for (int i = 0; i < listSize; i++) {
                 // add new DataPoint object to the array for each of your list entries
-                Value[] DO = userIoTValues.getValuesDO();
-                WQIcalc = new UserIoTWQICalculation(
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuesDO()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuesBOD()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuesCOD()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuesNH3N()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuesSS()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuespH()[y - i].getValue()))
-                );
+                try{
+                    Value[] DO = userIoTValues.getValuesDO();
+                    WQIcalc = new UserIoTWQICalculation(
+                            Double.parseDouble(String.valueOf(userIoTValues.getValuesDO()[y - i].getValue())),
+                            Double.parseDouble(String.valueOf(userIoTValues.getValuesBOD()[y - i].getValue())),
+                            Double.parseDouble(String.valueOf(userIoTValues.getValuesCOD()[y - i].getValue())),
+                            Double.parseDouble(String.valueOf(userIoTValues.getValuesNH3N()[y - i].getValue())),
+                            Double.parseDouble(String.valueOf(userIoTValues.getValuesSS()[y - i].getValue())),
+                            Double.parseDouble(String.valueOf(userIoTValues.getValuespH()[y - i].getValue()))
+                    );
+                }catch(Exception e){
+
+                }
+
                 WQIcalc.calculateWQI();
                 calculatedWQI = WQIcalc.getWQI();
                 dataPoints[i] = new DataPoint(i, calculatedWQI); //calculated WQI
