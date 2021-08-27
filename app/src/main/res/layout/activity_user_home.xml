@@ -64,7 +64,7 @@
 
             <LinearLayout
                 android:id="@+id/linearScroll"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -127,7 +127,7 @@
                                 <LinearLayout
                                     android:id="@+id/userHome_linearlayout_callToSetup"
                                     android:layout_width="match_parent"
-                                    android:layout_height="240dp"
+                                    android:layout_height="wrap_content"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -140,17 +140,32 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="1dip"
                                         android:background="#FF909090"
-                                        android:layout_marginTop="10dp"
                                         android:layout_marginBottom="10dp"/>
 
                                     <TextView
                                         android:id="@+id/userHome_txt_callToSetup"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/nunito_sans"
-                                        android:text="Oops! You haven't set up your water sensor"
+                                        android:text="@string/call_to_setup"
                                         android:textSize="16dp"
-                                        android:layout_gravity="center"/>
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:layout_marginBottom="10dp"/>
+
+                                    <com.airbnb.lottie.LottieAnimationView
+                                        android:id="@+id/activitySuccessful_lottie_regisSuccess"
+                                        android:layout_width="200dp"
+                                        android:layout_height="180dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintHorizontal_bias="0.5"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:lottie_autoPlay="true"
+                                        app:lottie_loop="true"
+                                        android:layout_gravity="center"
+                                        android:layout_marginBottom="10dp"
+                                        app:lottie_rawRes="@raw/finding_lottie" />
 
                                     <Button
                                         android:id="@+id/userHome_btn_setUpNow"
