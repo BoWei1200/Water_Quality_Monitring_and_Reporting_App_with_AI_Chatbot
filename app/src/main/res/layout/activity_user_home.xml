@@ -134,7 +134,7 @@
                                     app:layout_constraintTop_toBottomOf="@+id/userHome_txt_graphWQI"
                                     android:orientation="vertical"
                                     android:padding="10dp"
-                                    android:visibility="visible">
+                                    android:visibility="gone">
 
                                     <View
                                         android:layout_width="match_parent"
