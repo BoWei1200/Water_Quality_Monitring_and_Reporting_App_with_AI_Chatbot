@@ -3,6 +3,7 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -13,6 +14,8 @@ import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ import com.ubidots.Variable;
 public class UserUbidotsAccSetup extends AppCompatActivity {
     private TextView userUbidotsAccSetup_txt_step1Desc, userUbidotsAccSetup_txt_errorMsgAPI;
     private TextInputEditText userUbidotsAccSetup_txtInputET_step3APIKey;
+    private LinearLayout userUbidotsAccSetup_linearLayout_searching;
 
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
@@ -47,6 +51,7 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
+        userUbidotsAccSetup_linearLayout_searching = findViewById(R.id.userUbidotsAccSetup_linearLayout_searching);
 
         userUbidotsAccSetup_txt_step1Desc = findViewById(R.id.userUbidotsAccSetup_txt_step1Desc);
         userUbidotsAccSetup_txtInputET_step3APIKey = findViewById(R.id.userUbidotsAccSetup_txtInputET_step3APIKey);
@@ -104,9 +109,10 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
 
                 if(!dbHelper.isAPIKey_exist(API_KEY)){
                     abidotsSetup = new ApiUbidotsSetup().execute();
-
-                    startActivity(new Intent(this, UserUbidotsAPIkeyLoading_Searching.class));
-                    finish();
+                    userUbidotsAccSetup_linearLayout_searching.setVisibility(View.VISIBLE);
+                    hideKeyboard(this);
+//                    startActivity(new Intent(this, UserUbidotsAPIkeyLoading_Searching.class));
+//                    finish();
                 }else{
                     displayToast("This API key already exists");
                 }
@@ -122,6 +128,17 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
 
     public void displayToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public class ApiUbidotsSetup extends AsyncTask<Integer, Void, Value[]> {
@@ -187,7 +204,8 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                     }).start();
 
                     System.out.println("ERROR!!      "+ e.toString());
-                    startActivity(getIntent());
+                    userUbidotsAccSetup_linearLayout_searching.setVisibility(View.GONE);
+
                     finish();
                 }
 //                System.out.println(mPreferences.getString(APIExistPreference, null));
