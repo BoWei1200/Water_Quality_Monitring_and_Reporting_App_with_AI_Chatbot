@@ -55,6 +55,10 @@ public class ActivitySuccessfulDisplay extends AppCompatActivity {
     }
 
     public void skip(View view) {
-
+        switch(passedActivity){
+            case "registration":
+                startActivity(new Intent(this, Login.class));
+                break;
+        }
     }
 }

@@ -75,7 +75,7 @@
     </string>
     <string name="loading_searching_text">Please wait for a while..\n
         We are linking your Ubidots account\n\n Please don\'t exit and refresh this page</string>
-    <string name="call_to_setup">Oops!\nYou haven\'t set up your water sensor</string>
+    <string name="call_to_setup">Oops!\nYou haven\'t set up your Ubidots account</string>
     <string-array name="state_array">
         <item>Johor</item>
         <item>Kedah</item>

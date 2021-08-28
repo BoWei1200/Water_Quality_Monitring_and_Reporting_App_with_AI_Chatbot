@@ -33,9 +33,6 @@ import com.jjoe64.graphview.GraphView;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class UserHome extends AppCompatActivity{
-    private static int i = 0;
-    private static final String POLLUTION_LEVEL = "level";
-    //private TextView pollutionLevel;
 
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
@@ -44,9 +41,10 @@ public class UserHome extends AppCompatActivity{
     private final String userTypePreference = "userType";
     private final String passwordPreference = "password";
     private final String apiPreference = "api";
+    private final String scannedDeviceExistPreference = "scannedDeviceExist";
 
     private UserWaterSensor userWaterSensor;
-    //private ThreadUbidots threadUbidots;
+
     private ApiUbidots apiUbidots;
     private Boolean ubidotsExecuteStop = false;
 
@@ -55,12 +53,13 @@ public class UserHome extends AppCompatActivity{
     private GraphView graphWQI;
     private UserIoTValues userIoTValues;
     private LinearLayout userHome_linearlayout_graphDetails_hide, userHome_linearlayout_others, userHome_linearlayout_callToSetup;
-    private TextView userHome_txt_clickToViewMore;
+    private TextView userHome_txt_clickToViewMore, userHome_txt_callToSetup;
     private CardView userHome_cv_graph;
     private UserIoTWQICalculation WQIcalc;
     private ImageView userHome_img_setting;
     private PopupMenu userHome_popupMenu_setting;
     private String getAPIPreference = "";
+    private String getScannedDeviceExistPreference = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +71,8 @@ public class UserHome extends AppCompatActivity{
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         String currentUserID = mPreferences.getString(userIDPreference, null);
-        getAPIPreference = mPreferences.getString(apiPreference, null);
+        getAPIPreference = mPreferences.getString(apiPreference, "");
+        getScannedDeviceExistPreference = mPreferences.getString(scannedDeviceExistPreference, "");
 
         try{
             userWaterSensor.start();
@@ -87,6 +87,8 @@ public class UserHome extends AppCompatActivity{
         userHome_linearlayout_callToSetup = findViewById(R.id.userHome_linearlayout_callToSetup);
 
         userHome_txt_clickToViewMore = findViewById(R.id.userHome_txt_clickToViewMore);
+        userHome_txt_callToSetup = findViewById(R.id.userHome_txt_callToSetup);
+
         userHome_cv_graph = findViewById(R.id.userHome_cv_graph);
         userHome_img_setting = findViewById(R.id.userHome_img_setting);
 
@@ -128,7 +130,6 @@ public class UserHome extends AppCompatActivity{
                         startActivity(i);
                         finish();
                         break;
-
                 }
                 return true;
             }
@@ -136,6 +137,11 @@ public class UserHome extends AppCompatActivity{
 
         if(getAPIPreference.equals("")){
             userHome_txt_clickToViewMore.setVisibility(View.GONE);
+            userHome_linearlayout_callToSetup.setVisibility(View.VISIBLE);
+            graphWQI.setVisibility(View.GONE);
+        }else if(getScannedDeviceExistPreference.equals("")){
+            userHome_txt_clickToViewMore.setVisibility(View.GONE);
+            userHome_txt_callToSetup.setText("Oops! You haven't set up your water sensor");
             userHome_linearlayout_callToSetup.setVisibility(View.VISIBLE);
             graphWQI.setVisibility(View.GONE);
         }
@@ -227,8 +233,8 @@ public class UserHome extends AppCompatActivity{
     }
 
     public void runApiUbidots(Boolean run){
-        if(!getAPIPreference.equals(null)){
-            if(!getAPIPreference.equals("")){
+        if(!getAPIPreference.equals(null) && !getScannedDeviceExistPreference.equals(null)){
+            if(!getAPIPreference.equals("") && !getScannedDeviceExistPreference.equals("")){
                 if(run){
                     ubidotsAsyncTask = new ApiUbidots().execute();
                 }else{
@@ -279,9 +285,16 @@ public class UserHome extends AppCompatActivity{
                 break;
 
             case R.id.userHome_btn_WQIDetails:
-
                 intent = new Intent(this, UserGraphDetails.class);
                 intent.putExtra("WQIIndices", WQIcalc);
+                break;
+
+            case R.id.userHome_btn_setUpNow:
+                if(getAPIPreference.equals("")){
+                    intent = new Intent(this, UserUbidotsAccSetup.class);
+                }else{
+                    intent = new Intent(this, UserUbidotsScanDevice.class);
+                }
                 break;
         }
 

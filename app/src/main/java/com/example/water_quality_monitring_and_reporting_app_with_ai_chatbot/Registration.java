@@ -25,6 +25,9 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
     private final String emailPreference = "email";
+    private final String userIDPreference = "userID";
+    private final String userTypePreference = "userType";
+    private final String passwordPreference = "password";
 
     private TextInputEditText registration_txtInputET_fName, registration_txtInputET_lName,
             registration_txtInputET_email, registration_txtInputET_phone, registration_txtInputET_addressLine,
@@ -47,7 +50,6 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_registration);
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-        String getEmailPreference = mPreferences.getString(emailPreference, null);
 
         registration_txtInputET_fName = findViewById(R.id.registration_txtInputET_fName);
         registration_txtInputET_lName = findViewById(R.id.registration_txtInputET_lName);
@@ -296,7 +298,13 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
 
                         SharedPreferences.Editor editor = mPreferences.edit();
 
-                        editor.putString(emailPreference, registration_txtInputET_email.getText().toString());
+                        String userEmail = registration_txtInputET_email.getText().toString();
+
+                        editor.putString(userIDPreference, dbHelper.getUserID(userEmail));
+                        editor.putString(emailPreference, userEmail);
+                        editor.putString(userTypePreference, "NA"); //user or admin
+                        editor.putString(passwordPreference, registration_txtInputET_confirmPassword.getText().toString());
+
                         editor.commit();
 
                         Intent intent = new Intent(this, ActivitySuccessfulDisplay.class);

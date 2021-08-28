@@ -51,7 +51,7 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
-        userUbidotsAccSetup_linearLayout_searching = findViewById(R.id.userUbidotsAccSetup_linearLayout_searching);
+        userUbidotsAccSetup_linearLayout_searching = findViewById(R.id.userUbidotsScanDevice_linearLayout_searching);
 
         userUbidotsAccSetup_txt_step1Desc = findViewById(R.id.userUbidotsAccSetup_txt_step1Desc);
         userUbidotsAccSetup_txtInputET_step3APIKey = findViewById(R.id.userUbidotsAccSetup_txtInputET_step3APIKey);
@@ -169,11 +169,18 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                     Variable[] variable = apiClient.getVariables();
 
                     String getEmailPreference = mPreferences.getString(emailPreference, null);
+                    final String apiPreference = "api";
 
                     DatabaseHelper dbHelper = new DatabaseHelper(UserUbidotsAccSetup.this);
 
                     String userID = dbHelper.getUserID(getEmailPreference);
                     dbHelper.addAPIKey(API_KEY, userID);
+
+                    SharedPreferences.Editor editor = mPreferences.edit();
+
+                    editor.putString(apiPreference, API_KEY);
+
+                    editor.commit();
 
                     //store API key based on the userID
 

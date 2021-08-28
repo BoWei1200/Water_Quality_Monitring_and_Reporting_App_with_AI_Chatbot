@@ -92,7 +92,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/userUbidotsAccSetup_cv_step2"
+                    android:id="@+id/userUbidotsScanDevice_cv_availableSensor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="1dp"
@@ -248,7 +248,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/userUbidotsAccSetup_linearLayout_searching"
+        android:id="@+id/userUbidotsScanDevice_linearLayout_searching"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
@@ -266,7 +266,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/APIkeyLoadingSearching_lottie_loading"
+                android:id="@+id/userUbidotsScanDevice_lottie_loading"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -278,7 +278,7 @@
                 app:lottie_rawRes="@raw/loading_water_bowl" />
 
             <TextView
-                android:id="@+id/APIkeyLoadingSearching_txt_desc1"
+                android:id="@+id/userUbidotsScanDevice_txt_desc1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -290,10 +290,10 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/APIkeyLoadingSearching_lottie_loading" />
+                app:layout_constraintTop_toBottomOf="@+id/userUbidotsScanDevice_lottie_loading" />
 
             <TextView
-                android:id="@+id/APIkeyLoadingSearching_txt_desc2"
+                android:id="@+id/userUbidotsScanDevice_txt_desc2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -302,7 +302,7 @@
                 android:textSize="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/APIkeyLoadingSearching_txt_desc1" />
+                app:layout_constraintTop_toBottomOf="@+id/userUbidotsScanDevice_txt_desc1" />
 
             <TextView
                 android:id="@+id/APIkeyLoadingSearching_txt_desc3"
@@ -315,7 +315,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/APIkeyLoadingSearching_txt_desc2" />
+                app:layout_constraintTop_toBottomOf="@+id/userUbidotsScanDevice_txt_desc2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

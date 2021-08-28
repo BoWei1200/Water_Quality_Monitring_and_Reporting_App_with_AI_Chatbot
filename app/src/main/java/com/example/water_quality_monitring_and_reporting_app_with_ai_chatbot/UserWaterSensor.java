@@ -2,6 +2,7 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 public class UserWaterSensor extends Thread{
     private Boolean stop = false;
+    private int monitorFrequency;
 
     public UserWaterSensor() {
 
@@ -12,7 +13,8 @@ public class UserWaterSensor extends Thread{
         int i = 0;
         while (!stop) {
 
-            //detect water quality and store it in ubidots
+            //continuously detect water quality and store it in ubidots
+            //need try catch for network connection
             System.out.println("detect for " + i + "times");
             try {
                 Thread.sleep(1000);
