@@ -30,8 +30,6 @@ import com.ubidots.Variable;
 
 import com.jjoe64.graphview.GraphView;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class UserHome extends AppCompatActivity{
 
     private SharedPreferences mPreferences;
@@ -42,11 +40,12 @@ public class UserHome extends AppCompatActivity{
     private final String passwordPreference = "password";
     private final String apiPreference = "api";
     private final String scannedDeviceExistPreference = "scannedDeviceExist";
+    private final String stopSensorPreference = "stopSensor";
+    private final String currentRunningSensorPreference = "currentRunningSensor";
 
     private UserWaterSensor userWaterSensor;
 
     private ApiUbidots apiUbidots;
-    private Boolean ubidotsExecuteStop = false;
 
     private AsyncTask ubidotsAsyncTask;
 
@@ -58,8 +57,11 @@ public class UserHome extends AppCompatActivity{
     private UserIoTWQICalculation WQIcalc;
     private ImageView userHome_img_setting;
     private PopupMenu userHome_popupMenu_setting;
+
     private String getAPIPreference = "";
     private String getScannedDeviceExistPreference = "";
+    private String getStopSensorPreference = "";
+    private String getCurrentRunningSensorPreference = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +73,11 @@ public class UserHome extends AppCompatActivity{
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         String currentUserID = mPreferences.getString(userIDPreference, null);
+
         getAPIPreference = mPreferences.getString(apiPreference, "");
         getScannedDeviceExistPreference = mPreferences.getString(scannedDeviceExistPreference, "");
-
-        try{
-            userWaterSensor.start();
-        }catch(Exception e){
-            System.out.println(e.toString());
-        }
+        getStopSensorPreference = mPreferences.getString(stopSensorPreference, "");
+        getCurrentRunningSensorPreference = mPreferences.getString(currentRunningSensorPreference, "");
 
         //pollutionLevel = findViewById(R.id.pollutionlevel);
         graphWQI = findViewById(R.id.userHome_graph_WQI);
@@ -105,10 +104,13 @@ public class UserHome extends AppCompatActivity{
 
                         // below line will clear
                         // the data in shared prefs.
+                        editor.putString(stopSensorPreference, "1");
                         editor.clear();
                         //userWaterSensor.stopThread();
 
-                        ubidotsExecuteStop = true;
+                        userWaterSensor.stopThread();
+
+
                         //threadUbidots.stopThread();
                         //threadUbidots.interrupt();
 
@@ -134,6 +136,23 @@ public class UserHome extends AppCompatActivity{
                 return true;
             }
         });
+
+        if(getScannedDeviceExistPreference.equals("1")){
+            try{
+                userWaterSensor = new UserWaterSensor(this, MODE_PRIVATE);
+                Thread userWaterSensorThread = new Thread(userWaterSensor);
+                if(!getCurrentRunningSensorPreference.equals("1")){ // if current running thread is not stopped (stop == false), cant start()
+                    userWaterSensorThread.start();
+
+                    SharedPreferences.Editor editor = mPreferences.edit();
+                    editor.putString(currentRunningSensorPreference, "1");
+                    editor.commit();
+                }
+            }catch(Exception e){
+                System.out.println(e.toString());
+                System.out.println("cannot run thread!");
+            }
+        }
 
         if(getAPIPreference.equals("")){
             userHome_txt_clickToViewMore.setVisibility(View.GONE);
@@ -230,6 +249,10 @@ public class UserHome extends AppCompatActivity{
                 //}
             }
         }).start();
+    }
+
+    public Boolean getStopSensorPreference(){
+        return (mPreferences.getString(stopSensorPreference, "").equals("1"));
     }
 
     public void runApiUbidots(Boolean run){

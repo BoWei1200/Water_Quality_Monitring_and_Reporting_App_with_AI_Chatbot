@@ -15,6 +15,8 @@ public class UserUbidotsScanDevice extends AppCompatActivity {
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
     private final String scannedDeviceExistPreference = "scannedDeviceExist";
+    private final String stopSensorPreference = "stopSensor";
+    private final String currentRunningSensorPreference = "currentRunningSensor";
 
     private Switch serUbidotsScanDevice_switch_sensor;
 
@@ -35,10 +37,12 @@ public class UserUbidotsScanDevice extends AppCompatActivity {
 
         if(serUbidotsScanDevice_switch_sensor.isChecked()){
             editor.putString(scannedDeviceExistPreference, "1");
+            editor.putString(stopSensorPreference, "");
         }else{
             editor.putString(scannedDeviceExistPreference, "");
+            editor.putString(stopSensorPreference, "1");
         }
-
+        editor.putString(currentRunningSensorPreference, "");
         editor.commit();
 
         startActivity(new Intent(this, Login.class));
