@@ -58,7 +58,7 @@
                     android:src="@drawable/watersensoricon" />
 
                 <Switch
-                    android:id="@+id/serUbidotsScanDevice_switch_sensor"
+                    android:id="@+id/userUbidotsScanDevice_switch_sensor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nunito_sans"

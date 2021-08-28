@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 
 public class UserUbidotsScanDevice extends AppCompatActivity {
@@ -18,7 +16,7 @@ public class UserUbidotsScanDevice extends AppCompatActivity {
     private final String stopSensorPreference = "stopSensor";
     private final String currentRunningSensorPreference = "currentRunningSensor";
 
-    private Switch serUbidotsScanDevice_switch_sensor;
+    private Switch userUbidotsScanDevice_switch_sensor;
 
 
     @Override
@@ -28,14 +26,14 @@ public class UserUbidotsScanDevice extends AppCompatActivity {
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
-        serUbidotsScanDevice_switch_sensor = findViewById(R.id.serUbidotsScanDevice_switch_sensor);
+        userUbidotsScanDevice_switch_sensor = findViewById(R.id.userUbidotsScanDevice_switch_sensor);
     }
 
 
     public void save(View view) {
         SharedPreferences.Editor editor = mPreferences.edit();
 
-        if(serUbidotsScanDevice_switch_sensor.isChecked()){
+        if(userUbidotsScanDevice_switch_sensor.isChecked()){
             editor.putString(scannedDeviceExistPreference, "1");
             editor.putString(stopSensorPreference, "");
         }else{
