@@ -24,7 +24,7 @@
         app:titleTextColor="#FFFFFF" />
 
     <ImageView
-        android:id="@+id/userHome_img_setting"
+        android:id="@+id/systemAdminHome_img_setting"
         android:layout_width="40dp"
         android:layout_height="40dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,10 +35,10 @@
         android:onClick="settings"/>
 
     <ImageView
-        android:id="@+id/userHome_img_refresh"
+        android:id="@+id/systemAdminHome_img_refresh"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        app:layout_constraintEnd_toStartOf="@+id/userHome_img_setting"
+        app:layout_constraintEnd_toStartOf="@+id/systemAdminHome_img_setting"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/ic_refresh_icon"
         android:layout_marginRight="10dp"

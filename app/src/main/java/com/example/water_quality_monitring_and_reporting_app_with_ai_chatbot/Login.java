@@ -141,11 +141,29 @@ public class Login extends AppCompatActivity {
                         //To show the account holder name that the user logged in
                         displayToast("Welcome, "+name+" !");
 
-                        if(userType.equals("NA")){
-                            startActivity(new Intent (this, UserHome.class));
+                        if(userType.equals("SAD")){
+                            startActivity(new Intent (this, SystemAdminHome.class));
                             finish();
-                        }else{
-                            startActivity(new Intent (this, AdminHome.class));
+                        }
+
+                        else if(userType.equals("AD")){
+
+                        }
+
+                        else if(userType.equals("IN")){
+
+                        }
+
+                        else if(userType.equals("EX")){
+
+                        }
+
+                        else if(userType.equals("RH")){
+
+                        }
+
+                        else if(userType.equals("NA")){
+                            startActivity(new Intent (this, UserHome.class));
                             finish();
                         }
                     }

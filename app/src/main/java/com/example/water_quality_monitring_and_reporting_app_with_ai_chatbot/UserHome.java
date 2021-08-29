@@ -35,6 +35,7 @@ public class UserHome extends AppCompatActivity{
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
     private final String userIDPreference = "userID";
+
     private final String emailPreference = "email";
     private final String userTypePreference = "userType";
     private final String passwordPreference = "password";
@@ -78,7 +79,6 @@ public class UserHome extends AppCompatActivity{
         getStopSensorPreference = mPreferences.getString(stopSensorPreference, "");
         getCurrentRunningSensorPreference = mPreferences.getString(currentRunningSensorPreference, "");
 
-        //pollutionLevel = findViewById(R.id.pollutionlevel);
         graphWQI = findViewById(R.id.userHome_graph_WQI);
         userHome_linearlayout_graphDetails_hide = findViewById(R.id.userHome_linearlayout_graphDetails_hide);
         userHome_linearlayout_others = findViewById(R.id.userHome_linearlayout_others);
@@ -88,7 +88,7 @@ public class UserHome extends AppCompatActivity{
         userHome_txt_callToSetup = findViewById(R.id.userHome_txt_callToSetup);
 
         userHome_cv_graph = findViewById(R.id.userHome_cv_graph);
-        userHome_img_setting = findViewById(R.id.userHome_img_setting);
+        userHome_img_setting = findViewById(R.id.systemAdminHome_img_setting);
 
         WQIcalc = new UserIoTWQICalculation();
 

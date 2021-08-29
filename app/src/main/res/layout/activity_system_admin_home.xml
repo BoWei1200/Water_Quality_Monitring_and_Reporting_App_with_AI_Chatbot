@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SystemAdminHome">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/systemAdminHome_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/mainTheme"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/Toolbar_back_button_style"
+        app:title="@string/app_name"
+        app:titleMargin="2dp"
+        app:titleTextColor="#FFFFFF" />
+
+    <ImageView
+        android:id="@+id/systemAdminHome_img_setting"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_setting_icon"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:onClick="settings"/>
+
+    <ImageView
+        android:id="@+id/systemAdminHome_img_refresh"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toStartOf="@+id/systemAdminHome_img_setting"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_refresh_icon"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:onClick="refresh"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
