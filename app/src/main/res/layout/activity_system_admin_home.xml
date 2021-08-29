@@ -81,6 +81,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/systemAdminHome_lottie_company"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/company_discussion" />
+
                 <TextView
                     android:id="@+id/systemAdminHome_txt_numOfOrg"
                     android:layout_width="match_parent"
@@ -91,7 +104,7 @@
                     android:textColor="#93D1EA"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/systemAdminHome_lottie_company" />
 
                 <TextView
                     android:id="@+id/systemAdminHome_txt_organization"
@@ -104,20 +117,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/systemAdminHome_txt_numOfOrg" />
-
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/activitySuccessful_lottie_regisSuccess"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/systemAdminHome_txt_organization"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    app:lottie_rawRes="@raw/company_discussion" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
