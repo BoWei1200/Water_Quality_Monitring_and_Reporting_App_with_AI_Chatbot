@@ -29,7 +29,6 @@ public class UserUbidotsScanDevice extends AppCompatActivity {
         userUbidotsScanDevice_switch_sensor = findViewById(R.id.userUbidotsScanDevice_switch_sensor);
     }
 
-
     public void save(View view) {
         SharedPreferences.Editor editor = mPreferences.edit();
 

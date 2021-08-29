@@ -179,27 +179,50 @@
                                 android:id="@+id/userAddReport_txt_Address"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="20dp"
-                                android:text="Address"
+                                android:text=""
                                 android:textSize="18dp"
                                 android:textStyle="bold"
                                 android:fontFamily="@font/nunito_sans"/>
 
                             <TextView
+                                android:id="@+id/userAddReport_txt_errorMsgAddress"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Latitude, Longtitude"
+                                android:text="Requires location service to auto-fill up"
+                                android:gravity="end"
+                                android:textSize="14dp"
+                                android:fontFamily="@font/nunito_sans"
+                                android:textColor="@color/red"
+                                android:visibility="gone"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Latitude, Longitude"
+                                android:layout_marginTop="20dp"
                                 android:fontFamily="@font/nunito_sans"/>
 
                             <TextView
                                 android:id="@+id/userAddReport_txt_LaLongtitude"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="20dp"
-                                android:text="00000000, 00000000"
+                                android:text=""
                                 android:textSize="20dp"
                                 android:textStyle="bold"
                                 android:fontFamily="@font/nunito_sans"/>
+
+                            <TextView
+                                android:id="@+id/userAddReport_txt_errorMsgLaLongitude"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Requires location service to auto-fill up"
+                                android:gravity="end"
+                                android:textSize="14dp"
+                                android:fontFamily="@font/nunito_sans"
+                                android:textColor="@color/red"
+                                android:visibility="gone"/>
+
+                            userAddReport_txt_errorMsgLaLongitude
                         </LinearLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -208,6 +231,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Description ..."
+                            android:layout_marginTop="20dp"
                             app:boxCornerRadiusBottomEnd="20dp"
                             app:boxCornerRadiusBottomStart="20dp"
                             app:boxCornerRadiusTopEnd="20dp"

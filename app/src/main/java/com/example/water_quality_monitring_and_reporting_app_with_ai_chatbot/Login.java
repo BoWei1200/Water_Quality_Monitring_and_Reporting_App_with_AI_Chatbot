@@ -109,6 +109,7 @@ public class Login extends AppCompatActivity {
         this.finishAffinity();
     }
 
+
     public void login(View view) {
         if(edLoginEmailValid && edPasswordValid){
             String edEmail = login_eTxt_email.getText().toString();

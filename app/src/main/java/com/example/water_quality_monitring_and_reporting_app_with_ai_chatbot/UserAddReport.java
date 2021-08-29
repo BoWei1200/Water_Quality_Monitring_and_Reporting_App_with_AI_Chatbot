@@ -46,7 +46,9 @@ import static android.text.TextUtils.split;
 public class UserAddReport extends AppCompatActivity implements LocationListener{
 
     private LinearLayout userAddReport_linearLayout_previous, userAddReport_linearLayout_next;
-    private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude, userAddReport_txt_photoAmount, userAddReport_txt_errorMsgDesc;
+    private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude,
+            userAddReport_txt_photoAmount, userAddReport_txt_errorMsgDesc,
+            userAddReport_txt_errorMsgLaLongitude, userAddReport_txt_errorMsgAddress;
 
     private TextInputEditText userAddReport_etxtInput_pollutionDesc;
 
@@ -81,6 +83,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         userAddReport_txt_LongLatitude = findViewById(R.id.userAddReport_txt_LaLongtitude);
         userAddReport_txt_photoAmount = findViewById(R.id.userAddReport_txt_photoAmount);
         userAddReport_txt_errorMsgDesc = findViewById(R.id.userAddReport_txt_errorMsgDesc);
+        userAddReport_txt_errorMsgLaLongitude = findViewById(R.id.userAddReport_txt_errorMsgLaLongitude);
+        userAddReport_txt_errorMsgAddress = findViewById(R.id.userAddReport_txt_errorMsgAddress);
 
         userAddReport_etxtInput_pollutionDesc = findViewById(R.id.userAddReport_etxtInput_pollutionDesc);
 
@@ -227,6 +231,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             double latitude = location.getLatitude();
 
             userAddReport_txt_LongLatitude.setText( latitude+ ", " +longitude);
+            userAddReport_txt_errorMsgLaLongitude.setVisibility(View.GONE);
+            userAddReport_txt_errorMsgAddress.setVisibility(View.GONE);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -302,10 +308,13 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     }
 
     public void report(View view) {
-        if(photoIndex != 0 && !userAddReport_etxtInput_pollutionDesc.getText().toString().isEmpty()){
+        if(photoIndex != 0
+                && !userAddReport_etxtInput_pollutionDesc.getText().toString().isEmpty()
+                && !userAddReport_txt_LongLatitude.getText().equals("")
+                && !userAddReport_txt_Address.getText().equals("")){
             displayToast("Report Successfully!");
         }else{
-            displayToast("Please make sure photo or description are taken and written");
+            displayToast("Please make sure every requirement is completed");
             //String errorMsg = ""; int errorAmount = 0;
             if(photoIndex == 0){
                 userAddReport_txt_photoAmount.setTextColor(getResources().getColor(R.color.red));
@@ -313,6 +322,14 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
             if(userAddReport_etxtInput_pollutionDesc.getText().toString().isEmpty()){
                 userAddReport_txt_errorMsgDesc.setVisibility(View.VISIBLE);
+            }
+
+            if(userAddReport_txt_LongLatitude.getText().equals("")){
+                userAddReport_txt_errorMsgLaLongitude.setVisibility(View.VISIBLE);
+            }
+
+            if(userAddReport_txt_Address.getText().equals("")){
+                userAddReport_txt_errorMsgAddress.setVisibility(View.VISIBLE);
             }
         }
     }

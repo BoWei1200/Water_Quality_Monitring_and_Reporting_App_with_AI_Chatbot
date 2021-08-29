@@ -69,7 +69,6 @@ public class UserHome extends AppCompatActivity{
         setContentView(R.layout.activity_user_home);
 
         apiUbidots = new ApiUbidots();
-        //threadUbidots = new ThreadUbidots();
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         String currentUserID = mPreferences.getString(userIDPreference, null);
@@ -108,18 +107,6 @@ public class UserHome extends AppCompatActivity{
                         editor.clear();
                         //userWaterSensor.stopThread();
 
-                        userWaterSensor.stopThread();
-
-
-                        //threadUbidots.stopThread();
-                        //threadUbidots.interrupt();
-
-//                        ubidotsExecuteStop = true;
-//                        try{
-//                            apiUbidots.cancel(true);
-//                        }catch(Exception e){
-//
-//                        }
                         runApiUbidots(false);
 
                         // below line will apply empty
@@ -139,7 +126,7 @@ public class UserHome extends AppCompatActivity{
 
         if(getScannedDeviceExistPreference.equals("1")){
             try{
-                userWaterSensor = new UserWaterSensor(this, MODE_PRIVATE);
+                userWaterSensor = new UserWaterSensor(this, MODE_PRIVATE, getAPIPreference);
                 Thread userWaterSensorThread = new Thread(userWaterSensor);
                 if(!getCurrentRunningSensorPreference.equals("1")){ // if current running thread is not stopped (stop == false), cant start()
                     userWaterSensorThread.start();
@@ -158,7 +145,7 @@ public class UserHome extends AppCompatActivity{
             userHome_txt_clickToViewMore.setVisibility(View.GONE);
             userHome_linearlayout_callToSetup.setVisibility(View.VISIBLE);
             graphWQI.setVisibility(View.GONE);
-        }else if(getScannedDeviceExistPreference.equals("")){
+        } else if(getScannedDeviceExistPreference.equals("")){
             userHome_txt_clickToViewMore.setVisibility(View.GONE);
             userHome_txt_callToSetup.setText("Oops! You haven't set up your water sensor");
             userHome_linearlayout_callToSetup.setVisibility(View.VISIBLE);
@@ -170,25 +157,8 @@ public class UserHome extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
 
-//        try{
-//            if(!ubidotsExecuteStop){
-//                apiUbidots.execute();
-//            }
-//        }catch(Exception e){
-//            //apiUbidots.cancel(true);
-//            System.out.println(e.toString());
-//        }
-
-
-//        new ApiUbidots().execute();
-//        if(!threadUbidots.isAlive())
-//            threadUbidots.start();
-
-        //check whether this user is having his api key or not,
-
         runApiUbidots(true);
 
-        //registerReceiver(pollutionLevelReceiver, new IntentFilter(Intent.ACTION_ATTACH_DATA));
         Toast.makeText(this,"Start!",Toast.LENGTH_SHORT).show();
     }
 
@@ -196,21 +166,8 @@ public class UserHome extends AppCompatActivity{
     protected void onRestart(){
         super.onRestart();
 
-//        try{
-//            if(!ubidotsExecuteStop){
-//                apiUbidots.execute();
-//            }
-//        }catch(Exception e){
-//            //apiUbidots.cancel(true);
-//            System.out.println(e.toString());
-//        }
-
-//        if(!threadUbidots.isAlive())
-//            threadUbidots.start();
-
         runApiUbidots(true);
 
-        //registerReceiver(pollutionLevelReceiver, new IntentFilter(Intent.ACTION_ATTACH_DATA));
         Toast.makeText(this,"Restart!",Toast.LENGTH_SHORT).show();
     }
 
@@ -220,23 +177,14 @@ public class UserHome extends AppCompatActivity{
 
         Toast.makeText(this,"Resume!",Toast.LENGTH_SHORT).show();
 
-        //threadUbidots.start();
         new Thread(new Runnable() {
 
             @Override
             public void run() {
-                // we add 100 new entries
-                //while(!ubidotsExecuteStop){
                     runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
-//                            try{
-//                                apiUbidots.execute();
-//                            }catch(Exception e){
-//                                apiUbidots.cancel(true);
-//                                System.out.println("In thread: " + e.toString());
-//                            }
                             System.out.println("RunApiUbidots");
                             runApiUbidots(true);
                         }
@@ -246,13 +194,15 @@ public class UserHome extends AppCompatActivity{
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                     }
-                //}
             }
         }).start();
     }
 
-    public Boolean getStopSensorPreference(){
-        return (mPreferences.getString(stopSensorPreference, "").equals("1"));
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        System.out.println("App completely terminated");
     }
 
     public void runApiUbidots(Boolean run){
@@ -266,33 +216,6 @@ public class UserHome extends AppCompatActivity{
             }
         }
     }
-
-//    private class ThreadUbidots extends Thread{
-//        private final AtomicBoolean ubidotsExecuteStop = new AtomicBoolean(false);
-//
-//        @Override
-//        public void run() {
-//            // we add 100 new entries
-//            System.out.println("Thread stop: " + ubidotsExecuteStop);
-//            while(!ubidotsExecuteStop.get()){
-//                System.out.println(ubidotsExecuteStop.get());
-//                try{
-//                    new ApiUbidots().execute();
-//                }catch(Exception e){
-//                    System.out.println(e.toString());
-//                }
-//
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                }
-//            }
-//        }
-//
-//        public void stopThread(){
-//            ubidotsExecuteStop.set(true);
-//        }
-//    }
 
     public void toOtherPages(View view) {
         Intent intent = new Intent();
@@ -428,7 +351,6 @@ public class UserHome extends AppCompatActivity{
 
             }
 
-
             return valuesDO;
         }
 
@@ -445,7 +367,6 @@ public class UserHome extends AppCompatActivity{
 
             // Update your views here
 
-             // declare an array of DataPoint objects with the same size as your list
             int listSize = 11;
             DataPoint[] dataPoints = new DataPoint[listSize];
             int y = listSize - 1;
@@ -475,13 +396,7 @@ public class UserHome extends AppCompatActivity{
 
             userHome_txt_currentWQI.setText(String.format("%.2f", calculatedWQI));
 
-
             System.out.println(userHome_txt_currentWQI.getText() + "  from txt");
-//            if(!Double.toString(calculatedWQI).isEmpty())
-//            if(userHome_txt_currentWQI.getText().equals("--.--")){
-//                finish();
-//                startActivity(getIntent());
-//            }
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
             graphWQI.removeAllSeries();
@@ -497,12 +412,6 @@ public class UserHome extends AppCompatActivity{
 
             graphWQI.getViewport().setScrollable(true); // enables horizontal scrolling
             graphWQI.getViewport().setScalable(true); // enables horizontal zooming and scrolling
-
-//            GridLabelRenderer gridLabel = graphWQI.getGridLabelRenderer();
-//            gridLabel.setHorizontalAxisTitle("WQI");
-//            gridLabel.setVerticalAxisTitle("WQI");
         }
-
-
     }
 }

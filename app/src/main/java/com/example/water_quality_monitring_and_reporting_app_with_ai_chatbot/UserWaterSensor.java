@@ -2,11 +2,10 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
 
-import androidx.annotation.WorkerThread;
-import androidx.core.content.ContextCompat;
+import com.ubidots.ApiClient;
+import com.ubidots.DataSource;
+import com.ubidots.Variable;
 
 public class UserWaterSensor implements Runnable{
     Boolean stop = false;
@@ -14,10 +13,21 @@ public class UserWaterSensor implements Runnable{
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
     private final String stopSensorPreference = "stopSensor";
 
-    private int monitorFrequency;
+    //private final String demoVariableID = "60f2b0be4763e74e29fcc3aa";
 
-    public UserWaterSensor(Context context, int MODE_PRIVATE) {
+    private String API_KEY = "";
+    private ApiClient apiClient;
+    private Variable[] variables;
+
+    public UserWaterSensor(Context context, int MODE_PRIVATE, String API_KEY) {
         mPreferences = context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        this.API_KEY = API_KEY;
+        try{
+
+        }catch (Exception e){
+            System.out.println("ERROR IN THREAD API: " + e.toString());
+        }
+
     }
 
     public void run() {
@@ -25,12 +35,67 @@ public class UserWaterSensor implements Runnable{
 
         int i = 0;
         //stop = get from session to stop
+        apiClient = new ApiClient(API_KEY);
+
+        DataSource[] devices = apiClient.getDataSources();
+
+        DataSource device = null;
+
+        for (int j = 0; j < devices.length; j++){
+            if(devices[j].getName().equals("Water Quality Monitoring")){
+                device = devices[j];
+                break;
+            }
+        }
+
+        variables = device.getVariables();
+
+        Variable BOD = null;
+        Variable COD = null;
+        Variable DO = null;
+        Variable NH3N = null;
+        Variable pH = null;
+        Variable SS = null;
+
+        for (int j=0; j < variables.length; j++){
+            if(variables[j].getName().equals("bod"))
+                BOD = variables[j];
+
+            if(variables[j].getName().equals("cod"))
+                COD = variables[j];
+
+            if(variables[j].getName().equals("do"))
+                DO = variables[j];
+
+            if(variables[j].getName().equals("nh3n"))
+                NH3N = variables[j];
+
+            if(variables[j].getName().equals("ph"))
+                pH = variables[j];
+
+            if(variables[j].getName().equals("ss"))
+                SS = variables[j];
+        }
+
 
         while (!stop) {
 
             //continuously detect water quality and store it in ubidots
             //need try catch for network connection
             System.out.println("detect for "+ i++ +" times");
+
+            try{
+                System.out.println("API in Thread: " + API_KEY);
+                System.out.println(BOD.getName());
+                System.out.println(DO.getName());
+                System.out.println(SS.getName());
+
+                //variables.saveValue(i);
+            }catch(Exception e){
+                System.out.println("ERROR IN SAVING VALUE: "+e.toString());
+            }
+
+
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
