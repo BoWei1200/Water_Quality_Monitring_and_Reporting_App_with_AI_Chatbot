@@ -45,4 +45,88 @@
         android:layout_marginTop="10dp"
         android:onClick="refresh"/>
 
+    <LinearLayout
+        android:id="@+id/systemAdminHome_linearLayout_parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:useDefaultMargins="true"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/systemAdminHome_toolbar" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="- System Admin Site -"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:fontFamily="@font/nunito_sans"
+                android:padding="5dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/systemAdminHome_cv_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            app:cardCornerRadius="7dp"
+            app:cardUseCompatPadding="false">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/systemAdminHome_txt_numOfOrg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="0000"
+                    android:textSize="100dp"
+                    android:textColor="#93D1EA"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/systemAdminHome_txt_organization"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Organization(s)"
+                    android:textSize="18dp"
+                    android:fontFamily="@font/nunito_sans"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/systemAdminHome_txt_numOfOrg" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/activitySuccessful_lottie_regisSuccess"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/systemAdminHome_txt_organization"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    app:lottie_rawRes="@raw/company_discussion" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,6 +50,7 @@ public class SystemAdminHome extends AppCompatActivity {
     }
 
     public void settings(View view) {
+        systemAdminHome_popupMenu_setting.show();
     }
 
     public void refresh(View view) {

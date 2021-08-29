@@ -51,7 +51,9 @@ public class Login extends AppCompatActivity {
         if(getuserIDPreference != null && getEmailPreference != null && getPasswordPreference != null && getUserTypePreference != null){
             if(getUserTypePreference.equals("NA")){ //normal user
                 startActivity(new Intent(this,UserHome.class));
-            }else{
+            }else if (getUserTypePreference.equals("SAD")){
+                startActivity(new Intent(this,SystemAdminHome.class));
+            }else if (getUserTypePreference.equals("AD")){
                 startActivity(new Intent(this,AdminHome.class));
             }
         }
