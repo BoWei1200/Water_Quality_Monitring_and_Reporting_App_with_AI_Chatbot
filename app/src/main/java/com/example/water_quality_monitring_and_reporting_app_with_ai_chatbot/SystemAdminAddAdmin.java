@@ -228,7 +228,7 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
 
                 if(!(emailExist || phoneExist)){
 
-                    String randomizedPassword = "Hy" + (Math.random() * 99999);
+                    String randomizedPassword = "Hy" + (int)(Math.random() * 99999);
 
                     if(dbHelper.addUser(
                             systemAdminAddAdmin_txtInputET_email.getText().toString(),
@@ -245,14 +245,14 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
                         if(dbHelper.addEmployeeOrg(passedOrgID, dbHelper.getUserID(systemAdminAddAdmin_txtInputET_email.getText().toString()))){
                             displayToast("Organization admin added successfully!");
 
-                            String name = systemAdminAddAdmin_txtInputET_fName.getText().toString() + systemAdminAddAdmin_txtInputET_lName.getText().toString();
+                            String name = systemAdminAddAdmin_txtInputET_fName.getText().toString() + " " +systemAdminAddAdmin_txtInputET_lName.getText().toString();
                             String message = name + ", your HydroMy password is " + randomizedPassword;
 
-                            sendEmail(systemAdminAddAdmin_txtInputET_email.getText().toString(), message);
-                            Intent intent = new Intent(this, ActivitySuccessfulDisplay.class);
-                            intent.putExtra("successfulDisplayIndicator", "registration");
+                            Intent intent = new Intent(this, SystemAdminAddOrg.class);
                             startActivity(intent);
                             finish();
+
+                            sendEmail(systemAdminAddAdmin_txtInputET_email.getText().toString(), message);
                         }else{
                             displayToast("Failed to add organization admin");
                         }
@@ -288,7 +288,7 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 
-    protected void sendEmail(String toUserEmail, String message) {
+    protected boolean sendEmail(String toUserEmail, String message) {
         String[] TO = {toUserEmail};
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setData(Uri.parse("mailto:"));
@@ -301,9 +301,11 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
         try {
             startActivity(Intent.createChooser(emailIntent, "Send mail..."));
             finish();
+            return true;
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
+        return false;
     }
 
     @Override
