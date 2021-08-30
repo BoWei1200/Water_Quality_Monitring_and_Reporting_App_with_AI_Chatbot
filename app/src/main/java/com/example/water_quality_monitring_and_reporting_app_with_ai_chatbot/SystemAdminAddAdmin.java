@@ -1,13 +1,17 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Patterns;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,10 +38,17 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
 
     private static final Pattern phone_pattern = Pattern.compile("^(01)[0-46-9][0-9]{7,8}$");
 
+    private String passedOrgID = "";
+
+    private Boolean discardOrNot = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_admin_add_admin);
+
+        Intent intent = getIntent();
+        passedOrgID = intent.getStringExtra("orgID");
 
         systemAdminAddAdmin_txtInputET_fName = findViewById(R.id.systemAdminAddAdmin_txtInputET_fName);
         systemAdminAddAdmin_txtInputET_lName = findViewById(R.id.systemAdminAddAdmin_txtInputET_lName);
@@ -231,12 +242,20 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
                             systemAdminAddAdmin_txtInputET_city.getText().toString(),
                             systemAdminAddAdmin_spinner_state.getSelectedItem().toString()
                     )){
-                        displayToast("Registered Successfully!");
+                        if(dbHelper.addEmployeeOrg(passedOrgID, dbHelper.getUserID(systemAdminAddAdmin_txtInputET_email.getText().toString()))){
+                            displayToast("Organization admin added successfully!");
 
-                        Intent intent = new Intent(this, ActivitySuccessfulDisplay.class);
-                        intent.putExtra("successfulDisplayIndicator", "registration");
-                        startActivity(intent);
-                        finish();
+                            String name = systemAdminAddAdmin_txtInputET_fName.getText().toString() + systemAdminAddAdmin_txtInputET_lName.getText().toString();
+                            String message = name + ", your HydroMy password is " + randomizedPassword;
+
+                            sendEmail(systemAdminAddAdmin_txtInputET_email.getText().toString(), message);
+                            Intent intent = new Intent(this, ActivitySuccessfulDisplay.class);
+                            intent.putExtra("successfulDisplayIndicator", "registration");
+                            startActivity(intent);
+                            finish();
+                        }else{
+                            displayToast("Failed to add organization admin");
+                        }
                     }
 
                 }else{
@@ -267,5 +286,53 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
 
     public void displayToast(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    }
+
+    protected void sendEmail(String toUserEmail, String message) {
+        String[] TO = {toUserEmail};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "HydroMy Message");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            finish();
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        displayAlert(R.string.discard_org, R.string.discard_org_desc, R.drawable.warningiconedit);
+        if(discardOrNot){
+            super.onBackPressed();
+        }
+    }
+
+    public void displayAlert(int title, int msg, int drawable){
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        DatabaseHelper dbHelper = new DatabaseHelper(SystemAdminAddAdmin.this);
+                        if(dbHelper.deleteOrg(passedOrgID)){
+                            System.out.println("organization deleted");
+                        }
+
+                        discardOrNot = true;
+                        finish();
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(drawable)
+                .show();
     }
 }

@@ -77,6 +77,8 @@
         We are linking your Ubidots account\n\n Please don\'t exit and refresh this page</string>
     <string name="call_to_setup">Oops!\nYou haven\'t set up your Ubidots account</string>
     <string name="organization_s_participated_in_hydromy">Organization(s) participated in HydroMy!</string>
+    <string name="discard_org">Are you sure to discard the newly added organization?</string>
+    <string name="discard_org_desc">The organization must be created with an admin, by leaving this page, organization created just now will be removed.</string>
 
     <string-array name="state_array">
         <item>Johor</item>

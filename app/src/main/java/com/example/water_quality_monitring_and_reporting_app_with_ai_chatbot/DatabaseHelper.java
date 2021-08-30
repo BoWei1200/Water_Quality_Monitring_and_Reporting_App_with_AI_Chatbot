@@ -317,6 +317,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_ORGANIZATION, null, conValOrg) != -1;
     }
 
+    public Boolean addEmployeeOrg(String orgID, String userID){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues conValEmployeeOrg = new ContentValues();
+        conValEmployeeOrg.put("orgID", orgID);
+        conValEmployeeOrg.put("userID", userID);
+
+        return db.insert(TABLE_EMPLOYEE_ORGANIZATION, null, conValEmployeeOrg) != -1;
+    }
+
     public boolean isEmail_Exist(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE userEmail=?", new String[]{email});
@@ -381,6 +391,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //delete user by using NRIC (primary key)
         SQLiteDatabase db = getWritableDatabase();
         return db.delete(TABLE_USER, COLUMN_IC + "=?", new String[]{ic}) == 1;
+    }
+
+    public boolean deleteOrg(String orgID){
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(TABLE_ORGANIZATION, "orgID=?", new String[]{orgID}) == 1;
     }
 
     public Cursor getAllUser() {
