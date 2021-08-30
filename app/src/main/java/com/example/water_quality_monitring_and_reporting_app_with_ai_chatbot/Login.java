@@ -51,10 +51,21 @@ public class Login extends AppCompatActivity {
         if(getuserIDPreference != null && getEmailPreference != null && getPasswordPreference != null && getUserTypePreference != null){
             if(getUserTypePreference.equals("NA")){ //normal user
                 startActivity(new Intent(this,UserHome.class));
-            }else if (getUserTypePreference.equals("SAD")){
+            }
+            else if (getUserTypePreference.equals("SAD")){
                 startActivity(new Intent(this,SystemAdminHome.class));
-            }else if (getUserTypePreference.equals("AD")){
+            }
+            else if (getUserTypePreference.equals("AD")){
                 startActivity(new Intent(this,AdminHome.class));
+            }
+            else if(getUserTypePreference.equals("IN")){
+                startActivity(new Intent(this,InvestigatorHome.class));
+            }
+            else if(getUserTypePreference.equals("EX")){
+                startActivity(new Intent(this,ExaminerHome.class));
+            }
+            else if(getUserTypePreference.equals("RH")){
+                startActivity(new Intent(this,ReportHandlerHome.class));
             }
         }
 
@@ -145,29 +156,24 @@ public class Login extends AppCompatActivity {
 
                         if(userType.equals("SAD")){
                             startActivity(new Intent (this, SystemAdminHome.class));
-                            finish();
                         }
-
                         else if(userType.equals("AD")){
-
+                            startActivity(new Intent (this, AdminHome.class));
                         }
-
                         else if(userType.equals("IN")){
-
+                            startActivity(new Intent (this, InvestigatorHome.class));
                         }
-
                         else if(userType.equals("EX")){
-
+                            startActivity(new Intent (this, ExaminerHome.class));
                         }
-
                         else if(userType.equals("RH")){
-
+                            startActivity(new Intent (this, ReportHandlerHome.class));
                         }
-
                         else if(userType.equals("NA")){
                             startActivity(new Intent (this, UserHome.class));
-                            finish();
                         }
+
+                        finish();
                     }
                 }else{
                     displayToast("Invalid NRIC or password!");
