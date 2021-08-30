@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,6 +57,7 @@ public class SystemAdminHome extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
         int registeredOrg = dbHelper.getOrgNum();
@@ -72,5 +72,21 @@ public class SystemAdminHome extends AppCompatActivity {
     public void refresh(View view) {
         startActivity(getIntent());
         finish();
+    }
+
+    public void toOtherPages(View view) {
+        Intent intent = new Intent();
+
+        switch (view.getId()){
+            case R.id.systemAdminHome_btn_manageOrg:
+                intent = new Intent(this, SystemAdminOrgManagement.class);
+                break;
+
+            case R.id.systemAdminHome_btn_manageNews:
+                intent = new Intent(this, NewsManagement.class);
+                break;
+        }
+
+        startActivity(intent);
     }
 }
