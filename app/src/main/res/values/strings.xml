@@ -76,6 +76,7 @@
     <string name="loading_searching_text">Please wait for a while..\n
         We are linking your Ubidots account\n\n Please don\'t exit and refresh this page</string>
     <string name="call_to_setup">Oops!\nYou haven\'t set up your Ubidots account</string>
+    <string name="organization_s_participated_in_hydromy">Organization(s) participated in HydroMy!</string>
     <string-array name="state_array">
         <item>Johor</item>
         <item>Kedah</item>

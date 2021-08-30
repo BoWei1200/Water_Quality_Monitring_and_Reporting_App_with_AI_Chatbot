@@ -387,4 +387,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor.getCount();
     }
 
+    public int getOrgNum() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION, null);
+        return cursor.getCount();
+    }
+
+
+
 }

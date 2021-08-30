@@ -4,16 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 public class SystemAdminHome extends AppCompatActivity {
 
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp";
+
+    private TextView systemAdminHome_txt_numOfOrg;
 
     private ImageView systemAdminHome_img_setting;
     private PopupMenu systemAdminHome_popupMenu_setting;
@@ -24,6 +28,8 @@ public class SystemAdminHome extends AppCompatActivity {
         setContentView(R.layout.activity_system_admin_home);
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+
+        systemAdminHome_txt_numOfOrg = findViewById(R.id.systemAdminHome_txt_numOfOrg);
 
         systemAdminHome_img_setting = findViewById(R.id.systemAdminHome_img_setting);
 
@@ -47,6 +53,16 @@ public class SystemAdminHome extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+
+        int registeredOrg = dbHelper.getOrgNum();
+
+        systemAdminHome_txt_numOfOrg.setText(Integer.toString(registeredOrg));
     }
 
     public void settings(View view) {
