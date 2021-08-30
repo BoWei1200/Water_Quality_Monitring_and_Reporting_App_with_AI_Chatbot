@@ -51,7 +51,7 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
-        registration_txtInputET_fName = findViewById(R.id.registration_txtInputET_fName);
+        registration_txtInputET_fName = findViewById(R.id.systemAdminAddAdmin_txtInputET_fName);
         registration_txtInputET_lName = findViewById(R.id.registration_txtInputET_lName);
         registration_txtInputET_email = findViewById(R.id.registration_txtInputET_email);
         registration_txtInputET_phone = findViewById(R.id.registration_txtInputET_phone);
@@ -142,18 +142,6 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
 
         passwordValidation(registration_txtInputET_password);
         passwordValidation(registration_txtInputET_confirmPassword);
-
-        // email,
-        // firstname, lastname,
-        // phone no.,
-        // address,
-        // password,
-        // confirm password
-
-        //setup ubidots acc // redirect to the page to register for new account copy API credentials
-        //enter API key
-        //enter variables ID // register
-
     }
 
     @Override

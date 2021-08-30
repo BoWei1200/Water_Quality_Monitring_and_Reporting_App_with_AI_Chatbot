@@ -3,11 +3,10 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,7 +33,7 @@ public class SystemAdminAddOrg extends AppCompatActivity implements AdapterView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_admin_add_org);
 
-        Toolbar toolbar = findViewById(R.id.systemAdminAddOrg_toolbar);
+        Toolbar toolbar = findViewById(R.id.systemAdminAddAdmin_toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -163,15 +162,9 @@ public class SystemAdminAddOrg extends AppCompatActivity implements AdapterView.
                         systemAdminAddOrg_txtInputET_city.getText().toString(),
                         systemAdminAddOrg_spinner_state.getSelectedItem().toString())){
 
-                    //have to add one admin for the organization !!
-
-//                    if(dbHelper.addUser()){
-//
-//                    }else{
-//                        displayToast("Successfully Added!");
-//                    }
-
-                    startActivity(getIntent());
+                    Intent intent = new Intent(this, SystemAdminAddAdmin.class);
+                    intent.putExtra("orgID", );
+                    startActivity(intent);
                     finish();
                 }
                 else{
