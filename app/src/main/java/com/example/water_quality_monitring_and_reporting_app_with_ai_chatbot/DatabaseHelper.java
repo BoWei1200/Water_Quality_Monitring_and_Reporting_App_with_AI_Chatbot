@@ -304,6 +304,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_USER_UBIDOTS_CREDENTIALS, null, conValUserUbidotsCredentials) != -1;
     }
 
+    public Boolean addOrg(String orgName, String orgAddressLine, String orgPostCode,
+                          String orgCity, String orgState){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues conValOrg = new ContentValues();
+        conValOrg.put("orgName", orgName);
+        conValOrg.put("orgAddressLine", orgAddressLine);
+        conValOrg.put("orgPostCode", orgPostCode);
+        conValOrg.put("orgCity", orgCity);
+        conValOrg.put("orgState", orgState);
+
+        return db.insert(TABLE_ORGANIZATION, null, conValOrg) != -1;
+    }
+
     public boolean isEmail_Exist(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE userEmail=?", new String[]{email});
@@ -319,6 +334,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean isAPIKey_exist(String API){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER_UBIDOTS_CREDENTIALS + " WHERE ubidotsAPI=?", new String[]{API});
+        return (cursor.getCount() > 0);
+    }
+
+    public boolean isOrgExist(String orgName){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_ORGANIZATION + " WHERE orgName=?", new String[]{orgName});
         return (cursor.getCount() > 0);
     }
 

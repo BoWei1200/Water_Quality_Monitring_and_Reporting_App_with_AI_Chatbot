@@ -153,8 +153,36 @@ public class SystemAdminAddOrg extends AppCompatActivity implements AdapterView.
 
     public void add(View view) {
         if(orgNameValid && orgAddressValid){
-            displayToast("Success!");
-        }else{
+
+            DatabaseHelper dbHelper = new DatabaseHelper(this);
+            if(!dbHelper.isOrgExist(systemAdminAddOrg_txtInputET_orgName.getText().toString())){
+                if(dbHelper.addOrg(
+                        systemAdminAddOrg_txtInputET_orgName.getText().toString(),
+                        systemAdminAddOrg_txtInputET_addressLine.getText().toString(),
+                        systemAdminAddOrg_txtInputET_postcode.getText().toString(),
+                        systemAdminAddOrg_txtInputET_city.getText().toString(),
+                        systemAdminAddOrg_spinner_state.getSelectedItem().toString())){
+
+                    //have to add one admin for the organization !!
+
+//                    if(dbHelper.addUser()){
+//
+//                    }else{
+//                        displayToast("Successfully Added!");
+//                    }
+
+                    startActivity(getIntent());
+                    finish();
+                }
+                else{
+                    displayToast("Something wrong with the insertion! Please try again later");
+                }
+            }
+            else{
+                displayToast("Organization name already exists");
+            }
+        }
+        else{
             displayToast("Please make sure every crendetial is filled in correctly");
         }
     }
