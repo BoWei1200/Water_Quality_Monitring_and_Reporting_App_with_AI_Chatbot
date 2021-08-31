@@ -19,6 +19,7 @@ public class InvestigatorHome extends AppCompatActivity {
     private final String userIDPreference = "userID";
 
     private String getUserIDPreference = "";
+    private String teamID, teamName;
 
     private ImageView investigatorHome_img_setting, investigatorHome_img_refresh;
     private PopupMenu investigatorHome_popupMenu_setting;
@@ -69,8 +70,8 @@ public class InvestigatorHome extends AppCompatActivity {
             if(cursorGetOrgInfo.moveToFirst() && cursorGetInvestigatorTeamInfo.moveToFirst()){
                 String orgName = cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgName"));
 
-                String teamID = cursorGetInvestigatorTeamInfo.getString(cursorGetInvestigatorTeamInfo.getColumnIndex("investigationTeamID"));
-                String teamName = cursorGetInvestigatorTeamInfo.getString(cursorGetInvestigatorTeamInfo.getColumnIndex("investigationTeamName"));
+                teamID = cursorGetInvestigatorTeamInfo.getString(cursorGetInvestigatorTeamInfo.getColumnIndex("investigationTeamID"));
+                teamName = cursorGetInvestigatorTeamInfo.getString(cursorGetInvestigatorTeamInfo.getColumnIndex("investigationTeamName"));
 
                 investigatorHome_txt_orgName.setText(orgName);
 
@@ -80,9 +81,6 @@ public class InvestigatorHome extends AppCompatActivity {
         }catch (Exception e){
             System.out.println("ERROR: "+ e.toString());
         }
-
-
-
     }
 
     public void settings(View view) {
@@ -99,15 +97,17 @@ public class InvestigatorHome extends AppCompatActivity {
 
         switch(view.getId()){
             case R.id.investigatorHome_cv_myInvestigationTeam:
-                intent = new Intent(this, InvestigatorTeamDetailPage.class);
+                intent = new Intent(this, InvestigatorTeamDetail.class);
+                intent.putExtra("teamID", teamID);
+                intent.putExtra("teamName", teamName);
                 break;
 
             case R.id.investigatorHome_cv_pendingInvestigation:
-                intent = new Intent(this, InvestigatorTeamDetailPage.class);
+                intent = new Intent(this, NewsList.class);
                 break;
 
             case R.id.investigatorHome_cv_myInvestigation:
-                intent = new Intent(this, InvestigatorTeamDetailPage.class);
+                intent = new Intent(this, NewsList.class);
                 break;
 
             case R.id.investigatorHome_cv_news:

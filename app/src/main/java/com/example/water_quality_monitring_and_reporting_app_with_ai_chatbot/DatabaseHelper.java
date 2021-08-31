@@ -382,6 +382,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT inTeam.investigationTeamID, inTeam.investigationTeamName FROM " + TABLE_INVESTIGATION_TEAM + " inTeam, "+ TABLE_INVESTIGATION_TEAM_MEMBER +" inTeamMem WHERE inTeamMem.investigationTeamUserID=? AND inTeamMem.investigationTeamID = inTeam.investigationTeamID", new String[]{userID});
     }
 
+    public Cursor getTeamMember(String teamID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT user.fName, user.lName FROM " + TABLE_USER + " user ," + TABLE_INVESTIGATION_TEAM_MEMBER +" teamMem WHERE teamMem.investigationTeamID=? AND teamMem.investigationTeamUserID=user.userID", new String[]{teamID});
+    }
+
     // Registered user info
     public Cursor readInfo(String userEmail) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -431,10 +436,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_IC + " LIKE '%" + clause + "%'", null); //%NRIC%
     }
 
-    public int getUserNum() {
+    public int getTeamMemberNum(String teamID) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " +
-                COLUMN_isADMIN + " ='0'", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_INVESTIGATION_TEAM_MEMBER + " WHERE investigationTeamID=?", new String[]{String.valueOf(teamID)});
         return cursor.getCount();
     }
 
@@ -443,7 +447,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION, null);
         return cursor.getCount();
     }
-
-
-
 }
