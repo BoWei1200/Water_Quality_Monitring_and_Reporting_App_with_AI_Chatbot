@@ -30,7 +30,7 @@ public class SystemAdminHome extends AppCompatActivity {
 
         systemAdminHome_txt_numOfOrg = findViewById(R.id.systemAdminHome_txt_numOfOrg);
 
-        systemAdminHome_img_setting = findViewById(R.id.systemAdminHome_img_setting);
+        systemAdminHome_img_setting = findViewById(R.id.investigatorHome_img_setting);
 
         systemAdminHome_popupMenu_setting = new PopupMenu(this, systemAdminHome_img_setting);
         systemAdminHome_popupMenu_setting.getMenuInflater().inflate(R.menu.user_setting_menu, systemAdminHome_popupMenu_setting.getMenu());

@@ -88,7 +88,7 @@ public class UserHome extends AppCompatActivity{
         userHome_txt_callToSetup = findViewById(R.id.userHome_txt_callToSetup);
 
         userHome_cv_graph = findViewById(R.id.userHome_cv_graph);
-        userHome_img_setting = findViewById(R.id.systemAdminHome_img_setting);
+        userHome_img_setting = findViewById(R.id.investigatorHome_img_setting);
 
         WQIcalc = new UserIoTWQICalculation();
 
