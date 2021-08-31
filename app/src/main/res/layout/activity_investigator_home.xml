@@ -76,7 +76,7 @@
                 android:id="@+id/investigatorHome_cv_org"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".5"
+                android:layout_weight=".45"
                android:layout_marginTop="1dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginLeft="1dp"
@@ -101,21 +101,23 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight=".35">
+                            android:layout_weight=".3">
 
                             <ImageView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:src="@drawable/ic_organization_icon"/>
+                                android:src="@drawable/companyflaticon"
+                                android:layout_margin="10dp"/>
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight=".65"
+                            android:layout_weight=".7"
                             android:orientation="vertical"
-                            android:padding="10dp">
+                            android:padding="10dp"
+                            android:gravity="center_vertical">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -128,31 +130,56 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Organization Name"
-                                android:fontFamily="@font/nunito_sans" />
+                                android:text="Organization Name Organization Name Organization Name"
+                                android:fontFamily="@font/nunito_sans"
+                                android:gravity="center_vertical"/>
 
                         </LinearLayout>
 
-
-
                     </LinearLayout>
-
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight=".5"
-                        android:layout_margin="5dp">
+                        android:layout_margin="5dp"
+                        android:onClick="toOtherPages">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            >
+                            android:padding="10dp"
+                            android:orientation="vertical"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="My Investigation Team"
+                                android:textSize="20dp"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/nunito_sans"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Team ID 0000"
+                                android:fontFamily="@font/nunito_sans"
+                                android:gravity="center_vertical"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Investigation Team Name"
+                                android:textSize="18dp"
+                                android:fontFamily="@font/nunito_sans"
+                                android:gravity="center_vertical"/>
+
+
 
                         </LinearLayout>
 
                     </androidx.cardview.widget.CardView>
-
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -161,21 +188,148 @@
                 android:id="@+id/investigatorHome_cv_investigation"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".5"
-                android:layout_margin="1dp"
+                android:layout_weight=".4"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
                 app:cardCornerRadius="7dp"
                 app:cardUseCompatPadding="false">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/investigatorHome_cv_pendingInvestigation"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".5"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="7dp"
+                        app:cardUseCompatPadding="false"
+                        android:onClick="toOtherPages">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:orientation="horizontal">
+                            
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".25"
+                                android:padding="10dp"
+                                android:src="@drawable/investigationicon"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".75"
+                                android:text="Pending Investigation"
+                                android:textSize="16dp"
+                                android:fontFamily="@font/nunito_sans"
+                                android:gravity="center_vertical"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/investigatorHome_cv_myInvestigation"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".5"
+                        android:layout_margin="5dp"
+                        app:cardCornerRadius="7dp"
+                        app:cardUseCompatPadding="false"
+                        android:onClick="toOtherPages">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".25"
+                                android:padding="8dp"
+                                android:src="@drawable/myinvestigationicon"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight=".75"
+                                android:text="My investigation"
+                                android:fontFamily="@font/nunito_sans"
+                                android:textSize="16dp"
+                                android:gravity="center_vertical"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/investigatorHome_cv_news"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".15"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                app:cardCornerRadius="7dp"
+                app:cardUseCompatPadding="false"
+                android:onClick="toOtherPages">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".25"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_new_icon_blue"/>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".75"
+                        android:text="News of Water Pollution"
+                        android:fontFamily="@font/nunito_sans"
+                        android:textSize="16dp"
+                        android:gravity="center_vertical"/>
+
+                </LinearLayout>
+
             </androidx.cardview.widget.CardView>
+
+
+
         </LinearLayout>
 
 

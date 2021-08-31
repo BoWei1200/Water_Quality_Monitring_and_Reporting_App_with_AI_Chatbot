@@ -57,4 +57,7 @@ public class InvestigatorHome extends AppCompatActivity {
         startActivity(getIntent());
         finish();
     }
+
+    public void toOtherPages(View view) {
+    }
 }
