@@ -17,7 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot">
-        <activity android:name=".SystemAdminAddAdmin"></activity>
+        <activity android:name=".NewsList"></activity>
+        <activity android:name=".InvestigatorTeamDetailPage" />
+        <activity android:name=".SystemAdminAddAdmin" />
         <activity android:name=".SystemAdminManageOrg" />
         <activity android:name=".SystemAdminAddOrg" />
         <activity android:name=".NewsManagement" />

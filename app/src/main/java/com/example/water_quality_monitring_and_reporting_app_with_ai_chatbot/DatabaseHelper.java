@@ -360,20 +360,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String getAPIKey(String userID){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT ubidotsAPI FROM " + TABLE_USER_UBIDOTS_CREDENTIALS + " WHERE ubidotsUserID=? ", new String[]{userID});;
+        Cursor cursor = db.rawQuery("SELECT ubidotsAPI FROM " + TABLE_USER_UBIDOTS_CREDENTIALS + " WHERE ubidotsUserID=? ", new String[]{userID});
 
         return (cursor.moveToFirst()) ? cursor.getString(cursor.getColumnIndex("ubidotsAPI")) : "";
     }
 
     public String getorgID(String orgName){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION + " WHERE orgName=? ", new String[]{orgName});;
+        Cursor cursor = db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION + " WHERE orgName=? ", new String[]{orgName});
 
         return (cursor.moveToFirst()) ? cursor.getString(cursor.getColumnIndex("orgID")) : "";
     }
 
+    public Cursor getOrgInfoByUserID(String userID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT org.orgName FROM " + TABLE_ORGANIZATION + " org, "+ TABLE_EMPLOYEE_ORGANIZATION +" employOrg WHERE employOrg.userID=? AND org.orgID = employOrg.orgID", new String[]{userID});
+    }
 
-
+    public Cursor getInvestigatorTeamInfoByUserID(String userID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT inTeam.investigationTeamID, inTeam.investigationTeamName FROM " + TABLE_INVESTIGATION_TEAM + " inTeam, "+ TABLE_INVESTIGATION_TEAM_MEMBER +" inTeamMem WHERE inTeamMem.investigationTeamUserID=? AND inTeamMem.investigationTeamID = inTeam.investigationTeamID", new String[]{userID});
+    }
 
     // Registered user info
     public Cursor readInfo(String userEmail) {

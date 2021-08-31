@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,9 @@ public class InvestigatorHome extends AppCompatActivity {
 
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp";
+    private final String userIDPreference = "userID";
+
+    private String getUserIDPreference = "";
 
     private ImageView investigatorHome_img_setting, investigatorHome_img_refresh;
     private PopupMenu investigatorHome_popupMenu_setting;
@@ -27,6 +31,7 @@ public class InvestigatorHome extends AppCompatActivity {
         setContentView(R.layout.activity_investigator_home);
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        getUserIDPreference = mPreferences.getString(userIDPreference, null);
 
         investigatorHome_img_setting =findViewById(R.id.investigatorHome_img_setting);
         investigatorHome_img_refresh = findViewById(R.id.investigatorHome_img_refresh);
@@ -57,6 +62,27 @@ public class InvestigatorHome extends AppCompatActivity {
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
+        Cursor cursorGetOrgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+        Cursor cursorGetInvestigatorTeamInfo = dbHelper.getInvestigatorTeamInfoByUserID(getUserIDPreference);
+
+        try {
+            if(cursorGetOrgInfo.moveToFirst() && cursorGetInvestigatorTeamInfo.moveToFirst()){
+                String orgName = cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgName"));
+
+                String teamID = cursorGetInvestigatorTeamInfo.getString(cursorGetInvestigatorTeamInfo.getColumnIndex("investigationTeamID"));
+                String teamName = cursorGetInvestigatorTeamInfo.getString(cursorGetInvestigatorTeamInfo.getColumnIndex("investigationTeamName"));
+
+                investigatorHome_txt_orgName.setText(orgName);
+
+                investigatorHome_txt_investigationTeamID.setText("Team ID: " + teamID);
+                investigatorHome_txt_investigationTeamName.setText(teamName);
+            }
+        }catch (Exception e){
+            System.out.println("ERROR: "+ e.toString());
+        }
+
+
+
     }
 
     public void settings(View view) {
@@ -69,5 +95,26 @@ public class InvestigatorHome extends AppCompatActivity {
     }
 
     public void toOtherPages(View view) {
+        Intent intent = new Intent();
+
+        switch(view.getId()){
+            case R.id.investigatorHome_cv_myInvestigationTeam:
+                intent = new Intent(this, InvestigatorTeamDetailPage.class);
+                break;
+
+            case R.id.investigatorHome_cv_pendingInvestigation:
+                intent = new Intent(this, InvestigatorTeamDetailPage.class);
+                break;
+
+            case R.id.investigatorHome_cv_myInvestigation:
+                intent = new Intent(this, InvestigatorTeamDetailPage.class);
+                break;
+
+            case R.id.investigatorHome_cv_news:
+                intent = new Intent(this, NewsList.class);
+                break;
+        }
+
+        startActivity(intent);
     }
 }
