@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 public class InvestigatorHome extends AppCompatActivity {
 
@@ -17,6 +18,8 @@ public class InvestigatorHome extends AppCompatActivity {
 
     private ImageView investigatorHome_img_setting, investigatorHome_img_refresh;
     private PopupMenu investigatorHome_popupMenu_setting;
+
+    private TextView investigatorHome_txt_orgName, investigatorHome_txt_investigationTeamID, investigatorHome_txt_investigationTeamName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +30,10 @@ public class InvestigatorHome extends AppCompatActivity {
 
         investigatorHome_img_setting =findViewById(R.id.investigatorHome_img_setting);
         investigatorHome_img_refresh = findViewById(R.id.investigatorHome_img_refresh);
+
+        investigatorHome_txt_orgName = findViewById(R.id.investigatorHome_txt_orgName);
+        investigatorHome_txt_investigationTeamID = findViewById(R.id.investigatorHome_txt_investigationTeamID);
+        investigatorHome_txt_investigationTeamName = findViewById(R.id.investigatorHome_txt_investigationTeamName);
 
         investigatorHome_popupMenu_setting = new PopupMenu(this, investigatorHome_img_setting);
         investigatorHome_popupMenu_setting.getMenuInflater().inflate(R.menu.user_setting_menu, investigatorHome_popupMenu_setting.getMenu());
@@ -47,6 +54,9 @@ public class InvestigatorHome extends AppCompatActivity {
                 return true;
             }
         });
+
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+
     }
 
     public void settings(View view) {
