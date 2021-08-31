@@ -7,7 +7,7 @@
     tools:context=".SystemAdminAddOrg">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/systemAdminAddAdmin_toolbar"
+        android:id="@+id/systemAdminAddOrg_toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:padding="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/systemAdminAddAdmin_toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/systemAdminAddOrg_toolbar"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ScrollView

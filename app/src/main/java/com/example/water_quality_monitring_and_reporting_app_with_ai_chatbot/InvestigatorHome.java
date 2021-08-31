@@ -37,7 +37,7 @@ public class InvestigatorHome extends AppCompatActivity {
         investigatorHome_img_setting =findViewById(R.id.investigatorHome_img_setting);
         investigatorHome_img_refresh = findViewById(R.id.investigatorHome_img_refresh);
 
-        investigatorHome_txt_orgName = findViewById(R.id.investigatorHome_txt_orgName);
+        investigatorHome_txt_orgName = findViewById(R.id.examinerHome_txt_orgName);
         investigatorHome_txt_investigationTeamID = findViewById(R.id.investigatorHome_txt_investigationTeamID);
         investigatorHome_txt_investigationTeamName = findViewById(R.id.investigatorHome_txt_investigationTeamName);
 
