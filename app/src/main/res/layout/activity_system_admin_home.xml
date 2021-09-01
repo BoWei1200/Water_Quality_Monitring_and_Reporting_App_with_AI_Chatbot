@@ -138,7 +138,7 @@
                         android:id="@+id/systemAdminHome_btn_manageOrg"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight=".5"
+                        android:layout_weight=".33"
                         app:icon="@drawable/ic_organization_icon"
                         android:backgroundTint="#D6F0F8"
                         android:text="Organization Management"
@@ -146,28 +146,43 @@
                         android:onClick="toOtherPages"
                         android:textColor="#52B0E3"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="5dp"
                         android:fontFamily="@font/nunito_sans"
                         android:textAllCaps="false"
                         app:iconGravity="textStart"
-                        app:iconSize="70dp"/>
+                        app:iconSize="40dp"/>
 
                     <Button
                         android:id="@+id/systemAdminHome_btn_manageNews"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_weight=".5"
+                        android:layout_weight=".33"
                         app:icon="@drawable/ic_new_icon"
                         android:backgroundTint="#EFEFEF"
                         android:text="News Management"
                         android:textSize="15dp"
                         android:onClick="toOtherPages"
                         android:textColor="#787878"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="5dp"
                         android:fontFamily="@font/nunito_sans"
                         android:textAllCaps="false"
                         app:iconGravity="textStart"
-                        app:iconSize="70dp"/>
+                        app:iconSize="40dp"/>
+                    <Button
+                        android:id="@+id/systemAdminHome_btn_manageUser"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight=".33"
+                        app:icon="@drawable/ic_user_icon"
+                        android:backgroundTint="#56AAD3"
+                        android:text="User Management"
+                        android:textSize="15dp"
+                        android:onClick="toOtherPages"
+                        android:layout_marginBottom="5dp"
+                        android:fontFamily="@font/nunito_sans"
+                        android:textAllCaps="false"
+                        app:iconGravity="textStart"
+                        app:iconSize="40dp"/>
 
                 </LinearLayout>
 

@@ -26,6 +26,7 @@ public class ExaminerHome extends AppCompatActivity {
     private TextView examinerHome_txt_orgName;
 
     private PopupMenu examinerHome_popupMenu_setting;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
