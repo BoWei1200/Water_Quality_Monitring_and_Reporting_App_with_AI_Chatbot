@@ -6,4 +6,213 @@
     android:layout_height="match_parent"
     tools:context=".ReportHandlerHome">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/reportHandlerHome_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/mainTheme"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/Toolbar_back_button_style"
+        app:title="@string/app_name"
+        app:titleMargin="2dp"
+        app:titleTextColor="#FFFFFF" />
+
+    <ImageView
+        android:id="@+id/reportHandlerHome_img_setting"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_setting_icon"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:onClick="settings"/>
+
+    <ImageView
+        android:id="@+id/reportHandlerHome_img_refresh"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toStartOf="@+id/reportHandlerHome_img_setting"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_refresh_icon"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:onClick="refresh"/>
+
+    <LinearLayout
+        android:id="@+id/reportHandlerHome_linearLayout_parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:useDefaultMargins="true"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reportHandlerHome_toolbar">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="- Report Handler Site -"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:fontFamily="@font/nunito_sans"
+            android:padding="5dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/reportHandlerHome_cv_org"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            app:cardCornerRadius="7dp"
+            app:cardUseCompatPadding="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".3">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/companyflaticon" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".7"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="My Organization"
+                            android:fontFamily="@font/nunito_sans"
+                            android:textStyle="bold"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/reportHandlerHome_txt_orgName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Organization Name Organization Name Organization Name"
+                            android:fontFamily="@font/nunito_sans"
+                            android:gravity="center_vertical"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/reportHandlerHome_cv_reportFromUser"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            app:cardCornerRadius="7dp"
+            app:cardUseCompatPadding="false"
+            android:onClick="toOtherPages">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".25"
+                    android:padding="8dp"
+                    android:src="@drawable/warningicon3"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".75"
+                    android:text="Report From User"
+                    android:fontFamily="@font/nunito_sans"
+                    android:textSize="18dp"
+                    android:gravity="center_vertical"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/reportHandlerHome_cv_news"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            app:cardCornerRadius="7dp"
+            app:cardUseCompatPadding="false"
+            android:onClick="toOtherPages">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".25"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_new_icon_blue"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".75"
+                    android:text="News of Water Pollution"
+                    android:fontFamily="@font/nunito_sans"
+                    android:textSize="18dp"
+                    android:gravity="center_vertical"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

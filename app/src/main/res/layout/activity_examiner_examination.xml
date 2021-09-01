@@ -6,4 +6,110 @@
     android:layout_height="match_parent"
     tools:context=".ExaminerExamination">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/examinerExamination_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/mainTheme"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/Toolbar_back_button_style"
+        app:title="Examination on Report"
+        app:titleMargin="2dp"
+        app:titleTextColor="#FFFFFF" />
+
+    <LinearLayout
+        android:id="@+id/examinerExamination_linearLayout_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/examinerExamination_toolbar">
+
+        <TextView
+            android:id="@+id/examinerExamination_txt_tabPending"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:background="@color/tab_background"
+            android:fontFamily="@font/nunito_sans"
+            android:gravity="center"
+            android:onClick="toWhichTab"
+            android:padding="10dp"
+            android:text="Pending"
+            android:textColor="@color/tab_text_color"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/examinerExamination_txt_tabCompleted"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:fontFamily="@font/nunito_sans"
+            android:gravity="center"
+            android:onClick="toWhichTab"
+            android:padding="10dp"
+            android:text="Completed"
+            android:textSize="18dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/examinerExamination_linearLayout_searchEngine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/examinerExamination_linearLayout_tab"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight=".75"
+                android:fontFamily="@font/nunito_sans"
+                android:hint="Search by report ID"
+                android:textSize="16dp" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight=".25"
+                android:src="@drawable/ic_search_icon"
+                android:backgroundTint="#4EBEDA"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/editText"
+                android:background="@drawable/rounded_corners"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/examinerExamination_spinner_filter"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                style="@style/spinner_style" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

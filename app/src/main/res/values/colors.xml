@@ -16,4 +16,6 @@
     <color name="WQIYellow">#ffd760</color>
     <color name="WQIGreen">#7ee76b</color>
     <color name="WQIBlue">#64baf0</color>
+    <color name="tab_background">#E8F8FF</color>
+    <color name="tab_text_color">#73A0B3</color>
 </resources>

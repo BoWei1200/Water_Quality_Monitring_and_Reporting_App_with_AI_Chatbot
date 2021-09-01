@@ -33,7 +33,7 @@ public class SystemAdminAddOrg extends AppCompatActivity implements AdapterView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_admin_add_org);
 
-        Toolbar toolbar = findViewById(R.id.systemAdminOrg_toolbar);
+        Toolbar toolbar = findViewById(R.id.systemAdminAddOrg_toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
