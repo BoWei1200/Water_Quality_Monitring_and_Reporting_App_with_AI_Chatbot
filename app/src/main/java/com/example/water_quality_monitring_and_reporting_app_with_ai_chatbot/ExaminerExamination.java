@@ -72,18 +72,7 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
     }
 
     public void toWhichTab(View view) {
-        int tabIDToSwitch = R.id.examinerExamination_txt_tabPending;
-
-        switch(view.getId()){
-            case R.id.examinerExamination_txt_tabPending:
-                tabIDToSwitch = R.id.examinerExamination_txt_tabPending;
-                break;
-
-            case R.id.examinerExamination_txt_tabCompleted:
-                tabIDToSwitch = R.id.examinerExamination_txt_tabCompleted;
-                break;
-        }
-        setCurrentlyActiveTab(tabIDToSwitch);
+        setCurrentlyActiveTab(view.getId());
     }
 
     public void setCurrentlyActiveTab(int txtID){

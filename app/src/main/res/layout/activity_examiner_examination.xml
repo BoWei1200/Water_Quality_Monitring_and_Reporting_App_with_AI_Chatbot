@@ -57,7 +57,6 @@
             android:text="Completed"
             android:textSize="18dp" />
 
-
     </LinearLayout>
 
     <LinearLayout
@@ -85,7 +84,8 @@
                 android:layout_weight=".75"
                 android:fontFamily="@font/nunito_sans"
                 android:hint="Search by report ID"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:layout_marginRight="5dp"/>
 
             <ImageButton
                 android:layout_width="0dp"
@@ -96,6 +96,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/editText"
                 android:background="@drawable/rounded_corners"/>
+
         </LinearLayout>
 
         <LinearLayout

@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 public class ReportHandlerHome extends AppCompatActivity {
 
@@ -21,6 +23,8 @@ public class ReportHandlerHome extends AppCompatActivity {
 
     private PopupMenu reportHandlerHome_popupMenu_setting;
 
+    private TextView reportHandlerHome_txt_orgName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +34,8 @@ public class ReportHandlerHome extends AppCompatActivity {
         getUserIDPreference = mPreferences.getString(userIDPreference, null);
 
         reportHandlerHome_img_setting = findViewById(R.id.reportHandlerHome_img_setting);
+
+        reportHandlerHome_txt_orgName = findViewById(R.id.reportHandlerHome_txt_orgName);
 
         reportHandlerHome_popupMenu_setting = new PopupMenu(this, reportHandlerHome_img_setting);
         reportHandlerHome_popupMenu_setting.getMenuInflater().inflate(R.menu.user_setting_menu, reportHandlerHome_popupMenu_setting.getMenu());
@@ -48,6 +54,19 @@ public class ReportHandlerHome extends AppCompatActivity {
             }
             return true;
         });
+
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+
+        Cursor cursorGetOrgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+
+        try {
+            if(cursorGetOrgInfo.moveToFirst()){
+                String orgName = cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgName"));
+                reportHandlerHome_txt_orgName.setText(orgName);
+            }
+        }catch (Exception e){
+            System.out.println("ERROR: "+ e.toString());
+        }
     }
 
     public void settings(View view) {

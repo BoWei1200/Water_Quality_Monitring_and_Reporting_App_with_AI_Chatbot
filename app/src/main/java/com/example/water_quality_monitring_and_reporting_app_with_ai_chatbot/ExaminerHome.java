@@ -58,10 +58,9 @@ public class ExaminerHome extends AppCompatActivity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
         Cursor cursorGetOrgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
-        Cursor cursorGetInvestigatorTeamInfo = dbHelper.getInvestigatorTeamInfoByUserID(getUserIDPreference);
 
         try {
-            if(cursorGetOrgInfo.moveToFirst() && cursorGetInvestigatorTeamInfo.moveToFirst()){
+            if(cursorGetOrgInfo.moveToFirst()){
                 String orgName = cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgName"));
                 examinerHome_txt_orgName.setText(orgName);
             }
