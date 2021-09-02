@@ -21,6 +21,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_INVESTIGATION_TEAM = "investigationTeam";
     private static final String TABLE_INVESTIGATION_TEAM_MEMBER = "investigationTeamMember";
 
+    private static final String TABLE_REPORT_FROM_USER = "reportFromUser";
+    private static final String TABLE_REPORT_FROM_USER_IMAGE = "reportFromUserImage";
+    private static final String TABLE_REPORT_LOCATION = "reportLocation";
+    private static final String TABLE_REPORT_INVESTIGATION = "reportInvestigation";
+    private static final String TABLE_REPORT_CLEANING_PROCESS = "reportCleaningProcess";
 
 
     private static final String COLUMN_IC = "ic";
@@ -60,6 +65,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INVESTIGATION_TEAM + ";");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INVESTIGATION_TEAM_MEMBER + ";");
 
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORT_FROM_USER + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORT_FROM_USER_IMAGE + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORT_LOCATION + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORT_INVESTIGATION + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORT_CLEANING_PROCESS + ";");
 
 
         onCreate(db);
@@ -128,7 +138,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (investigationTeamUserID) REFERENCES " + TABLE_USER + " (userID), " +
                 "FOREIGN KEY (investigationTeamID) REFERENCES " + TABLE_INVESTIGATION_TEAM + " (investigationTeamID));");
 
+        //Report
+        db.execSQL("CREATE TABLE " + TABLE_REPORT_FROM_USER +"(" +
+                "reportID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "reportDesc TEXT NOT NULL, " +
+                "reportDate DATE NOT NULL, " +
+                "reportTime TEXT NOT NULL, " +
+                "reportStatus TEXT NOT NULL, " +
+                "reportPollutionCause TEXT, " +
+                "reportEstimatedSolveDuration TEXT, " +
+                "reportInvestigationTeam TEXT, " +
+                "examiner TEXT NOT NULL, " +
+                "reportHandler TEXT, " +
+                "userID TEXT NOT NULL, " +
+                "FOREIGN KEY (reportInvestigationTeam) REFERENCES " + TABLE_INVESTIGATION_TEAM + " (investigationTeamID), " +
+                "FOREIGN KEY (examiner) REFERENCES " + TABLE_USER + " (userID), " +
+                "FOREIGN KEY (reportHandler) REFERENCES " + TABLE_USER + " (userID), "+
+                "FOREIGN KEY (userID) REFERENCES " + TABLE_USER + " (userID));");
 
+        db.execSQL("CREATE TABLE " + TABLE_REPORT_FROM_USER_IMAGE +"(" +
+                "reportImageID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "reportImageFilePath TEXT NOT NULL, " +
+                "reportID TEXT NOT NULL, " +
+                "FOREIGN KEY (reportID) REFERENCES "+ TABLE_REPORT_FROM_USER +" (reportID));");
+
+        db.execSQL("CREATE TABLE " + TABLE_REPORT_LOCATION +"(" +
+                "reportLocationID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "reportaddressLine TEXT NOT NULL, " +
+                "reportPostcode TEXT NOT NULL, " +
+                "reportCity TEXT NOT NULL, " +
+                "reportState TEXT NOT NULL, " +
+                "reportLatitude TEXT NOT NULL, " +
+                "reportLongitude TEXT NOT NULL, " +
+                "reportID TEXT NOT NULL, " +
+                "FOREIGN KEY (reportID) REFERENCES "+ TABLE_REPORT_FROM_USER +" (reportID));");
+
+        db.execSQL("CREATE TABLE " + TABLE_REPORT_INVESTIGATION +"(" +
+                "investigationDocID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "firstInvestigationDocPath TEXT NOT NULL, " +
+                "secondInvestigationDocPath TEXT NOT NULL, " +
+                "reportID TEXT NOT NULL, " +
+                "FOREIGN KEY (reportID) REFERENCES " + TABLE_REPORT_FROM_USER + " (reportID));");
+
+        db.execSQL("CREATE TABLE " + TABLE_REPORT_CLEANING_PROCESS +"(" +
+                "reportDealingID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "pollutionCleaningProcDocPath TEXT NOT NULL, " +
+                "documentStatus TEXT NOT NULL, " +
+                "remark TEXT NOT NULL, " +
+                "reportID TEXT NOT NULL, " +
+                "FOREIGN KEY (reportID) REFERENCES " + TABLE_REPORT_FROM_USER + " (reportID));");
+
+
+
+        //(investigationDocID, firstInvestigationDoc, secondInvestigationDoc, reportID
+//        private static final String TABLE_REPORT_FROM_USER = "reportFromUser";
+//        private static final String TABLE_REPORT_FROM_USER_IMAGE = "reportFromUserImage";
+//        private static final String TABLE_REPORT_LOCATION = "reportLocation";
+//        private static final String TABLE_REPORT_INVESTIGATION = "reportInvestigation";
+//        private static final String TABLE_REPORT_CLEANING_PROCESS = "reportCleaningProcess";
 
     }
 
@@ -327,6 +394,62 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_EMPLOYEE_ORGANIZATION, null, conValEmployeeOrg) != -1;
     }
 
+    public Boolean addReport(String reportDesc, String reportDate, String reportTime, String reportStatus, String examiner, String userID,
+                             String reportImageFilePaths[],
+                             String reportaddressLine, String reportPostcode, String reportCity, String reportState, String reportLatitude, String reportLongitude){
+
+        Boolean insertedReportFromUser = false, insertedReportImage = false, insertedReportLocation = false;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues conValReportFromUser = new ContentValues();
+        conValReportFromUser.put("reportDesc", reportDesc);
+        conValReportFromUser.put("reportDate", reportDate);
+        conValReportFromUser.put("reportTime", reportTime);
+        conValReportFromUser.put("reportStatus", reportStatus);
+        //conValReportFromUser.put("reportPollutionCause", reportPollutionCause);
+        //conValReportFromUser.put("reportEstimatedSolveDuration", reportEstimatedSolveDuration);
+        //conValReportFromUser.put("reportInvestigationTeam", reportInvestigationTeam);
+        conValReportFromUser.put("examiner", examiner);
+        //conValReportFromUser.put("reportHandler", reportHandler);
+        conValReportFromUser.put("userID", userID);
+
+        insertedReportFromUser = db.insert(TABLE_REPORT_FROM_USER, null, conValReportFromUser) != -1;
+
+        String reportID = getReportID(reportDate, reportTime, userID);
+
+        if(insertedReportFromUser){
+            try{
+                // insert image
+                for(int i = 0; i < reportImageFilePaths.length; i++){
+                    ContentValues conValReportImage = new ContentValues();
+                    conValReportImage.put("reportImageFilePath", reportImageFilePaths[i]);
+                    conValReportImage.put("reportID", reportID);
+                    db.insert(TABLE_REPORT_FROM_USER_IMAGE, null, conValReportImage);
+                }
+
+                insertedReportImage = true;
+
+            }catch (Exception e){
+                insertedReportImage = false;
+
+            }
+
+            // insert report location
+            ContentValues conValReportLocation = new ContentValues();
+            conValReportLocation.put("reportaddressLine", reportaddressLine);
+            conValReportLocation.put("reportPostcode", reportPostcode);
+            conValReportLocation.put("reportCity", reportCity);
+            conValReportLocation.put("reportState", reportState);
+            conValReportLocation.put("reportLatitude", reportLatitude);
+            conValReportLocation.put("reportLongitude", reportLongitude);
+            conValReportLocation.put("reportID", reportID);
+            insertedReportLocation = db.insert(TABLE_REPORT_LOCATION, null, conValReportLocation) != -1;
+        }
+
+        return insertedReportFromUser && insertedReportImage && insertedReportLocation;
+    }
+
     public boolean isEmail_Exist(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE userEmail=?", new String[]{email});
@@ -385,6 +508,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getTeamMember(String teamID) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT user.fName, user.lName FROM " + TABLE_USER + " user ," + TABLE_INVESTIGATION_TEAM_MEMBER +" teamMem WHERE teamMem.investigationTeamID=? AND teamMem.investigationTeamUserID=user.userID", new String[]{teamID});
+    }
+
+    public String getReportID(String reportDate, String reportTime, String userID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT reportID FROM " + TABLE_REPORT_FROM_USER + " WHERE reportDate=? AND reportTime=? AND userID=?", new String[]{reportDate, reportTime, userID});
+
+        return (cursor.moveToFirst()) ? cursor.getString(cursor.getColumnIndex("reportID")) : "";
     }
 
     // Registered user info

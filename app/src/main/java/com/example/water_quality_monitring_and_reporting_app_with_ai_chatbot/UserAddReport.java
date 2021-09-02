@@ -6,17 +6,23 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.Rect;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.provider.SyncStateContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -29,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -37,13 +44,23 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
 import static android.text.TextUtils.split;
 
 public class UserAddReport extends AppCompatActivity implements LocationListener{
+
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.example.android.fyp_hydroMyapp";
+    private final String userIDPreference = "userID";
+
+    private String getUserIDPreference = "";
 
     private LinearLayout userAddReport_linearLayout_previous, userAddReport_linearLayout_next;
     private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude,
@@ -61,6 +78,13 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     Boolean discardOrNot = false, deleteOrNot = false;
 
     LocationManager locationManager;
+    String[] addressSplitList = null;
+    double longitude = 0.0;
+    double latitude = 0.0;
+
+    List<Address> addressList = null;
+
+    String[] reportImageFilePaths;
 
     private static final int IMAGE_PICK_CAMERA_CODE = 1001;
     Uri image_uri;
@@ -75,6 +99,9 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        getUserIDPreference = mPreferences.getString(userIDPreference, null);
 
         userAddReport_linearLayout_previous = findViewById(R.id.userAddReport_linearLayout_previous);
         userAddReport_linearLayout_next = findViewById(R.id.userAddReport_linearLayout_next);
@@ -216,10 +243,10 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             displayToast("GPS is locating your current position");
             Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
             //get location by using latitude and longitude
-            List<Address> addressList = geocoder.getFromLocation(location.getLatitude(),
+            addressList = geocoder.getFromLocation(location.getLatitude(),
                     location.getLongitude(), 1);
             // split the full address by ,
-            String[] addressSplitList = split(addressList.get(0).getAddressLine(0), ",");
+            addressSplitList = split(addressList.get(0).getAddressLine(0), ",");
             userAddReport_txt_Address.setText(addressSplitList[0]
                     + addressSplitList[1]
                     + addressSplitList[2]
@@ -227,8 +254,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                     + ", " + addressList.get(0).getAdminArea()
                     + ", " + addressList.get(0).getPostalCode());
 
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
 
             userAddReport_txt_LongLatitude.setText( latitude+ ", " +longitude);
             userAddReport_txt_errorMsgLaLongitude.setVisibility(View.GONE);
@@ -307,12 +334,43 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void report(View view) {
         if(photoIndex != 0
                 && !userAddReport_etxtInput_pollutionDesc.getText().toString().isEmpty()
                 && !userAddReport_txt_LongLatitude.getText().equals("")
                 && !userAddReport_txt_Address.getText().equals("")){
-            displayToast("Report Successfully!");
+
+            reportImageFilePaths = new String[photoIndex];
+            //store image to file
+            saveImage(imageUri);
+
+            //store to db
+            String reportDesc = userAddReport_etxtInput_pollutionDesc.getText().toString();
+
+            DateTimeFormatter currentDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDateTime nowDate = LocalDateTime.now();
+            String reportDate = currentDate.format(nowDate);
+
+            DateTimeFormatter currentTime = DateTimeFormatter.ofPattern("HH:mm:ss");
+            LocalDateTime nowTime = LocalDateTime.now();
+            String reportTime = currentTime.format(nowTime);
+
+            String examinerID = "";//choose examiner sequentially
+
+            String reportaddressLine = addressSplitList[0] + addressSplitList[1] + addressSplitList[2];
+            String reportPostcode = addressList.get(0).getPostalCode();
+            String reportCity = addressList.get(0).getLocality();
+            String reportState = addressList.get(0).getAdminArea();
+
+            DatabaseHelper dbHelper = new DatabaseHelper(this);
+
+            if(dbHelper.addReport(reportDesc, reportDate, reportTime, "Pending", examinerID, getUserIDPreference,
+                    reportImageFilePaths, reportaddressLine, reportPostcode, reportCity, reportState, Double.toString(latitude), Double.toString(longitude))){
+
+                displayToast("Reported Successfully!");
+                finish();
+            }
         }else{
             displayToast("Please make sure every requirement is completed");
             //String errorMsg = ""; int errorAmount = 0;
@@ -330,6 +388,52 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
             if(userAddReport_txt_Address.getText().equals("")){
                 userAddReport_txt_errorMsgAddress.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void saveImage(Uri[] imageUri) {
+
+        //String root = Environment.getExternalStorageDirectory().toString();
+        File filePathString = Environment.getExternalStorageDirectory();
+        File filePath = new File(filePathString + "/reported_water_pollution_images/");
+        //String root = "/sdcard";
+//        System.out.println("root: " + root);
+//        String imgFilePath = root + "/reported_water_pollution_images/";
+//        System.out.println(imgFilePath);
+        if(!filePath.exists())
+            filePath.mkdirs();
+//        File myDir = new File(imgFilePath);
+//        myDir.mkdirs();
+
+        DateTimeFormatter currentDate = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime nowDate = LocalDateTime.now();
+        String reportDateTime = currentDate.format(nowDate);
+
+        String imageName = getUserIDPreference + reportDateTime;
+
+        for (int i = 0; i < photoIndex; i++){
+            String imageNameConcat = "Image-" + imageName + i + ".jpg";
+            File file = new File (filePath, imageNameConcat);
+
+            System.out.println(filePath.exists());
+            reportImageFilePaths[i] = filePath + "/" +imageNameConcat;
+
+            //if (file.exists ()) file.delete ();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri[i]);
+                BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(reportImageFilePaths[i], false);
+                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
+
+                FileOutputStream out = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+
+            } catch (Exception e) {
+                System.out.println("ERROR in Storing images: " + e.toString());
             }
         }
     }
