@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapRegionDecoder;
 import android.graphics.Rect;
@@ -51,6 +52,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import static android.text.TextUtils.split;
 
@@ -365,7 +367,68 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
             DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-            if(dbHelper.addReport(reportDesc, reportDate, reportTime, "Pending", examinerID, getUserIDPreference,
+
+            String selectedOrgPostcode = "";
+
+            String prevPostcode = "";
+            String availableOrgPostcode = "";
+            Cursor cursorAvailableOrgPostcode = dbHelper.getAvailableOrgPostcodeByState(reportState);
+
+            Boolean found = false;
+
+            for (cursorAvailableOrgPostcode.moveToFirst(); !cursorAvailableOrgPostcode.isAfterLast(); cursorAvailableOrgPostcode.moveToNext()) {
+                availableOrgPostcode = cursorAvailableOrgPostcode.getString(cursorAvailableOrgPostcode.getColumnIndex("orgPostCode"));
+
+                if(reportPostcode.compareTo(availableOrgPostcode) > 0){
+                    prevPostcode = availableOrgPostcode;
+                    continue;
+                }
+                else if(reportPostcode.compareTo(availableOrgPostcode) == 0){
+                    selectedOrgPostcode = availableOrgPostcode;
+                    found = true;
+                    break;
+                }
+                else{
+                    break;
+                }
+            }
+
+            if(!found){
+                if(prevPostcode == "")
+                    selectedOrgPostcode = availableOrgPostcode;
+                else{
+                    if(cursorAvailableOrgPostcode.isAfterLast()){
+                        selectedOrgPostcode = prevPostcode;
+                    }
+                    else{
+                        int diffWithPrev = reportPostcode.compareTo(prevPostcode);
+                        int diffWithNext = availableOrgPostcode.compareTo(reportPostcode);
+
+                        if(diffWithPrev < diffWithNext){
+                            selectedOrgPostcode = prevPostcode;
+                        }
+                        else if(diffWithNext < diffWithPrev){
+                            selectedOrgPostcode = availableOrgPostcode;
+                        }
+                        else{
+                            Random r = new Random();
+                            int low = 1;
+                            int high = 2;
+                            int randomNum = r.nextInt(high-low) + low;
+
+                            selectedOrgPostcode = (randomNum == 1) ? prevPostcode : availableOrgPostcode;
+                        }
+                    }
+                }
+            }
+
+            String selectedOrgID = "";
+            Cursor cursorAvailableOrgID = dbHelper.getAvailableOrgIDBySelectedPostcode(selectedOrgPostcode);
+            cursorAvailableOrgID.moveToFirst();
+
+            selectedOrgID = dbHelper.getOrgIDWithLeastReports(cursorAvailableOrgID);
+
+            if(dbHelper.addReport(reportDesc, reportDate, reportTime, "Pending", examinerID, selectedOrgID, getUserIDPreference,
                     reportImageFilePaths, reportaddressLine, reportPostcode, reportCity, reportState, Double.toString(latitude), Double.toString(longitude))){
 
                 displayToast("Reported Successfully!");

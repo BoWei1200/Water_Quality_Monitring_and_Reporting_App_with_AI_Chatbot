@@ -150,10 +150,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "reportInvestigationTeam TEXT, " +
                 "examiner TEXT NOT NULL, " +
                 "reportHandler TEXT, " +
+                "orgID TEXT, " +
                 "userID TEXT NOT NULL, " +
                 "FOREIGN KEY (reportInvestigationTeam) REFERENCES " + TABLE_INVESTIGATION_TEAM + " (investigationTeamID), " +
                 "FOREIGN KEY (examiner) REFERENCES " + TABLE_USER + " (userID), " +
                 "FOREIGN KEY (reportHandler) REFERENCES " + TABLE_USER + " (userID), "+
+                "FOREIGN KEY (orgID) REFERENCES " + TABLE_ORGANIZATION + " (orgID), "+
                 "FOREIGN KEY (userID) REFERENCES " + TABLE_USER + " (userID));");
 
         db.execSQL("CREATE TABLE " + TABLE_REPORT_FROM_USER_IMAGE +"(" +
@@ -394,7 +396,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_EMPLOYEE_ORGANIZATION, null, conValEmployeeOrg) != -1;
     }
 
-    public Boolean addReport(String reportDesc, String reportDate, String reportTime, String reportStatus, String examiner, String userID,
+    public Boolean addReport(String reportDesc, String reportDate, String reportTime, String reportStatus, String examiner, String orgID, String userID,
                              String reportImageFilePaths[],
                              String reportaddressLine, String reportPostcode, String reportCity, String reportState, String reportLatitude, String reportLongitude){
 
@@ -412,6 +414,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //conValReportFromUser.put("reportInvestigationTeam", reportInvestigationTeam);
         conValReportFromUser.put("examiner", examiner);
         //conValReportFromUser.put("reportHandler", reportHandler);
+        conValReportFromUser.put("orgID", orgID);
         conValReportFromUser.put("userID", userID);
 
         insertedReportFromUser = db.insert(TABLE_REPORT_FROM_USER, null, conValReportFromUser) != -1;
@@ -500,6 +503,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT org.orgName FROM " + TABLE_ORGANIZATION + " org, "+ TABLE_EMPLOYEE_ORGANIZATION +" employOrg WHERE employOrg.userID=? AND org.orgID = employOrg.orgID", new String[]{userID});
     }
 
+    public Cursor getAvailableOrgPostcodeByState(String reportState){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT DISTINCT orgPostCode FROM " + TABLE_ORGANIZATION + " WHERE orgState=? ORDER BY orgPostCode ASC", new String[]{reportState});
+    }
+
+    public Cursor getAvailableOrgIDBySelectedPostcode(String selectedPostcode){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION + " WHERE orgPostCode=? ORDER BY orgPostCode ASC", new String[]{selectedPostcode});
+    }
+
+    public Cursor getOrgReportNumByOrgID(String orgID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT org.orgID, COUNT(report.reportID) FROM " + TABLE_REPORT_FROM_USER +" report, "+ TABLE_ORGANIZATION +" org WHERE org.orgID=?  AND report.orgID = org.orgID GROUP BY org.orgID ORDER BY COUNT(report.reportID)", new String[]{orgID});
+    }
+
+    public String getOrgIDWithLeastReports(Cursor cursorAvailableOrgID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String WHERE_clause = "";
+        for (int i = 0; i < cursorAvailableOrgID.getCount(); i++){
+            if(i == 0){
+                WHERE_clause += "orgID=" + cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("orgID")) + " ";
+            }else{
+                WHERE_clause += "OR orgID=" + cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("orgID")) + " ";
+            }
+
+            cursorAvailableOrgID.moveToNext();
+        }
+
+        String query = "SELECT orgID, COUNT(reportID) FROM reportFromUser WHERE " + WHERE_clause + " GROUP BY orgID ORDER BY COUNT(reportID)";
+
+        System.out.println("QUERY CHECK: " + query);
+
+        Cursor getOrgID = db.rawQuery(query, null);
+
+        Cursor cursorOrgWithNoReport = null;
+
+        System.out.println("TWO CURSOR: " + Boolean.toString(cursorAvailableOrgID.getCount() != getOrgID.getCount()) );
+
+        if(cursorAvailableOrgID.getCount() != getOrgID.getCount()){
+            System.out.println("move to first? : " + cursorAvailableOrgID.moveToFirst());
+            System.out.println();
+            for(int i = 0; i < cursorAvailableOrgID.getCount(); i++){
+                cursorOrgWithNoReport = getOrgReportNumByOrgID(cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("orgID")));
+                cursorOrgWithNoReport.moveToFirst();
+
+                System.out.println("cursorOrgWithNoReport == null?: " + cursorOrgWithNoReport == null);
+
+                if(cursorOrgWithNoReport.getCount() == 0){
+                    return cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("orgID"));
+                }
+                cursorAvailableOrgID.moveToNext();
+            }
+        }
+
+        return (getOrgID.moveToFirst()) ? getOrgID.getString(getOrgID.getColumnIndex("orgID")) : "";
+    }
+
     public Cursor getInvestigatorTeamInfoByUserID(String userID){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT inTeam.investigationTeamID, inTeam.investigationTeamName FROM " + TABLE_INVESTIGATION_TEAM + " inTeam, "+ TABLE_INVESTIGATION_TEAM_MEMBER +" inTeamMem WHERE inTeamMem.investigationTeamUserID=? AND inTeamMem.investigationTeamID = inTeam.investigationTeamID", new String[]{userID});
@@ -577,4 +638,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION, null);
         return cursor.getCount();
     }
+
+
 }
