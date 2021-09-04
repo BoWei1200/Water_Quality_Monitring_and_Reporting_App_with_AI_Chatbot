@@ -306,7 +306,8 @@
                 <RadioGroup
                     android:id="@+id/adminAddEmployee_rGroup_employeeType"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:onClick="selectUserType">
 
                     <RadioButton
                         android:id="@+id/adminAddEmployee_rBtn_AD"
