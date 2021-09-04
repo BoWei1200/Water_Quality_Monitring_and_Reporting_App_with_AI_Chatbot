@@ -42,6 +42,14 @@ public class AdminEmployeeManagement extends AppCompatActivity {
             case R.id.adminEmployeeManagement_tableRow_manageEmployee:
                 intent = new Intent(this, ManageUserOrEmployee.class);
                 break;
+
+            case R.id.adminEmployeeManagement_tableRow_addInvestigationTeam:
+                intent = new Intent(this, AdminAddInvestigationTeam.class);
+                break;
+
+            case R.id.adminEmployeeManagement_tableRow_manageInvestigationTeam:
+                intent = new Intent(this, AdminManageInvestigationTeam.class);
+                break;
         }
 
         startActivity(intent);

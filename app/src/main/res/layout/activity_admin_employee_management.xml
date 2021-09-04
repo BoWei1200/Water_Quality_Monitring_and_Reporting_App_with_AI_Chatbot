@@ -36,9 +36,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/adminEmployeeManagement_toolbar">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Employee"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_sans"
+            android:layout_marginBottom="20dp"/>
+
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp">
 
             <TableRow
                 android:id="@+id/adminEmployeeManagement_tableRow_addEmployee"
@@ -49,8 +59,8 @@
 
                 <ImageView
                     android:id="@+id/adminEmployeeManagement_img_addEmployee"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_column="1"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/createusericonedit" />
@@ -90,8 +100,8 @@
 
                 <ImageView
                     android:id="@+id/adminEmployeeManagement_img_manageEmployee"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_column="1"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/manageusericonedit" />
@@ -105,6 +115,89 @@
                     android:fontFamily="@font/nunito_sans"
                     android:gravity="center_vertical"
                     android:text="  Manage Employee"
+                    android:textSize="18sp" />
+            </TableRow>
+
+        </TableLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Investigation Team"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_sans"
+            android:layout_marginBottom="20dp"/>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:id="@+id/adminEmployeeManagement_tableRow_addInvestigationTeam"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:onClick="toOtherPages"
+                android:weightSum="10">
+
+                <ImageView
+                    android:id="@+id/adminEmployeeManagement_img_addInvestigationTeam"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_column="1"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/addinteamicon" />
+
+                <TextView
+                    android:id="@+id/adminEmployeeManagement_txt_addInvestigationTeam"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_weight="7"
+                    android:fontFamily="@font/nunito_sans"
+                    android:gravity="center_vertical"
+                    android:text="  Add Investigation Team"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"></TableRow>
+
+            <View
+                android:layout_height="1dip"
+                android:background="#FF909090" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"></TableRow>
+
+            <TableRow
+                android:id="@+id/adminEmployeeManagement_tableRow_manageInvestigationTeam"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:onClick="toOtherPages"
+                android:weightSum="10">
+
+                <ImageView
+                    android:id="@+id/adminEmployeeManagement_img_manageInvestigationTeam"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_column="1"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/inteamicon" />
+
+                <TextView
+                    android:id="@+id/adminEmployeeManagement_txt_manageInvestigationTeam"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_weight="7"
+                    android:fontFamily="@font/nunito_sans"
+                    android:gravity="center_vertical"
+                    android:text="  Manage Investigation Team"
                     android:textSize="18sp" />
             </TableRow>
 
