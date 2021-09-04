@@ -3,6 +3,10 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,6 +27,12 @@ import java.util.regex.Pattern;
 
 public class AdminAddEmployee extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.example.android.fyp_hydroMyapp";
+    private final String userIDPreference = "userID";
+
+    private String getUserIDPreference = "";
+
     private TextInputEditText adminAddEmployee_txtInputET_fName, adminAddEmployee_txtInputET_lName, adminAddEmployee_txtInputET_email,
             adminAddEmployee_txtInputET_phone, adminAddEmployee_txtInputET_addressLine, adminAddEmployee_txtInputET_postcode,
             adminAddEmployee_txtInputET_city;
@@ -34,9 +44,11 @@ public class AdminAddEmployee extends AppCompatActivity implements AdapterView.O
     private TextView adminAddEmployee_txt_errorName, adminAddEmployee_txt_errorEmail, adminAddEmployee_txt_errorPhone,
             adminAddEmployee_txt_errorAddress, adminAddEmployee_txt_errorUserType;
 
-    private Boolean nameValid = false, emailValid = false, phoneValid = false, addressValid = false, paswordValid = false;
+    private Boolean nameValid = false, emailValid = false, phoneValid = false, addressValid = false, userTypeValid = false;
 
     private static final Pattern phone_pattern = Pattern.compile("^(01)[0-46-9][0-9]{7,8}$");
+
+    private String userType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +60,9 @@ public class AdminAddEmployee extends AppCompatActivity implements AdapterView.O
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        getUserIDPreference = mPreferences.getString(userIDPreference, null);
 
         adminAddEmployee_txtInputET_fName = findViewById(R.id.adminAddEmployee_txtInputET_fName);
         adminAddEmployee_txtInputET_lName  =findViewById(R.id.adminAddEmployee_txtInputET_lName);
@@ -229,29 +244,110 @@ public class AdminAddEmployee extends AppCompatActivity implements AdapterView.O
     }
 
     public void addEmployee(View view) {
+        if(nameValid && emailValid && phoneValid && addressValid && userTypeValid){
+            try{
+                DatabaseHelper dbHelper = new DatabaseHelper(this);
 
+                Boolean emailExist = dbHelper.isEmail_Exist(adminAddEmployee_txtInputET_email.getText().toString());
+                Boolean phoneExist = dbHelper.isPhone_Exist(adminAddEmployee_txtInputET_phone.getText().toString());
+
+                if(!(emailExist || phoneExist)){
+                    String randomizedPassword = "Hy" + (int)(Math.random() * 99999);
+
+                    if(dbHelper.addUser(
+                            adminAddEmployee_txtInputET_email.getText().toString(),
+                            adminAddEmployee_txtInputET_fName.getText().toString(),
+                            adminAddEmployee_txtInputET_lName.getText().toString(),
+                            adminAddEmployee_txtInputET_phone.getText().toString(),
+                            userType,
+                            randomizedPassword,
+                            adminAddEmployee_txtInputET_addressLine.getText().toString(),
+                            adminAddEmployee_txtInputET_postcode.getText().toString(),
+                            adminAddEmployee_txtInputET_city.getText().toString(),
+                            adminAddEmployee_spinner_state.getSelectedItem().toString()
+                    )){
+                        String orgID = "";
+                        Cursor cursorOrgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+
+                        orgID = (cursorOrgInfo.moveToFirst()) ? cursorOrgInfo.getString(cursorOrgInfo.getColumnIndex("orgID")) : "";
+
+                        if(dbHelper.addEmployeeOrg(orgID, dbHelper.getUserID(adminAddEmployee_txtInputET_email.getText().toString()))){
+                            displayToast("Registered Successfully!");
+
+                            String name = adminAddEmployee_txtInputET_fName.getText().toString() + " " + adminAddEmployee_txtInputET_lName.getText().toString();
+                            String message = name + ", your HydroMy password is " + randomizedPassword;
+
+                            finish();
+
+                            sendEmail(adminAddEmployee_txtInputET_email.getText().toString(), message);
+                        }else{
+                            displayToast("Problem occurred during assigning organization");
+                        }
+                    }else{
+                        displayToast("Problem occurred during registration");
+                    }
+
+                }else{
+                    if(emailExist){
+                        adminAddEmployee_txt_errorEmail.setText("This email is alredy registered");
+                        displayToast("This email has been registered");
+                    }
+
+                    if(phoneExist){
+                        adminAddEmployee_txt_errorPhone.setText("This phone no. is already registered");
+                        displayToast("This phone no. is already registered");
+                    }
+                }
+
+            }catch(Exception e){
+                System.out.println("\t" + e.toString());
+            }
+        }else {
+            displayToast("Please ensure every credential is filled in correctly");
+        }
     }
 
     public void selectUserType(View view) {
         switch (view.getId()){
             case R.id.adminAddEmployee_rBtn_AD:
-                displayToast("AD");
+                userType = "AD";
                 break;
 
             case R.id.adminAddEmployee_rBtn_EX:
-                displayToast("EX");
+                userType = "EX";
                 break;
 
             case R.id.adminAddEmployee_rBtn_IN:
-                displayToast("IN");
+                userType = "IN";
                 break;
 
             case R.id.adminAddEmployee_rBtn_RH:
-                displayToast("RH");
+                userType = "RH";
                 break;
         }
 
         adminAddEmployee_txt_errorUserType.setVisibility(View.GONE);
+        userTypeValid = true;
+    }
+
+    protected boolean sendEmail(String toUserEmail, String message) {
+        String[] TO = {toUserEmail};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "HydroMy Message");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            finish();
+            return true;
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 
     public void displayToast(String message){

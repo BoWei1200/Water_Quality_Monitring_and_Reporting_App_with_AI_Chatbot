@@ -152,8 +152,8 @@ public class SystemAdminAddOrg extends AppCompatActivity implements AdapterView.
 
     public void add(View view) {
         if(orgNameValid && orgAddressValid){
-
             DatabaseHelper dbHelper = new DatabaseHelper(this);
+
             if(!dbHelper.isOrgExist(systemAdminAddOrg_txtInputET_orgName.getText().toString())){
                 if(dbHelper.addOrg(
                         systemAdminAddOrg_txtInputET_orgName.getText().toString(),
