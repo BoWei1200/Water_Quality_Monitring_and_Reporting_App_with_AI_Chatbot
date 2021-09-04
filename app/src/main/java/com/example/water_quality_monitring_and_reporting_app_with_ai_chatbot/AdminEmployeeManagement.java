@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class UserManagement extends AppCompatActivity {
+public class AdminEmployeeManagement extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_management);
+        setContentView(R.layout.activity_admin_employee_management);
     }
 }

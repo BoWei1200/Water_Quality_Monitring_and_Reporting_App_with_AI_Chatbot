@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.provider.SyncStateContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -44,7 +43,6 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -358,15 +356,12 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             LocalDateTime nowTime = LocalDateTime.now();
             String reportTime = currentTime.format(nowTime);
 
-            String examinerID = "";//choose examiner sequentially
-
             String reportaddressLine = addressSplitList[0] + addressSplitList[1] + addressSplitList[2];
             String reportPostcode = addressList.get(0).getPostalCode();
             String reportCity = addressList.get(0).getLocality();
             String reportState = addressList.get(0).getAdminArea();
 
             DatabaseHelper dbHelper = new DatabaseHelper(this);
-
 
             String selectedOrgPostcode = "";
 
@@ -426,9 +421,16 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             Cursor cursorAvailableOrgID = dbHelper.getAvailableOrgIDBySelectedPostcode(selectedOrgPostcode);
             cursorAvailableOrgID.moveToFirst();
 
-            selectedOrgID = dbHelper.getOrgIDWithLeastReports(cursorAvailableOrgID);
+            selectedOrgID = (cursorAvailableOrgID.getCount() != 0) ? dbHelper.getOrgIDWithLeastReports(cursorAvailableOrgID) :  dbHelper.getorgID("Department of Environment (DOE) Kuala Lumpur");
 
-            if(dbHelper.addReport(reportDesc, reportDate, reportTime, "Pending", examinerID, selectedOrgID, getUserIDPreference,
+            //sequentially get examiner.
+            String selectedExaminerID = "";
+
+            Cursor cursorAvailableExaminerID = dbHelper.getAvailableExaminerByOrgID(selectedOrgID);
+
+            selectedExaminerID = dbHelper.getExaminerIDWithLeastReports(cursorAvailableExaminerID);
+
+            if(dbHelper.addReport(reportDesc, reportDate, reportTime, "Pending", selectedExaminerID, selectedOrgID, getUserIDPreference,
                     reportImageFilePaths, reportaddressLine, reportPostcode, reportCity, reportState, Double.toString(latitude), Double.toString(longitude))){
 
                 displayToast("Reported Successfully!");
