@@ -306,8 +306,7 @@
                 <RadioGroup
                     android:id="@+id/adminAddEmployee_rGroup_employeeType"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="selectUserType">
+                    android:layout_height="wrap_content">
 
                     <RadioButton
                         android:id="@+id/adminAddEmployee_rBtn_AD"
@@ -316,7 +315,8 @@
                         android:text="Admin"
                         android:layout_gravity="center_horizontal"
                         android:textSize="16dp"
-                        android:fontFamily="@font/nunito_sans"/>
+                        android:fontFamily="@font/nunito_sans"
+                        android:onClick="selectUserType"/>
 
                     <RadioButton
                         android:id="@+id/adminAddEmployee_rBtn_EX"
@@ -325,7 +325,8 @@
                         android:text="Examiner"
                         android:layout_gravity="center_horizontal"
                         android:textSize="16dp"
-                        android:fontFamily="@font/nunito_sans" />
+                        android:fontFamily="@font/nunito_sans"
+                        android:onClick="selectUserType"/>
 
                     <RadioButton
                         android:id="@+id/adminAddEmployee_rBtn_IN"
@@ -334,7 +335,8 @@
                         android:text="Investigator"
                         android:layout_gravity="center_horizontal"
                         android:textSize="16dp"
-                        android:fontFamily="@font/nunito_sans" />
+                        android:fontFamily="@font/nunito_sans"
+                        android:onClick="selectUserType"/>
 
                     <RadioButton
                         android:id="@+id/adminAddEmployee_rBtn_RH"
@@ -343,7 +345,8 @@
                         android:text="Report Handler"
                         android:layout_gravity="center_horizontal"
                         android:textSize="16dp"
-                        android:fontFamily="@font/nunito_sans" />
+                        android:fontFamily="@font/nunito_sans"
+                        android:onClick="selectUserType"/>
                 </RadioGroup>
 
                 <TextView

@@ -4,8 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -13,7 +19,9 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-public class AdminAddEmployee extends AppCompatActivity {
+import java.util.regex.Pattern;
+
+public class AdminAddEmployee extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private TextInputEditText adminAddEmployee_txtInputET_fName, adminAddEmployee_txtInputET_lName, adminAddEmployee_txtInputET_email,
             adminAddEmployee_txtInputET_phone, adminAddEmployee_txtInputET_addressLine, adminAddEmployee_txtInputET_postcode,
@@ -25,6 +33,10 @@ public class AdminAddEmployee extends AppCompatActivity {
 
     private TextView adminAddEmployee_txt_errorName, adminAddEmployee_txt_errorEmail, adminAddEmployee_txt_errorPhone,
             adminAddEmployee_txt_errorAddress, adminAddEmployee_txt_errorUserType;
+
+    private Boolean nameValid = false, emailValid = false, phoneValid = false, addressValid = false, paswordValid = false;
+
+    private static final Pattern phone_pattern = Pattern.compile("^(01)[0-46-9][0-9]{7,8}$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +67,73 @@ public class AdminAddEmployee extends AppCompatActivity {
         adminAddEmployee_txt_errorAddress = findViewById(R.id.adminAddEmployee_txt_errorAddress);
         adminAddEmployee_txt_errorUserType = findViewById(R.id.adminAddEmployee_txt_errorUserType);
 
+        nameValidation(adminAddEmployee_txtInputET_fName);
+        nameValidation(adminAddEmployee_txtInputET_lName);
 
+        adminAddEmployee_txtInputET_email.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!TextUtils.isEmpty(s) ){
+                    if(Patterns.EMAIL_ADDRESS.matcher(s).matches()){
+                        adminAddEmployee_txt_errorEmail.setText("");
+                        emailValid = true;
+                    }else{
+                        adminAddEmployee_txt_errorEmail.setText("Invalid Email");
+                        emailValid = false;
+                    }
+                }else{
+                    adminAddEmployee_txt_errorEmail.setText("Required");
+                    emailValid = false;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        adminAddEmployee_txtInputET_phone.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!adminAddEmployee_txtInputET_phone.getText().toString().isEmpty()){
+                    if (phone_pattern.matcher(adminAddEmployee_txtInputET_phone.getText().toString()).matches()) {
+                        adminAddEmployee_txt_errorPhone.setText("");
+                        phoneValid = true;
+                    } else {
+                        adminAddEmployee_txt_errorPhone.setText("Invalid Malaysia Phone No.");
+                        phoneValid = false;
+                    }
+                }else{
+                    adminAddEmployee_txt_errorPhone.setText("Required");
+                    phoneValid = false;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        addressValidation(adminAddEmployee_txtInputET_addressLine);
+        addressValidation(adminAddEmployee_txtInputET_postcode);
+        addressValidation(adminAddEmployee_txtInputET_city);
+
+        if (adminAddEmployee_spinner_state != null) {
+            adminAddEmployee_spinner_state.setOnItemSelectedListener(this);
+
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                    R.array.state_array, android.R.layout.simple_spinner_item);
+
+            // Specify the layout to use when the list of choices appears.
+            adapter.setDropDownViewResource
+                    (android.R.layout.simple_spinner_dropdown_item);
+            // Apply the adapter to the spinner.
+            if (adminAddEmployee_spinner_state != null) {
+                adminAddEmployee_spinner_state.setAdapter(adapter);
+            }
+        }
     }
 
     @Override //when back button clicked
@@ -66,12 +144,96 @@ public class AdminAddEmployee extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+        String spinnerLabel = adapterView.getItemAtPosition(position).toString();
+        //displayToast(spinnerLabel);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
+
+    public void nameValidation(TextInputEditText txtInputET_nameAttribute){
+        txtInputET_nameAttribute.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try{
+                    String fNameCheck = "", LNameCheck = "";
+                    fNameCheck = adminAddEmployee_txtInputET_fName.getText().toString();
+                    LNameCheck = adminAddEmployee_txtInputET_lName.getText().toString();
+
+                    if(fNameCheck.isEmpty() || LNameCheck.isEmpty()){
+                        adminAddEmployee_txt_errorName.setText("Required");
+                        nameValid = false;
+                    }
+                    else{
+                        adminAddEmployee_txt_errorName.setText("");
+                        nameValid = true;
+                    }
+                }catch(Exception e) {
+                    System.out.println(e.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    public void addressValidation(TextInputEditText txtInputET_addressAttribute){
+        txtInputET_addressAttribute.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try{
+                    String addressLineCheck = "", postcodeCheck = "", cityCheck = "";
+
+                    addressLineCheck = adminAddEmployee_txtInputET_addressLine.getText().toString();
+                    postcodeCheck = adminAddEmployee_txtInputET_postcode.getText().toString();
+                    cityCheck = adminAddEmployee_txtInputET_city.getText().toString();
+
+                    if(addressLineCheck.isEmpty() || postcodeCheck.isEmpty() || cityCheck.isEmpty()){
+                        String errorMsgAddress = "Require: "; int errorAmount = 0;
+
+                        if(addressLineCheck.isEmpty()){
+                            errorMsgAddress += "address line";
+                            errorAmount++;
+                        }
+
+                        if(postcodeCheck.isEmpty()){
+                            errorMsgAddress += (errorAmount > 0) ? ", postcode" : "postcode";
+                            errorAmount++;
+                        }
+
+                        if(cityCheck.isEmpty()){
+                            errorMsgAddress += (errorAmount > 0) ? ", city" : "city";
+                            errorAmount++;
+                        }
+
+                        adminAddEmployee_txt_errorAddress.setText(errorMsgAddress);
+                        addressValid = false;
+                    }
+                    else{
+                        adminAddEmployee_txt_errorAddress.setText("");
+                        addressValid = true;
+                    }
+                }catch(Exception e){
+                    System.out.println(e.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
     public void addEmployee(View view) {
 
     }
 
     public void selectUserType(View view) {
-        switch (adminAddEmployee_rGroup_employeeType.getCheckedRadioButtonId()){
+        switch (view.getId()){
             case R.id.adminAddEmployee_rBtn_AD:
                 displayToast("AD");
                 break;
@@ -88,6 +250,8 @@ public class AdminAddEmployee extends AppCompatActivity {
                 displayToast("RH");
                 break;
         }
+
+        adminAddEmployee_txt_errorUserType.setVisibility(View.GONE);
     }
 
     public void displayToast(String message){
