@@ -272,7 +272,7 @@ public class AdminAddEmployee extends AppCompatActivity implements AdapterView.O
                         orgID = (cursorOrgInfo.moveToFirst()) ? cursorOrgInfo.getString(cursorOrgInfo.getColumnIndex("orgID")) : "";
 
                         if(dbHelper.addEmployeeOrg(orgID, dbHelper.getUserID(adminAddEmployee_txtInputET_email.getText().toString()))){
-                            displayToast("Registered Successfully!");
+                            displayToast("Employee added successfully!");
 
                             String name = adminAddEmployee_txtInputET_fName.getText().toString() + " " + adminAddEmployee_txtInputET_lName.getText().toString();
                             String message = name + ", your HydroMy password is " + randomizedPassword;

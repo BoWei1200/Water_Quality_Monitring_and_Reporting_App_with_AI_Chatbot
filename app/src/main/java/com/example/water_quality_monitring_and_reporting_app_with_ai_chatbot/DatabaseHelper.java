@@ -587,12 +587,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String WHERE_clause = "";
+
         for (int i = 0; i < cursorAvailableExaminerID.getCount(); i++){
-            if(i == 0){
-                WHERE_clause += "examiner=" + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("examiner")) + " ";
-            }else{
-                WHERE_clause += "OR examiner=" + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("examiner")) + " ";
-            }
+//            try{
+                if(i == 0){
+                    WHERE_clause += "examiner=" + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")) + " ";
+                }else{
+                    WHERE_clause += "OR examiner=" + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")) + " ";
+                }
+//            }catch(Exception e){
+//                System.out.println("ERROR in Where" + e.toString());
+//            }
+
 
             cursorAvailableExaminerID.moveToNext();
         }
@@ -611,15 +617,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             System.out.println("move to first? : " + cursorAvailableExaminerID.moveToFirst());
 
             for(int i = 0; i < cursorAvailableExaminerID.getCount(); i++){
-                cursorExaminerWithNoReport = getOrgReportNumByOrgID(cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("examiner")));
+                cursorExaminerWithNoReport = getOrgReportNumByOrgID(cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")));
 
-                cursorExaminerWithNoReport = getExaminerReportNumByExaminerID(cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("examiner")));
+                cursorExaminerWithNoReport = getExaminerReportNumByExaminerID(cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")));
                 cursorExaminerWithNoReport.moveToFirst();
 
                 System.out.println("cursorExaminerWithNoReport == null?: " + cursorExaminerWithNoReport == null);
 
                 if(cursorExaminerWithNoReport.getCount() == 0){
-                    return cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("examiner"));
+                    return cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID"));
                 }
                 cursorAvailableExaminerID.moveToNext();
             }

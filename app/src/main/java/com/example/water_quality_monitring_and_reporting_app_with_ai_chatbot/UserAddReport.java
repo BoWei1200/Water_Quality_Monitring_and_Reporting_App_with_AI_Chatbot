@@ -424,9 +424,11 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             selectedOrgID = (cursorAvailableOrgID.getCount() != 0) ? dbHelper.getOrgIDWithLeastReports(cursorAvailableOrgID) :  dbHelper.getorgID("Department of Environment (DOE) Kuala Lumpur");
 
             //sequentially get examiner.
+            System.out.println("Selected OrgID: " +selectedOrgID);
             String selectedExaminerID = "";
 
             Cursor cursorAvailableExaminerID = dbHelper.getAvailableExaminerByOrgID(selectedOrgID);
+            cursorAvailableExaminerID.moveToFirst();
 
             selectedExaminerID = dbHelper.getExaminerIDWithLeastReports(cursorAvailableExaminerID);
 
