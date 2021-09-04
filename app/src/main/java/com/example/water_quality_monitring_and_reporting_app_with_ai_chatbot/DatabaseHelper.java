@@ -502,12 +502,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getOrgInfoByUserID(String userID){
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT org.orgName FROM " + TABLE_ORGANIZATION + " org, "+ TABLE_EMPLOYEE_ORGANIZATION +" employOrg WHERE employOrg.userID=? AND org.orgID = employOrg.orgID", new String[]{userID});
+        return db.rawQuery("SELECT org.orgID, org.orgName FROM " + TABLE_ORGANIZATION + " org, "+ TABLE_EMPLOYEE_ORGANIZATION +" employOrg WHERE employOrg.userID=? AND org.orgID = employOrg.orgID", new String[]{userID});
     }
 
     public Cursor getAvailableOrgPostcodeByState(String reportState){
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT DISTINCT orgPostCode FROM " + TABLE_ORGANIZATION + " WHERE orgState=? ORDER BY orgPostCode ASC", new String[]{reportState});
+        return db.rawQuery("SELECT DISTINCT orgPostCode FROM " + TABLE_ORGANIZATION + " WHERE orgState=? AND orgReady='1' ORDER BY orgPostCode ASC", new String[]{reportState});
     }
 
     public Cursor getAvailableOrgIDBySelectedPostcode(String selectedPostcode){
@@ -571,6 +571,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getInvestigatorTeamInfoByUserID(String userID){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT inTeam.investigationTeamID, inTeam.investigationTeamName FROM " + TABLE_INVESTIGATION_TEAM + " inTeam, "+ TABLE_INVESTIGATION_TEAM_MEMBER +" inTeamMem WHERE inTeamMem.investigationTeamUserID=? AND inTeamMem.investigationTeamID = inTeam.investigationTeamID", new String[]{userID});
+    }
+
+    public Cursor getInvestigationTeamByOrgID(String orgID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT investigationTeamID, investigationTeamName FROM " + TABLE_INVESTIGATION_TEAM + " WHERE investigationTeamOrgID=?", new String[]{orgID});
     }
 
     public Cursor getTeamMember(String teamID) {

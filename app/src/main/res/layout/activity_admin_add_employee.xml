@@ -338,6 +338,21 @@
                         android:fontFamily="@font/nunito_sans"
                         android:onClick="selectUserType"/>
 
+                    <LinearLayout
+                        android:id="@+id/adminAddEmployee_linearLayout_investigationTeam"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:visibility="gone">
+
+                        <Spinner
+                            android:id="@+id/adminAddEmployee_spinner_investigationTeamList"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            style="@style/spinner_style"/>
+
+                    </LinearLayout>
+
                     <RadioButton
                         android:id="@+id/adminAddEmployee_rBtn_RH"
                         android:layout_width="match_parent"
