@@ -455,6 +455,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return insertedReportFromUser && insertedReportImage && insertedReportLocation;
     }
 
+    public boolean addInvestigationTeamMember(String userID, String investigationTeamID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues conValTeamMem = new ContentValues();
+        conValTeamMem.put("investigationTeamUserID", userID);
+        conValTeamMem.put("investigationTeamID", investigationTeamID);
+
+        return db.insert(TABLE_INVESTIGATION_TEAM_MEMBER, null, conValTeamMem) != -1;
+    }
+
     public boolean isEmail_Exist(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE userEmail=?", new String[]{email});
@@ -576,6 +586,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getInvestigationTeamByOrgID(String orgID){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT investigationTeamID, investigationTeamName FROM " + TABLE_INVESTIGATION_TEAM + " WHERE investigationTeamOrgID=?", new String[]{orgID});
+    }
+
+    public Cursor getInvestigationTeamByTeamName(String investigationTeamName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_INVESTIGATION_TEAM + " WHERE investigationTeamName=?", new String[]{investigationTeamName});
     }
 
     public Cursor getTeamMember(String teamID) {
