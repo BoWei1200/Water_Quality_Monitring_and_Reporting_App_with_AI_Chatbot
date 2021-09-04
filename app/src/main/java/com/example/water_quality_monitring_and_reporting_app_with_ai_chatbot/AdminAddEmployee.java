@@ -3,24 +3,21 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
-public class AdminEmployeeManagement extends AppCompatActivity {
+public class AdminAddEmployee extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_employee_management);
+        setContentView(R.layout.activity_admin_add_employee);
 
-        Toolbar toolbar = findViewById(R.id.adminEmployeeManagement_toolbar);
+        Toolbar toolbar = findViewById(R.id.adminAddEmployee_toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
     }
 
     @Override //when back button clicked
@@ -29,21 +26,5 @@ public class AdminEmployeeManagement extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void toOtherPages(View view) {
-        Intent intent = new Intent();
-
-        switch(view.getId()){
-            case R.id.adminEmployeeManagement_tableRow_addEmployee:
-                intent = new Intent(this, AdminAddEmployee.class);
-                break;
-
-            case R.id.adminEmployeeManagement_tableRow_manageEmployee:
-                intent = new Intent(this, ManageUserOrEmployee.class);
-                break;
-        }
-
-        startActivity(intent);
     }
 }

@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot">
-        <activity android:name=".AdminEmployeeManagement"></activity>
+        <activity android:name=".AdminAddEmployee"></activity>
+        <activity android:name=".AdminEmployeeManagement" />
         <activity android:name=".OrgDetail" />
         <activity android:name=".ManageUserOrEmployee" />
         <activity android:name=".ReportHandlerReportFromUser" />
