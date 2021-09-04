@@ -29,8 +29,17 @@ public class ManageUserOrEmployee extends AppCompatActivity {
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         getUserTypePreference = mPreferences.getString(userTypePreference, null);
 
-        getSupportActionBar().setTitle((getUserTypePreference == "SAD") ? "User Management" :
-                                        (getUserTypePreference == "AD") ? "Employee Management" : "");
+        System.out.println("usertype" + getUserTypePreference);
+
+//        String toolbarTitle = "";
+//        if(getUserTypePreference == "SAD")
+//            toolbarTitle = "User Management";
+//        else if (getUserTypePreference == "AD")
+//            toolbarTitle = "Employee Management";
+
+        String toolbarTitle = (getUserTypePreference.equals("SAD")) ? "Manage User" :
+                                (getUserTypePreference.equals("AD")) ? "Manage Employee" : "null";
+        getSupportActionBar().setTitle(toolbarTitle);
 
 
     }

@@ -523,18 +523,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getExaminerReportNumByExaminerID(String examinerID){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT user.userID, COUNT(report.reportID) FROM " + TABLE_REPORT_FROM_USER +" report, "+ TABLE_USER +" user WHERE user.userID=?  AND report.userID = user.userID GROUP BY user.userID ORDER BY COUNT(report.reportID)", new String[]{examinerID});
-
-
-
-
-
-    //////here
-
-
-
-
-
-
     }
 
     public String getOrgIDWithLeastReports(Cursor cursorAvailableOrgID) {

@@ -51,7 +51,7 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
-        registration_txtInputET_fName = findViewById(R.id.systemAdminAddAdmin_txtInputET_fName);
+        registration_txtInputET_fName = findViewById(R.id.registration_txtInputET_fName);
         registration_txtInputET_lName = findViewById(R.id.registration_txtInputET_lName);
         registration_txtInputET_email = findViewById(R.id.registration_txtInputET_email);
         registration_txtInputET_phone = findViewById(R.id.registration_txtInputET_phone);
