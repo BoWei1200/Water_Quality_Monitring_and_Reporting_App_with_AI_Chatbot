@@ -42,8 +42,7 @@
             android:text="Employee"
             android:textSize="25dp"
             android:textStyle="bold"
-            android:fontFamily="@font/nunito_sans"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="10dp"/>
 
         <TableLayout
             android:layout_width="match_parent"
@@ -126,8 +125,7 @@
             android:text="Investigation Team"
             android:textSize="25dp"
             android:textStyle="bold"
-            android:fontFamily="@font/nunito_sans"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="10dp"/>
 
         <TableLayout
             android:layout_width="match_parent"
