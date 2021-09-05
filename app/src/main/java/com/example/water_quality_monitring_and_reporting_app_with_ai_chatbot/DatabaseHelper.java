@@ -653,8 +653,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             System.out.println("move to first? : " + cursorAvailableExaminerID.moveToFirst());
 
             for(int i = 0; i < cursorAvailableExaminerID.getCount(); i++){
-                cursorExaminerWithNoReport = getOrgReportNumByOrgID(cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")));
-
                 cursorExaminerWithNoReport = getExaminerReportNumByExaminerID(cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")));
                 cursorExaminerWithNoReport.moveToFirst();
 

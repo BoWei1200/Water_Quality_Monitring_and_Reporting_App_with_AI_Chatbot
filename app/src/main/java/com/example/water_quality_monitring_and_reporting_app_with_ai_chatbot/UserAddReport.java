@@ -41,11 +41,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -338,6 +341,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                 intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
                 startActivity(intent);
             });
+
             photoIndex++;
             prevNextandOtherBtnsDisplay();
             setTxtPhotoAmount();
@@ -472,17 +476,19 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveImage(Uri[] imageUri) {
 
-        //String root = Environment.getExternalStorageDirectory().toString();
-        File filePathString = Environment.getExternalStorageDirectory();
-        File filePath = new File(filePathString + "/reported_water_pollution_images/");
-        //String root = "/sdcard";
-//        System.out.println("root: " + root);
-//        String imgFilePath = root + "/reported_water_pollution_images/";
-//        System.out.println(imgFilePath);
-        if(!filePath.exists())
-            filePath.mkdirs();
-//        File myDir = new File(imgFilePath);
-//        myDir.mkdirs();
+
+
+//        //String root = Environment.getExternalStorageDirectory().toString();
+//        File filePathString = Environment.getExternalStorageDirectory();
+//        File filePath = new File(filePathString + "/reported_water_pollution_images/");
+//        //String root = "/sdcard";
+////        System.out.println("root: " + root);
+////        String imgFilePath = root + "/reported_water_pollution_images/";
+////        System.out.println(imgFilePath);
+//        if(!filePath.exists())
+//            filePath.mkdirs();
+////        File myDir = new File(imgFilePath);
+////        myDir.mkdirs();
 
         DateTimeFormatter currentDate = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime nowDate = LocalDateTime.now();
@@ -492,26 +498,35 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
         for (int i = 0; i < photoIndex; i++){
             String imageNameConcat = "Image-" + imageName + i + ".jpg";
-            File file = new File (filePath, imageNameConcat);
+            reportImageFilePaths[i] = imageNameConcat;
+            StorageReference reference =storageReference.child(imageNameConcat);
+            reference.putFile(imageUri[i]).addOnSuccessListener(
+                    new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-            System.out.println(filePath.exists());
-            reportImageFilePaths[i] = filePath + "/" +imageNameConcat;
+                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                            while(!uriTask.isComplete()) ;
+                            Uri uri = uriTask.getResult();
 
-            //if (file.exists ()) file.delete ();
+                            databaseReferece.child(databaseReferece.push().getKey()).setValue(imageNameConcat);
+                        }
+                    }
+            );
 
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri[i]);
-                BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(reportImageFilePaths[i], false);
-                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
-
-                FileOutputStream out = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
-
-            } catch (Exception e) {
-                System.out.println("ERROR in Storing images: " + e.toString());
-            }
+//            try {
+//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri[i]);
+//                BitmapRegionDecoder decoder = BitmapRegionDecoder.newInstance(reportImageFilePaths[i], false);
+//                bitmap = decoder.decodeRegion(new Rect(10, 10, 50, 50), null);
+//
+//                FileOutputStream out = new FileOutputStream(file);
+//                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+//                out.flush();
+//                out.close();
+//
+//            } catch (Exception e) {
+//                System.out.println("ERROR in Storing images: " + e.toString());
+//            }
         }
     }
 
