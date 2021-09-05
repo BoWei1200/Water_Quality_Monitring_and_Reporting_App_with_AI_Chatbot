@@ -20,4 +20,10 @@
     <color name="tab_text_color">#73A0B3</color>
     <color name="resolving_icon_color">#FAECBA</color>
     <color name="report_color">#E6FFD659</color>
+    <color name="circle_img_pending">#E6FFD659</color>
+    <color name="circle_img_investigating">#E6A13B</color>
+    <color name="circle_img_resolving">#27AAF1</color>
+    <color name="circle_img_examining">#1A76AF</color>
+    <color name="circle_img_resolved">#E622D38D</color>
+    <color name="circle_img_rejected">#FFEF6B61</color>
 </resources>
