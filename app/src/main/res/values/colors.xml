@@ -18,4 +18,6 @@
     <color name="WQIBlue">#64baf0</color>
     <color name="tab_background">#E8F8FF</color>
     <color name="tab_text_color">#73A0B3</color>
+    <color name="resolving_icon_color">#FAECBA</color>
+    <color name="report_color">#E6FFD659</color>
 </resources>

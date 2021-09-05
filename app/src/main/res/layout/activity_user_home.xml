@@ -320,7 +320,7 @@
                                     android:paddingBottom="10dp"
                                     android:text="@string/report"
                                     android:textSize="18sp"
-                                    app:backgroundTint="#E6FFD659"
+                                    app:backgroundTint="@color/report_color"
                                     app:icon="@drawable/warningicon2edit"
                                     app:iconGravity="textTop"
                                     app:iconSize="50dp" />
