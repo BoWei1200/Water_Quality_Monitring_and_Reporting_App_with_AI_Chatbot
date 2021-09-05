@@ -27,13 +27,14 @@
         android:id="@+id/userMyReport_recycleV_reportList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:scrollingCache="true"
         android:smoothScrollbar="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userMyReport_toolbar" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

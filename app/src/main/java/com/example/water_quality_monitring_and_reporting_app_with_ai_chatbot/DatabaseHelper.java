@@ -675,6 +675,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor.getString(cursor.getColumnIndex("reportID")) : "";
     }
 
+    public Cursor getMyReport(String userID) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REPORT_FROM_USER + " WHERE userID=?", new String[]{String.valueOf(userID)});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
     // Registered user info
     public Cursor readInfo(String userEmail) {
         SQLiteDatabase db = this.getReadableDatabase();
