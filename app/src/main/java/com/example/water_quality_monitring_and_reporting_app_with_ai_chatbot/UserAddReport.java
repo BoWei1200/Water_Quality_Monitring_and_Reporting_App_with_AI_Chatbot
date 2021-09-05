@@ -42,6 +42,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -61,6 +65,9 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     private final String userIDPreference = "userID";
 
     private String getUserIDPreference = "";
+
+    private StorageReference storageReference;
+    private DatabaseReference databaseReferece;
 
     private LinearLayout userAddReport_linearLayout_previous, userAddReport_linearLayout_next;
     private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude,
@@ -102,6 +109,9 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         getUserIDPreference = mPreferences.getString(userIDPreference, null);
+
+        storageReference = FirebaseStorage.getInstance().getReference();
+        databaseReferece = FirebaseDatabase.getInstance().getReference("reportFromUserImage");
 
         userAddReport_linearLayout_previous = findViewById(R.id.userAddReport_linearLayout_previous);
         userAddReport_linearLayout_next = findViewById(R.id.userAddReport_linearLayout_next);

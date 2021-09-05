@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "704290621223",
+    "project_id": "water-quality-monitoring-ddc6b",
+    "storage_bucket": "water-quality-monitoring-ddc6b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704290621223:android:39d7b394cff673319c8b02",
+        "android_client_info": {
+          "package_name": "com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704290621223-a8f9jc90dk9k9df7vd7fcivttjnehkj1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCghgTvYQy1o1MBBPE6VcXk1PtosVv5an8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704290621223-a8f9jc90dk9k9df7vd7fcivttjnehkj1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
