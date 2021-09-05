@@ -79,6 +79,8 @@
     <string name="organization_s_participated_in_hydromy">Organization(s) participated in HydroMy!</string>
     <string name="discard_org">Are you sure to discard the newly added organization?</string>
     <string name="discard_org_desc">The organization must be created with an admin, by leaving this page, organization created just now will be removed.</string>
+    <string name="assigned_organization">Assigned \nOrganization :</string>
+    <string name="estimated_cleaning_duration">Estimated \nCleaning \nDuration : </string>
 
     <string-array name="state_array">
         <item>Johor</item>

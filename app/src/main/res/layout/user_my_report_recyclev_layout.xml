@@ -67,7 +67,6 @@
 
             </LinearLayout>
 
-
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -151,10 +150,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:text="Pending"
-                        android:fontFamily="@font/nunito_sans"
                         android:textStyle="bold"
                         android:textColor="@color/circle_img_pending"
-                        android:textSize="22dp"
+                        android:textSize="18dp"
                         android:gravity="center"/>
 
                 </LinearLayout>
