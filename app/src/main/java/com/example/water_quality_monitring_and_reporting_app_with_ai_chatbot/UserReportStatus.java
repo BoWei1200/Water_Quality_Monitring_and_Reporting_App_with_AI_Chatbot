@@ -262,9 +262,9 @@ public class UserReportStatus extends AppCompatActivity{
                         if(userReportImageRead.getName().equals(imgName)){
                             userReportImage[finalI1] = ds.getValue(UserReportImage.class);
                             System.out.println("IMG URL " + userReportImage[finalI1].getUrl());
-                            Picasso.get().load(userReportImage[finalI1].getUrl()).into(userReportStatus_img_pollutionPhoto);
+                            Picasso.get().load(userReportImage[0].getUrl()).into(userReportStatus_img_pollutionPhoto);
 
-                            imageUri[finalI1] = Uri.parse(userReportImage[0].getUrl());
+                            imageUri[finalI1] = Uri.parse(userReportImage[finalI1].getUrl());
                             currentDisplayingPhotoIndex = 0;
                             break;
                         }
@@ -280,9 +280,6 @@ public class UserReportStatus extends AppCompatActivity{
 
             System.out.println("IMG URL FROM DB" + cursorGetImageByReportID.getString(cursorGetImageByReportID.getColumnIndex("reportImageFilePath")));
         }
-
-
-
 
             userReportStatus_img_pollutionPhoto.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             userReportStatus_img_pollutionPhoto.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -313,21 +310,18 @@ public class UserReportStatus extends AppCompatActivity{
     }
 
     public void prevNextandOtherBtnsDisplay(){
-        if(imageUri.length > 1){
 
-        }
-
-        if(photoIndex-1 > 0){
+        if(imageUri.length - 1 > 1){
             if(currentDisplayingPhotoIndex > 0){
                 userReportStatus_linearLayout_previous.setVisibility(View.VISIBLE);
             }
-            if(currentDisplayingPhotoIndex < photoIndex-1){
+            if(currentDisplayingPhotoIndex < imageUri.length-1){
                 userReportStatus_linearLayout_next.setVisibility(View.VISIBLE);
             }
             if(currentDisplayingPhotoIndex == 0){
                 userReportStatus_linearLayout_previous.setVisibility(View.GONE);
             }
-            if(currentDisplayingPhotoIndex == photoIndex-1){
+            if(currentDisplayingPhotoIndex == imageUri.length-1){
                 userReportStatus_linearLayout_next.setVisibility(View.GONE);
             }
         }else{
@@ -340,12 +334,14 @@ public class UserReportStatus extends AppCompatActivity{
     }
 
     public void viewPrevious(View view) {
-        userReportStatus_img_pollutionPhoto.setImageURI(imageUri[--currentDisplayingPhotoIndex]);
+        Picasso.get().load(imageUri[--currentDisplayingPhotoIndex]).into(userReportStatus_img_pollutionPhoto);
+        //userReportStatus_img_pollutionPhoto.setImageURI(Uri.parse(imageUri[--currentDisplayingPhotoIndex].toString()));
         prevNextandOtherBtnsDisplay();
     }
 
     public void viewNext(View view) {
-        userReportStatus_img_pollutionPhoto.setImageURI(imageUri[++currentDisplayingPhotoIndex]);
+        Picasso.get().load(imageUri[++currentDisplayingPhotoIndex]).into(userReportStatus_img_pollutionPhoto);
+        //userReportStatus_img_pollutionPhoto.setImageURI(Uri.parse(imageUri[++currentDisplayingPhotoIndex].toString()));
         prevNextandOtherBtnsDisplay();
     }
 }
