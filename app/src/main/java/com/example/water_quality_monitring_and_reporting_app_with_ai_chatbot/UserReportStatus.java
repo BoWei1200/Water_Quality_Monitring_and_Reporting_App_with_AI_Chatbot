@@ -2,6 +2,7 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -60,6 +62,12 @@ public class UserReportStatus extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_report_status);
+
+        Toolbar toolbar = findViewById(R.id.userReportStatus_toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         userReportStatus_linearLayout_reportStatus = findViewById(R.id.userReportStatus_linearLayout_reportStatus);
         userReportStatus_linearLayout_previous = findViewById(R.id.userReportStatus_linearLayout_previous);
@@ -142,6 +150,19 @@ public class UserReportStatus extends AppCompatActivity{
                             cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportLongitude"));
 
         userReportStatus_txt_reportLaLongitude.setText(reportLaLongitude);
+
+
+        Cursor cursorGetOrgInfo = dbHelper.getOrgInfoByOrgID(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("orgID")));
+
+        userReportStatus_txt_reportOrg.setText(cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgName")));
+    }
+
+    @Override //when back button clicked
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()== android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

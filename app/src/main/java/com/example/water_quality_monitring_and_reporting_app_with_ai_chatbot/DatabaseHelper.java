@@ -526,6 +526,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor.getString(cursor.getColumnIndex("orgID")) : "";
     }
 
+    public Cursor getOrgInfoByOrgID(String orgID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_ORGANIZATION + " WHERE orgID=?", new String[]{orgID});
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
     public Cursor getOrgInfoByUserID(String userID){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT org.orgID, org.orgName FROM " + TABLE_ORGANIZATION + " org, "+ TABLE_EMPLOYEE_ORGANIZATION +" employOrg WHERE employOrg.userID=? AND org.orgID = employOrg.orgID", new String[]{userID});
