@@ -26,4 +26,5 @@
     <color name="circle_img_examining">#1A76AF</color>
     <color name="circle_img_resolved">#E622D38D</color>
     <color name="circle_img_rejected">#FFEF6B61</color>
+    <color name="circle_img_not_ready">#E1E1E1</color>
 </resources>
