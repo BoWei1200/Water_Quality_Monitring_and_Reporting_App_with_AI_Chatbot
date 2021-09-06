@@ -485,7 +485,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         for (int i = 0; i < photoIndex; i++){
             String imageNameConcat = "Image-" + imageName + i + ".jpg";
             reportImageFilePaths[i] = imageNameConcat;
-            StorageReference reference =storageReference.child(imageNameConcat);
+            StorageReference reference = storageReference.child(imageNameConcat);
             reference.putFile(imageUri[i]).addOnSuccessListener(
                     new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -494,8 +494,9 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                             Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                             while(!uriTask.isComplete()) ;
                             Uri uri = uriTask.getResult();
+                            UserReportImage reportImage = new UserReportImage(imageNameConcat, uri.toString());
 
-                            databaseReferece.child(databaseReferece.push().getKey()).setValue(imageNameConcat);
+                            databaseReferece.child(databaseReferece.push().getKey()).setValue(reportImage);
                         }
                     }
             );

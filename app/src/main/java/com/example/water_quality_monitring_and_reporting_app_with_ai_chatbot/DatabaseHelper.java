@@ -702,6 +702,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
+    public Cursor getImageByReportID(String reportID) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT reportImageFilePath FROM " + TABLE_REPORT_FROM_USER_IMAGE + " WHERE reportID=?", new String[]{String.valueOf(reportID)});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
     // Registered user info
     public Cursor readInfo(String userEmail) {
         SQLiteDatabase db = this.getReadableDatabase();

@@ -1,5 +1,6 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -8,21 +9,57 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.sql.SQLOutput;
+import java.util.concurrent.TimeUnit;
+
+import com.squareup.picasso.Picasso;
 
 public class UserReportStatus extends AppCompatActivity{
+
+    StorageReference storageReference;
 
     private LinearLayout userReportStatus_linearLayout_reportStatus, userReportStatus_linearLayout_previous, userReportStatus_linearLayout_next;
 
@@ -57,6 +94,8 @@ public class UserReportStatus extends AppCompatActivity{
     private Uri[] imageUri;  private int photoIndex = 0; private int currentDisplayingPhotoIndex = 0;
 
     private String reportID = "";
+
+    private UserReportImage[] userReportImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +203,11 @@ public class UserReportStatus extends AppCompatActivity{
 
         userReportStatus_txt_reportDesc.setText(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportDesc")));
 
-        displayUploadedImageFromFirebase();
+        try {
+            displayUploadedImageFromFirebase();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         setReportStatus();
     }
 
@@ -190,7 +233,75 @@ public class UserReportStatus extends AppCompatActivity{
         TransitionManager.beginDelayedTransition(userReportStatus_linearLayout_reportStatus, new AutoTransition());
     }
 
-    private void displayUploadedImageFromFirebase() {
+    private void displayUploadedImageFromFirebase() throws MalformedURLException {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        Cursor cursorGetImageByReportID = dbHelper.getImageByReportID(reportID);
+
+        imageUri = new Uri[cursorGetImageByReportID.getCount()];
+        userReportImage = new UserReportImage[cursorGetImageByReportID.getCount()];
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("reportFromUserImage");
+
+        System.out.println("CURSOR COUNT" + cursorGetImageByReportID.getCount());
+
+        int finalI = 0;
+        for(cursorGetImageByReportID.moveToFirst(); !cursorGetImageByReportID.isAfterLast(); cursorGetImageByReportID.moveToNext()){
+            System.out.println("LOOP FOR " + finalI );
+
+
+            //Query query = databaseReference.child("name").equalTo(cursorGetImageByReportID.getString(cursorGetImageByReportID.getColumnIndex("reportImageFilePath")));
+
+            int finalI1 = finalI;
+            String imgName = cursorGetImageByReportID.getString(cursorGetImageByReportID.getColumnIndex("reportImageFilePath"));
+
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+
+                    for(DataSnapshot ds : snapshot.getChildren()){
+                        UserReportImage userReportImageRead = ds.getValue(UserReportImage.class);
+                        if(userReportImageRead.getName().equals(imgName)){
+                            userReportImage[finalI1] = ds.getValue(UserReportImage.class);
+                            System.out.println("IMG URL " + userReportImage[finalI1].getUrl());
+                            Picasso.get().load(userReportImage[finalI1].getUrl()).into(userReportStatus_img_pollutionPhoto);
+
+                            imageUri[finalI1] = Uri.parse(userReportImage[0].getUrl());
+                            currentDisplayingPhotoIndex = 0;
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+            finalI++;
+
+            System.out.println("IMG URL FROM DB" + cursorGetImageByReportID.getString(cursorGetImageByReportID.getColumnIndex("reportImageFilePath")));
+        }
+
+
+
+
+            userReportStatus_img_pollutionPhoto.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+            userReportStatus_img_pollutionPhoto.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            userReportStatus_img_pollutionPhoto.requestLayout();
+
+            userReportStatus_img_pollutionPhoto.setAdjustViewBounds(true);
+
+            userReportStatus_img_pollutionPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            userReportStatus_img_pollutionPhoto.setOnClickListener(v -> {
+                Intent intent = new Intent(UserReportStatus.this, UserAddReportPhotoViewer.class);
+                intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
+                startActivity(intent);
+            });
+            prevNextandOtherBtnsDisplay();
+
+            cursorGetImageByReportID.moveToNext();
+
 
     }
 
@@ -202,6 +313,10 @@ public class UserReportStatus extends AppCompatActivity{
     }
 
     public void prevNextandOtherBtnsDisplay(){
+        if(imageUri.length > 1){
+
+        }
+
         if(photoIndex-1 > 0){
             if(currentDisplayingPhotoIndex > 0){
                 userReportStatus_linearLayout_previous.setVisibility(View.VISIBLE);

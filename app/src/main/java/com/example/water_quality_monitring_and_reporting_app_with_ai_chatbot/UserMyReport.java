@@ -42,18 +42,21 @@ public class UserMyReport extends AppCompatActivity {
         userMyReport_recycleV_reportList = findViewById(R.id.userMyReport_recycleV_reportList);
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        int countMyReport = dbHelper.getMyReport(getUserIDPreference).getCount();
+        Cursor cursorGetMyReport = dbHelper.getMyReport(getUserIDPreference);
+        int countMyReport = (! (cursorGetMyReport==null)) ? cursorGetMyReport.getCount() : 0;
 
-        myReportIDs = new String[countMyReport];
-        myReportDates = new String[countMyReport];
-        myReportTimes = new String[countMyReport];
-        myReportStatus = new String[countMyReport];
+        if(countMyReport != 0){
+            myReportIDs = new String[countMyReport];
+            myReportDates = new String[countMyReport];
+            myReportTimes = new String[countMyReport];
+            myReportStatus = new String[countMyReport];
 
-        loadMyReportFromDatabase();
+            loadMyReportFromDatabase();
 
-        UserMyReportRecycleVAdapter adapter = new UserMyReportRecycleVAdapter(this, myReportIDs, myReportDates, myReportTimes, myReportStatus);
-        userMyReport_recycleV_reportList.setAdapter(adapter);
-        userMyReport_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
+            UserMyReportRecycleVAdapter adapter = new UserMyReportRecycleVAdapter(this, myReportIDs, myReportDates, myReportTimes, myReportStatus);
+            userMyReport_recycleV_reportList.setAdapter(adapter);
+            userMyReport_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
 
     @Override //when back button clicked
