@@ -155,6 +155,17 @@ public class UserReportStatus extends AppCompatActivity{
         Cursor cursorGetOrgInfo = dbHelper.getOrgInfoByOrgID(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("orgID")));
 
         userReportStatus_txt_reportOrg.setText(cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgName")));
+
+        String reportEstimatedSolveDuration = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportEstimatedSolveDuration"));
+        userReportStatus_txt_reportDuration.setText(!(reportEstimatedSolveDuration==null) ? reportEstimatedSolveDuration : " - ");
+
+        String reportPollutionCause = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportPollutionCause"));
+        userReportStatus_txt_reportCause.setText(!(reportPollutionCause==null) ? reportPollutionCause : " - ");
+
+        userReportStatus_txt_reportDesc.setText(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportDesc")));
+
+        displayUploadedImageFromFirebase();
+        setReportStatus();
     }
 
     @Override //when back button clicked
@@ -177,6 +188,14 @@ public class UserReportStatus extends AppCompatActivity{
             userReportStatus_img_arrowRightOrDown.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_right_icon));
         }
         TransitionManager.beginDelayedTransition(userReportStatus_linearLayout_reportStatus, new AutoTransition());
+    }
+
+    private void displayUploadedImageFromFirebase() {
+
+    }
+
+    private void setReportStatus() {
+
     }
 
     public void toImageViewer(View view) {
