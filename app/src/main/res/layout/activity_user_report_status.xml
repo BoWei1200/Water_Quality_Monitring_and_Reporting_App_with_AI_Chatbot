@@ -513,7 +513,7 @@
                                             android:layout_height="0dp"
                                             android:layout_weight=".4"
                                             android:textStyle="bold"
-                                            android:text="Report Pending"
+                                            android:text="Pending"
                                             android:textSize="20dp"
                                             android:gravity="bottom"
                                             android:layout_marginBottom="5dp"/>
@@ -603,7 +603,7 @@
                                             android:layout_height="0dp"
                                             android:layout_weight=".4"
                                             android:textStyle="bold"
-                                            android:text="Report Investigating"
+                                            android:text="Investigating"
                                             android:textColor="@color/circle_img_not_ready"
                                             android:textSize="20dp"
                                             android:gravity="bottom"
@@ -651,7 +651,7 @@
                                     android:padding="15dp">
 
                                     <ImageView
-                                        android:id="@+id/userReportStatus_img_resolving"
+                                        android:id="@+id/userReportStatus_img_dotResolving"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:background="@drawable/circle_img_not_ready"/>
@@ -688,22 +688,24 @@
                                         android:layout_marginLeft="10dp">
 
                                         <TextView
+                                            android:id="@+id/userReportStatus_txt_resolvingHeader"
                                             android:layout_width="match_parent"
                                             android:layout_height="0dp"
                                             android:layout_weight=".4"
                                             android:textStyle="bold"
-                                            android:text="Report Resolving"
+                                            android:text="Resolving"
                                             android:textColor="@color/circle_img_not_ready"
                                             android:textSize="20dp"
                                             android:gravity="bottom"
                                             android:layout_marginBottom="5dp"/>
 
                                         <TextView
+                                            android:id="@+id/userReportStatus_txt_resolving"
                                             android:layout_width="match_parent"
                                             android:layout_height="0dp"
                                             android:layout_weight=".6"
-                                            android:text="We are resolving the water pollution reported"
-                                            android:textColor="#9A9A9A"
+                                            android:text="We are resolving water pollution reported"
+                                            android:textColor="@color/circle_img_not_ready"
                                             android:fontFamily="@font/nunito_sans"/>
 
                                     </LinearLayout>
@@ -719,11 +721,13 @@
                                 android:gravity="center">
 
                                 <View
+                                    android:id="@+id/userReportStatus_view_goToSecondInvestigating"
                                     android:layout_height="match_parent"
                                     android:layout_width="3dp"
-                                    android:background="#FF909090" />
+                                    android:background="@color/circle_img_not_ready" />
 
                             </LinearLayout>
+
 
                             <!--Second Investigating-->
                             <LinearLayout
@@ -738,9 +742,10 @@
                                     android:padding="15dp">
 
                                     <ImageView
+                                        android:id="@+id/userReportStatus_img_dotSecondInvestigating"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:background="@drawable/circle_img_pending"/>
+                                        android:background="@drawable/circle_img_not_ready"/>
 
                                 </LinearLayout>
 
@@ -757,10 +762,11 @@
                                         android:padding="10dp">
 
                                         <ImageView
+                                            android:id="@+id/userReportStatus_img_iconSecondInvestigating"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:background="@drawable/circle_img_pending"
-                                            android:src="@drawable/ic_reportpending_icon"
+                                            android:background="@drawable/circle_img_not_ready"
+                                            android:src="@drawable/ic_search_icon"
                                             android:padding="15dp"/>
 
                                     </LinearLayout>
@@ -774,21 +780,24 @@
                                         android:layout_marginLeft="10dp">
 
                                         <TextView
+                                            android:id="@+id/userReportStatus_txt_secondInvestigatingHeader"
                                             android:layout_width="match_parent"
                                             android:layout_height="0dp"
                                             android:layout_weight=".4"
                                             android:textStyle="bold"
-                                            android:text="Report Pending"
+                                            android:text="Investigating"
+                                            android:textColor="@color/circle_img_not_ready"
                                             android:textSize="20dp"
                                             android:gravity="bottom"
                                             android:layout_marginBottom="5dp"/>
 
                                         <TextView
+                                            android:id="@+id/userReportStatus_txt_secondInvestigating"
                                             android:layout_width="match_parent"
                                             android:layout_height="0dp"
                                             android:layout_weight=".6"
-                                            android:text="Your report is pending for validation"
-                                            android:textColor="#9A9A9A"
+                                            android:text="Your report is under second investigation"
+                                            android:textColor="@color/circle_img_not_ready"
                                             android:fontFamily="@font/nunito_sans"/>
 
                                     </LinearLayout>
@@ -804,9 +813,10 @@
                                 android:gravity="center">
 
                                 <View
+                                    android:id="@+id/userReportStatus_view_goToExamining"
                                     android:layout_height="match_parent"
                                     android:layout_width="3dp"
-                                    android:background="#FF909090" />
+                                    android:background="@color/circle_img_not_ready" />
 
                             </LinearLayout>
 
@@ -824,9 +834,10 @@
                                     android:padding="15dp">
 
                                     <ImageView
+                                        android:id="@+id/userReportStatus_img_dotExamining"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:background="@drawable/circle_img_pending"/>
+                                        android:background="@drawable/circle_img_not_ready"/>
 
                                 </LinearLayout>
 
@@ -843,10 +854,11 @@
                                         android:padding="10dp">
 
                                         <ImageView
+                                            android:id="@+id/userReportStatus_img_iconExamining"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:background="@drawable/circle_img_pending"
-                                            android:src="@drawable/ic_reportpending_icon"
+                                            android:background="@drawable/circle_img_not_ready"
+                                            android:src="@drawable/ic_reportexamining_icon"
                                             android:padding="15dp"/>
 
                                     </LinearLayout>
@@ -860,21 +872,24 @@
                                         android:layout_marginLeft="10dp">
 
                                         <TextView
+                                            android:id="@+id/userReportStatus_txt_examiningHeader"
                                             android:layout_width="match_parent"
                                             android:layout_height="0dp"
                                             android:layout_weight=".4"
                                             android:textStyle="bold"
-                                            android:text="Report Pending"
+                                            android:text="Examining"
+                                            android:textColor="@color/circle_img_not_ready"
                                             android:textSize="20dp"
                                             android:gravity="bottom"
                                             android:layout_marginBottom="5dp"/>
 
                                         <TextView
+                                            android:id="@+id/userReportStatus_txt_examining"
                                             android:layout_width="match_parent"
                                             android:layout_height="0dp"
                                             android:layout_weight=".6"
-                                            android:text="Your report is pending for validation"
-                                            android:textColor="#9A9A9A"
+                                            android:text="We are examining the resolved water pollution"
+                                            android:textColor="@color/circle_img_not_ready"
                                             android:fontFamily="@font/nunito_sans"/>
 
                                     </LinearLayout>
@@ -890,9 +905,10 @@
                                 android:gravity="center">
 
                                 <View
+                                    android:id="@+id/userReportStatus_view_goToResolved"
                                     android:layout_height="match_parent"
                                     android:layout_width="3dp"
-                                    android:background="#FF909090" />
+                                    android:background="@color/circle_img_not_ready" />
 
                             </LinearLayout>
 
@@ -909,9 +925,10 @@
                                     android:padding="15dp">
 
                                     <ImageView
+                                        android:id="@+id/userReportStatus_img_dotResolved"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:background="@drawable/circle_img_pending"/>
+                                        android:background="@drawable/circle_img_not_ready"/>
 
                                 </LinearLayout>
 
@@ -928,10 +945,11 @@
                                         android:padding="10dp">
 
                                         <ImageView
+                                            android:id="@+id/userReportStatus_img_iconResolved"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:background="@drawable/circle_img_pending"
-                                            android:src="@drawable/ic_reportpending_icon"
+                                            android:background="@drawable/circle_img_not_ready"
+                                            android:src="@drawable/ic_reportresolved_icon"
                                             android:padding="15dp"/>
 
                                     </LinearLayout>
@@ -945,21 +963,24 @@
                                         android:layout_marginLeft="10dp">
 
                                         <TextView
+                                            android:id="@+id/userReportStatus_txt_resolvedHeader"
                                             android:layout_width="match_parent"
                                             android:layout_height="0dp"
                                             android:layout_weight=".4"
                                             android:textStyle="bold"
-                                            android:text="Report Pending"
+                                            android:text="Resolved"
                                             android:textSize="20dp"
+                                            android:textColor="@color/circle_img_not_ready"
                                             android:gravity="bottom"
                                             android:layout_marginBottom="5dp"/>
 
                                         <TextView
+                                            android:id="@+id/userReportStatus_txt_resolved"
                                             android:layout_width="match_parent"
                                             android:layout_height="0dp"
                                             android:layout_weight=".6"
-                                            android:text="Your report is pending for validation"
-                                            android:textColor="#9A9A9A"
+                                            android:text="Reported water pollution was resolved sucessfully!"
+                                            android:textColor="@color/circle_img_not_ready"
                                             android:fontFamily="@font/nunito_sans"/>
 
                                     </LinearLayout>
