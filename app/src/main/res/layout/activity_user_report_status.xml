@@ -419,563 +419,571 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <View
-                            android:layout_height="1dip"
-                            android:layout_width="match_parent"
-                            android:background="#FF909090"
-                            android:layout_marginBottom="20dp"/>
-
                         <LinearLayout
+                            android:id="@+id/userReportStatus_linearLayout_reportStatus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="20dp"
-                            android:onClick="viewImage">
+                            android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:text="Report Status"
-                                android:textStyle="bold"
-                                android:textSize="20dp"
-                                android:padding="5dp"/>
+                            <View
+                                android:layout_height="1dip"
+                                android:layout_width="match_parent"
+                                android:background="#FF909090"
+                                android:layout_marginBottom="20dp"/>
 
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginBottom="20dp">
-
-                            <!--Pending-->
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:orientation="horizontal">
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".15"
-                                    android:padding="15dp">
-
-                                    <ImageView
-                                        android:id="@+id/userReportStatus_img_dotPending"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:background="@drawable/circle_img_pending"/>
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".9"
-                                    android:orientation="horizontal">
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight=".3"
-                                        android:padding="10dp">
-
-                                        <ImageView
-                                            android:id="@+id/userReportStatus_img_iconPending"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            android:background="@drawable/circle_img_pending"
-                                            android:src="@drawable/ic_reportpending_icon"
-                                            android:padding="15dp"/>
-
-                                    </LinearLayout>
-
-
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight=".65"
-                                        android:orientation="vertical"
-                                        android:layout_marginLeft="10dp">
-
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_pendingHeader"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".4"
-                                            android:textStyle="bold"
-                                            android:text="Pending"
-                                            android:textSize="20dp"
-                                            android:gravity="bottom"
-                                            android:layout_marginBottom="5dp"/>
-                                        
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_pending"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".6"
-                                            android:text="Your report is pending for validation"
-                                            android:textColor="#9A9A9A"
-                                            android:fontFamily="@font/nunito_sans"/>
-
-                                    </LinearLayout>
-
-                                </LinearLayout>
-                                
-                            </LinearLayout>
-                            <!--goToInvestigating-->
-                            <LinearLayout
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:gravity="center">
+                                android:layout_marginBottom="20dp"
+                                android:onClick="viewImage">
 
-                                <View
-                                    android:id="@+id/userReportStatus_view_goToInvestigating"
+                                <TextView
+                                    android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:layout_width="3dp"
-                                    android:background="@color/circle_img_not_ready" />
+                                    android:text="Report Status"
+                                    android:textStyle="bold"
+                                    android:textSize="20dp"
+                                    android:padding="5dp"/>
 
                             </LinearLayout>
 
-
-                            <!--Investigating-->
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:orientation="horizontal">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginBottom="20dp">
 
+                                <!--Pending-->
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".15"
-                                    android:padding="15dp">
-
-                                    <ImageView
-                                        android:id="@+id/userReportStatus_img_dotInvestigating"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:background="@drawable/circle_img_not_ready"/>
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".9"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight=".3"
-                                        android:padding="10dp">
+                                        android:layout_weight=".15"
+                                        android:padding="15dp">
 
                                         <ImageView
-                                            android:id="@+id/userReportStatus_img_iconInvestigating"
+                                            android:id="@+id/userReportStatus_img_dotPending"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:background="@drawable/circle_img_not_ready"
-                                            android:src="@drawable/ic_search_icon"
-                                            android:padding="15dp"/>
+                                            android:background="@drawable/circle_img_pending"/>
 
                                     </LinearLayout>
-
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight=".65"
-                                        android:orientation="vertical"
-                                        android:layout_marginLeft="10dp">
+                                        android:layout_weight=".9"
+                                        android:orientation="horizontal">
 
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_investigatingHeader"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".4"
-                                            android:textStyle="bold"
-                                            android:text="Investigating"
-                                            android:textColor="@color/circle_img_not_ready"
-                                            android:textSize="20dp"
-                                            android:gravity="bottom"
-                                            android:layout_marginBottom="5dp"/>
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".3"
+                                            android:padding="10dp">
 
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_investigating"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".6"
-                                            android:text="We are investigating your report"
-                                            android:textColor="@color/circle_img_not_ready"
-                                            android:fontFamily="@font/nunito_sans"/>
+                                            <ImageView
+                                                android:id="@+id/userReportStatus_img_iconPending"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:background="@drawable/circle_img_pending"
+                                                android:src="@drawable/ic_reportpending_icon"
+                                                android:padding="15dp"/>
+
+                                        </LinearLayout>
+
+
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".65"
+                                            android:orientation="vertical"
+                                            android:layout_marginLeft="10dp">
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_pendingHeader"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".4"
+                                                android:textStyle="bold"
+                                                android:text="Pending"
+                                                android:textSize="20dp"
+                                                android:gravity="bottom"
+                                                android:layout_marginBottom="5dp"/>
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_pending"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".6"
+                                                android:text="Your report is pending for validation"
+                                                android:textColor="#9A9A9A"
+                                                android:fontFamily="@font/nunito_sans"/>
+
+                                        </LinearLayout>
 
                                     </LinearLayout>
 
                                 </LinearLayout>
-
-                            </LinearLayout>
-                            <!--goToResolving-->
-                            <LinearLayout
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:orientation="horizontal"
-                                android:gravity="center">
-
-                                <View
-                                    android:id="@+id/userReportStatus_view_goToResolving"
-                                    android:layout_height="match_parent"
-                                    android:layout_width="3dp"
-                                    android:background="@color/circle_img_not_ready" />
-
-                            </LinearLayout>
-
-
-                            <!--Resolving-->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:orientation="horizontal">
-
+                                <!--goToInvestigating-->
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".15"
-                                    android:padding="15dp">
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
 
-                                    <ImageView
-                                        android:id="@+id/userReportStatus_img_dotResolving"
-                                        android:layout_width="match_parent"
+                                    <View
+                                        android:id="@+id/userReportStatus_view_goToInvestigating"
                                         android:layout_height="match_parent"
-                                        android:background="@drawable/circle_img_not_ready"/>
+                                        android:layout_width="3dp"
+                                        android:background="@color/circle_img_not_ready" />
 
                                 </LinearLayout>
 
+
+                                <!--Investigating-->
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".9"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight=".3"
-                                        android:padding="10dp">
+                                        android:layout_weight=".15"
+                                        android:padding="15dp">
 
                                         <ImageView
-                                            android:id="@+id/userReportStatus_img_iconResolving"
+                                            android:id="@+id/userReportStatus_img_dotInvestigating"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:background="@drawable/circle_img_not_ready"
-                                            android:src="@drawable/ic_reportresolving_icon"
-                                            android:padding="15dp"/>
+                                            android:background="@drawable/circle_img_not_ready"/>
 
                                     </LinearLayout>
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight=".65"
-                                        android:orientation="vertical"
-                                        android:layout_marginLeft="10dp">
+                                        android:layout_weight=".9"
+                                        android:orientation="horizontal">
 
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_resolvingHeader"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".4"
-                                            android:textStyle="bold"
-                                            android:text="Resolving"
-                                            android:textColor="@color/circle_img_not_ready"
-                                            android:textSize="20dp"
-                                            android:gravity="bottom"
-                                            android:layout_marginBottom="5dp"/>
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".3"
+                                            android:padding="10dp">
 
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_resolving"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".6"
-                                            android:text="We are resolving water pollution reported"
-                                            android:textColor="@color/circle_img_not_ready"
-                                            android:fontFamily="@font/nunito_sans"/>
+                                            <ImageView
+                                                android:id="@+id/userReportStatus_img_iconInvestigating"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:background="@drawable/circle_img_not_ready"
+                                                android:src="@drawable/ic_search_icon"
+                                                android:padding="15dp"/>
+
+                                        </LinearLayout>
+
+
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".65"
+                                            android:orientation="vertical"
+                                            android:layout_marginLeft="10dp">
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_investigatingHeader"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".4"
+                                                android:textStyle="bold"
+                                                android:text="Investigating"
+                                                android:textColor="@color/circle_img_not_ready"
+                                                android:textSize="20dp"
+                                                android:gravity="bottom"
+                                                android:layout_marginBottom="5dp"/>
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_investigating"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".6"
+                                                android:text="We are investigating your report"
+                                                android:textColor="@color/circle_img_not_ready"
+                                                android:fontFamily="@font/nunito_sans"/>
+
+                                        </LinearLayout>
 
                                     </LinearLayout>
 
                                 </LinearLayout>
-
-                            </LinearLayout>
-                            <!--goToInvestigating-->
-                            <LinearLayout
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:orientation="horizontal"
-                                android:gravity="center">
-
-                                <View
-                                    android:id="@+id/userReportStatus_view_goToSecondInvestigating"
-                                    android:layout_height="match_parent"
-                                    android:layout_width="3dp"
-                                    android:background="@color/circle_img_not_ready" />
-
-                            </LinearLayout>
-
-
-                            <!--Second Investigating-->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:orientation="horizontal">
-
+                                <!--goToResolving-->
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".15"
-                                    android:padding="15dp">
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
 
-                                    <ImageView
-                                        android:id="@+id/userReportStatus_img_dotSecondInvestigating"
-                                        android:layout_width="match_parent"
+                                    <View
+                                        android:id="@+id/userReportStatus_view_goToResolving"
                                         android:layout_height="match_parent"
-                                        android:background="@drawable/circle_img_not_ready"/>
+                                        android:layout_width="3dp"
+                                        android:background="@color/circle_img_not_ready" />
 
                                 </LinearLayout>
 
+
+                                <!--Resolving-->
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".9"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight=".3"
-                                        android:padding="10dp">
+                                        android:layout_weight=".15"
+                                        android:padding="15dp">
 
                                         <ImageView
-                                            android:id="@+id/userReportStatus_img_iconSecondInvestigating"
+                                            android:id="@+id/userReportStatus_img_dotResolving"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:background="@drawable/circle_img_not_ready"
-                                            android:src="@drawable/ic_search_icon"
-                                            android:padding="15dp"/>
+                                            android:background="@drawable/circle_img_not_ready"/>
 
                                     </LinearLayout>
-
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight=".65"
-                                        android:orientation="vertical"
-                                        android:layout_marginLeft="10dp">
+                                        android:layout_weight=".9"
+                                        android:orientation="horizontal">
 
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_secondInvestigatingHeader"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".4"
-                                            android:textStyle="bold"
-                                            android:text="Investigating"
-                                            android:textColor="@color/circle_img_not_ready"
-                                            android:textSize="20dp"
-                                            android:gravity="bottom"
-                                            android:layout_marginBottom="5dp"/>
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".3"
+                                            android:padding="10dp">
 
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_secondInvestigating"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".6"
-                                            android:text="Your report is under second investigation"
-                                            android:textColor="@color/circle_img_not_ready"
-                                            android:fontFamily="@font/nunito_sans"/>
+                                            <ImageView
+                                                android:id="@+id/userReportStatus_img_iconResolving"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:background="@drawable/circle_img_not_ready"
+                                                android:src="@drawable/ic_reportresolving_icon"
+                                                android:padding="15dp"/>
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".65"
+                                            android:orientation="vertical"
+                                            android:layout_marginLeft="10dp">
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_resolvingHeader"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".4"
+                                                android:textStyle="bold"
+                                                android:text="Resolving"
+                                                android:textColor="@color/circle_img_not_ready"
+                                                android:textSize="20dp"
+                                                android:gravity="bottom"
+                                                android:layout_marginBottom="5dp"/>
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_resolving"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".6"
+                                                android:text="We are resolving water pollution reported"
+                                                android:textColor="@color/circle_img_not_ready"
+                                                android:fontFamily="@font/nunito_sans"/>
+
+                                        </LinearLayout>
 
                                     </LinearLayout>
 
                                 </LinearLayout>
-
-                            </LinearLayout>
-                            <!--goToExamining-->
-                            <LinearLayout
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:orientation="horizontal"
-                                android:gravity="center">
-
-                                <View
-                                    android:id="@+id/userReportStatus_view_goToExamining"
-                                    android:layout_height="match_parent"
-                                    android:layout_width="3dp"
-                                    android:background="@color/circle_img_not_ready" />
-
-                            </LinearLayout>
-
-
-                            <!--Examining-->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:orientation="horizontal">
-
+                                <!--goToInvestigating-->
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".15"
-                                    android:padding="15dp">
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
 
-                                    <ImageView
-                                        android:id="@+id/userReportStatus_img_dotExamining"
-                                        android:layout_width="match_parent"
+                                    <View
+                                        android:id="@+id/userReportStatus_view_goToSecondInvestigating"
                                         android:layout_height="match_parent"
-                                        android:background="@drawable/circle_img_not_ready"/>
+                                        android:layout_width="3dp"
+                                        android:background="@color/circle_img_not_ready" />
 
                                 </LinearLayout>
 
+
+                                <!--Second Investigating-->
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".9"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight=".3"
-                                        android:padding="10dp">
+                                        android:layout_weight=".15"
+                                        android:padding="15dp">
 
                                         <ImageView
-                                            android:id="@+id/userReportStatus_img_iconExamining"
+                                            android:id="@+id/userReportStatus_img_dotSecondInvestigating"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:background="@drawable/circle_img_not_ready"
-                                            android:src="@drawable/ic_reportexamining_icon"
-                                            android:padding="15dp"/>
+                                            android:background="@drawable/circle_img_not_ready"/>
 
                                     </LinearLayout>
-
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight=".65"
-                                        android:orientation="vertical"
-                                        android:layout_marginLeft="10dp">
+                                        android:layout_weight=".9"
+                                        android:orientation="horizontal">
 
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_examiningHeader"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".4"
-                                            android:textStyle="bold"
-                                            android:text="Examining"
-                                            android:textColor="@color/circle_img_not_ready"
-                                            android:textSize="20dp"
-                                            android:gravity="bottom"
-                                            android:layout_marginBottom="5dp"/>
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".3"
+                                            android:padding="10dp">
 
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_examining"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".6"
-                                            android:text="We are examining the resolved water pollution"
-                                            android:textColor="@color/circle_img_not_ready"
-                                            android:fontFamily="@font/nunito_sans"/>
+                                            <ImageView
+                                                android:id="@+id/userReportStatus_img_iconSecondInvestigating"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:background="@drawable/circle_img_not_ready"
+                                                android:src="@drawable/ic_search_icon"
+                                                android:padding="15dp"/>
+
+                                        </LinearLayout>
+
+
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".65"
+                                            android:orientation="vertical"
+                                            android:layout_marginLeft="10dp">
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_secondInvestigatingHeader"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".4"
+                                                android:textStyle="bold"
+                                                android:text="Investigating"
+                                                android:textColor="@color/circle_img_not_ready"
+                                                android:textSize="20dp"
+                                                android:gravity="bottom"
+                                                android:layout_marginBottom="5dp"/>
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_secondInvestigating"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".6"
+                                                android:text="Your report is under second investigation"
+                                                android:textColor="@color/circle_img_not_ready"
+                                                android:fontFamily="@font/nunito_sans"/>
+
+                                        </LinearLayout>
 
                                     </LinearLayout>
 
                                 </LinearLayout>
-
-                            </LinearLayout>
-                            <!--goToResolved-->
-                            <LinearLayout
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:orientation="horizontal"
-                                android:gravity="center">
-
-                                <View
-                                    android:id="@+id/userReportStatus_view_goToResolved"
-                                    android:layout_height="match_parent"
-                                    android:layout_width="3dp"
-                                    android:background="@color/circle_img_not_ready" />
-
-                            </LinearLayout>
-
-
-                            <!--Resolved-->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="100dp"
-                                android:orientation="horizontal">
-
+                                <!--goToExamining-->
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".15"
-                                    android:padding="15dp">
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
 
-                                    <ImageView
-                                        android:id="@+id/userReportStatus_img_dotResolved"
-                                        android:layout_width="match_parent"
+                                    <View
+                                        android:id="@+id/userReportStatus_view_goToExamining"
                                         android:layout_height="match_parent"
-                                        android:background="@drawable/circle_img_not_ready"/>
+                                        android:layout_width="3dp"
+                                        android:background="@color/circle_img_not_ready" />
 
                                 </LinearLayout>
 
+
+                                <!--Examining-->
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".9"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
                                     android:orientation="horizontal">
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight=".3"
-                                        android:padding="10dp">
+                                        android:layout_weight=".15"
+                                        android:padding="15dp">
 
                                         <ImageView
-                                            android:id="@+id/userReportStatus_img_iconResolved"
+                                            android:id="@+id/userReportStatus_img_dotExamining"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:background="@drawable/circle_img_not_ready"
-                                            android:src="@drawable/ic_reportresolved_icon"
-                                            android:padding="15dp"/>
+                                            android:background="@drawable/circle_img_not_ready"/>
 
                                     </LinearLayout>
-
 
                                     <LinearLayout
                                         android:layout_width="0dp"
                                         android:layout_height="match_parent"
-                                        android:layout_weight=".65"
-                                        android:orientation="vertical"
-                                        android:layout_marginLeft="10dp">
+                                        android:layout_weight=".9"
+                                        android:orientation="horizontal">
 
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_resolvedHeader"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".4"
-                                            android:textStyle="bold"
-                                            android:text="Resolved"
-                                            android:textSize="20dp"
-                                            android:textColor="@color/circle_img_not_ready"
-                                            android:gravity="bottom"
-                                            android:layout_marginBottom="5dp"/>
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".3"
+                                            android:padding="10dp">
 
-                                        <TextView
-                                            android:id="@+id/userReportStatus_txt_resolved"
+                                            <ImageView
+                                                android:id="@+id/userReportStatus_img_iconExamining"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:background="@drawable/circle_img_not_ready"
+                                                android:src="@drawable/ic_reportexamining_icon"
+                                                android:padding="15dp"/>
+
+                                        </LinearLayout>
+
+
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".65"
+                                            android:orientation="vertical"
+                                            android:layout_marginLeft="10dp">
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_examiningHeader"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".4"
+                                                android:textStyle="bold"
+                                                android:text="Examining"
+                                                android:textColor="@color/circle_img_not_ready"
+                                                android:textSize="20dp"
+                                                android:gravity="bottom"
+                                                android:layout_marginBottom="5dp"/>
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_examining"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".6"
+                                                android:text="We are examining the resolved water pollution"
+                                                android:textColor="@color/circle_img_not_ready"
+                                                android:fontFamily="@font/nunito_sans"/>
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+                                <!--goToResolved-->
+                                <LinearLayout
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:orientation="horizontal"
+                                    android:gravity="center">
+
+                                    <View
+                                        android:id="@+id/userReportStatus_view_goToResolved"
+                                        android:layout_height="match_parent"
+                                        android:layout_width="3dp"
+                                        android:background="@color/circle_img_not_ready" />
+
+                                </LinearLayout>
+
+
+                                <!--Resolved-->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="100dp"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight=".15"
+                                        android:padding="15dp">
+
+                                        <ImageView
+                                            android:id="@+id/userReportStatus_img_dotResolved"
                                             android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:layout_weight=".6"
-                                            android:text="Reported water pollution was resolved sucessfully!"
-                                            android:textColor="@color/circle_img_not_ready"
-                                            android:fontFamily="@font/nunito_sans"/>
+                                            android:layout_height="match_parent"
+                                            android:background="@drawable/circle_img_not_ready"/>
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight=".9"
+                                        android:orientation="horizontal">
+
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".3"
+                                            android:padding="10dp">
+
+                                            <ImageView
+                                                android:id="@+id/userReportStatus_img_iconResolved"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:background="@drawable/circle_img_not_ready"
+                                                android:src="@drawable/ic_reportresolved_icon"
+                                                android:padding="15dp"/>
+
+                                        </LinearLayout>
+
+
+                                        <LinearLayout
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight=".65"
+                                            android:orientation="vertical"
+                                            android:layout_marginLeft="10dp">
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_resolvedHeader"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".4"
+                                                android:textStyle="bold"
+                                                android:text="Resolved"
+                                                android:textSize="20dp"
+                                                android:textColor="@color/circle_img_not_ready"
+                                                android:gravity="bottom"
+                                                android:layout_marginBottom="5dp"/>
+
+                                            <TextView
+                                                android:id="@+id/userReportStatus_txt_resolved"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="0dp"
+                                                android:layout_weight=".6"
+                                                android:text="Reported water pollution was resolved sucessfully!"
+                                                android:textColor="@color/circle_img_not_ready"
+                                                android:fontFamily="@font/nunito_sans"/>
+
+                                        </LinearLayout>
 
                                     </LinearLayout>
 

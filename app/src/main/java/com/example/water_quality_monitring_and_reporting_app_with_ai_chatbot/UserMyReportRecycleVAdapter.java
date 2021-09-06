@@ -2,6 +2,9 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
 
 public class UserMyReportRecycleVAdapter extends RecyclerView.Adapter<UserMyReportRecycleVAdapter.UserMyReportRecycleViewHolder>{
     Context context;
@@ -46,7 +51,6 @@ public class UserMyReportRecycleVAdapter extends RecyclerView.Adapter<UserMyRepo
                 Intent intent = new Intent(context, UserReportStatus.class);
                 intent.putExtra("reportID", reportID);
                 context.startActivity(intent);
-                Toast.makeText(context, reportID,Toast.LENGTH_SHORT).show();
             }
         });
 

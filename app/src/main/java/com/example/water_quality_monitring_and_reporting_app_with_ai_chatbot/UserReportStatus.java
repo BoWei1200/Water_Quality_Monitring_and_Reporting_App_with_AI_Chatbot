@@ -1,20 +1,32 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class UserReportStatus extends AppCompatActivity {
+import java.io.Serializable;
 
-    private LinearLayout userReportStatus_linearLayout_previous, userReportStatus_linearLayout_next;
+public class UserReportStatus extends AppCompatActivity{
+
+    private LinearLayout userReportStatus_linearLayout_reportStatus, userReportStatus_linearLayout_previous, userReportStatus_linearLayout_next;
 
     private ConstraintLayout userReportStatus_constraintLayout_images;
+
+    private CardView userReportStatus_cv_reportStatus;
 
     private ImageView userReportStatus_img_pollutionPhoto, userReportStatus_img_previous, userReportStatus_img_next,
 
@@ -42,15 +54,20 @@ public class UserReportStatus extends AppCompatActivity {
 
     private Uri[] imageUri;  private int photoIndex = 0; private int currentDisplayingPhotoIndex = 0;
 
+    private String reportID = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_report_status);
 
+        userReportStatus_linearLayout_reportStatus = findViewById(R.id.userReportStatus_linearLayout_reportStatus);
         userReportStatus_linearLayout_previous = findViewById(R.id.userReportStatus_linearLayout_previous);
         userReportStatus_linearLayout_next = findViewById(R.id.userReportStatus_linearLayout_next);
 
         userReportStatus_constraintLayout_images = findViewById(R.id.userReportStatus_constraintLayout_images);
+
+        userReportStatus_cv_reportStatus = findViewById(R.id.userReportStatus_cv_reportStatus);
 
         userReportStatus_img_pollutionPhoto = findViewById(R.id.userReportStatus_img_pollutionPhoto);
         userReportStatus_img_previous = findViewById(R.id.userReportStatus_img_previous);
@@ -102,9 +119,43 @@ public class UserReportStatus extends AppCompatActivity {
         userReportStatus_view_goToExamining = findViewById(R.id.userReportStatus_view_goToExamining);
         userReportStatus_view_goToResolved = findViewById(R.id.userReportStatus_view_goToResolved);
 
+        Intent intent = getIntent();
+        reportID = intent.getStringExtra("reportID");
+
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        Cursor cursorReportInfo = dbHelper.getReportInfoByReportID(reportID);
+
+        userReportStatus_txt_reportID.setText("Report# " + reportID);
+        userReportStatus_txt_reportDate.setText(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportDate")));
+        userReportStatus_txt_reportTime.setText(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportTime")));
+
+        Cursor cursorReportLocation = dbHelper.getReportLocationByReportID(reportID);
+
+        String reportAddress = cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportaddressLine")) + ", "+
+                         cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportPostcode")) + ", "+
+                         cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportCity")) + ", "+
+                         cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportState"));
+
+        userReportStatus_txt_reportAddress.setText(reportAddress);
+
+        String reportLaLongitude = cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportLatitude")) + ", "+
+                            cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportLongitude"));
+
+        userReportStatus_txt_reportLaLongitude.setText(reportLaLongitude);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void viewImage(View view) {
+        TransitionManager.beginDelayedTransition(userReportStatus_constraintLayout_images, new AutoTransition());
+        if(userReportStatus_constraintLayout_images.getVisibility() == View.GONE){
+            userReportStatus_constraintLayout_images.setVisibility(View.VISIBLE);
+            userReportStatus_img_arrowRightOrDown.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_down_icon));
+        }
+        else{
+            userReportStatus_constraintLayout_images.setVisibility(View.GONE);
+            userReportStatus_img_arrowRightOrDown.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_right_icon));
+        }
+        TransitionManager.beginDelayedTransition(userReportStatus_linearLayout_reportStatus, new AutoTransition());
     }
 
     public void toImageViewer(View view) {
