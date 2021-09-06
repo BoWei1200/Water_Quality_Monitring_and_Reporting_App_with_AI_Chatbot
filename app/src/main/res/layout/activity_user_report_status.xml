@@ -72,14 +72,14 @@
                             android:padding="5dp">
 
                             <TableRow
-                                android:id="@+id/userMyReportRecycleVLayout_tableRow_reportDate"
+                                android:id="@+id/userReportStatus_tableRow_reportDate"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportDateHeader"
+                                    android:id="@+id/userReportStatus_txt_reportDateHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -89,7 +89,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportDate"
+                                    android:id="@+id/userReportStatus_txt_reportDate"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -102,14 +102,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userMyReportRecycleVLayout_tableRow_reportTime"
+                                android:id="@+id/userReportStatus_tableRow_reportTime"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTimeHeader"
+                                    android:id="@+id/userReportStatus_txt_reportTimeHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -119,7 +119,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTime"
+                                    android:id="@+id/userReportStatus_txt_reportTime"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_column="2"
@@ -132,14 +132,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userMyReportRecycleVLayout_tableRow_reportTime"
+                                android:id="@+id/userReportStatus_tableRow_reportAddress"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTimeHeader"
+                                    android:id="@+id/userReportStatus_txt_reportAddressHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -149,7 +149,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTime"
+                                    android:id="@+id/userReportStatus_txt_reportAddress"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -162,14 +162,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userMyReportRecycleVLayout_tableRow_reportTime"
+                                android:id="@+id/userReportStatus_tableRow_reportLaLongitude"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTimeHeader"
+                                    android:id="@+id/userReportStatus_txt_reportLaLongitudeHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -179,7 +179,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTime"
+                                    android:id="@+id/userReportStatus_txt_reportLaLongitude"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -192,14 +192,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userMyReportRecycleVLayout_tableRow_reportTime"
+                                android:id="@+id/userReportStatus_tableRow_reportOrg"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTimeHeader"
+                                    android:id="@+id/userReportStatus_txt_reportOrgHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -209,7 +209,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTime"
+                                    android:id="@+id/userReportStatus_txt_reportOrg"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -222,14 +222,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userMyReportRecycleVLayout_tableRow_reportTime"
+                                android:id="@+id/userReportStatus_tableRow_reportDuration"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTimeHeader"
+                                    android:id="@+id/userReportStatus_txt_reportDurationHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -239,7 +239,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTime"
+                                    android:id="@+id/userReportStatus_txt_reportDuration"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -252,14 +252,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userMyReportRecycleVLayout_tableRow_reportTime"
+                                android:id="@+id/userReportStatus_tableRow_reportCause"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTimeHeader"
+                                    android:id="@+id/userReportStatus_txt_reportCauseHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -269,7 +269,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTime"
+                                    android:id="@+id/userReportStatus_txt_reportCause"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -282,14 +282,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userMyReportRecycleVLayout_tableRow_reportTime"
+                                android:id="@+id/userReportStatus_tableRow_reportDesc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTimeHeader"
+                                    android:id="@+id/uuserReportStatus_txt_reportDescHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -299,7 +299,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userMyReportRecycleVLayout_txt_reportTime"
+                                    android:id="@+id/userReportStatus_txt_reportDesc"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -345,14 +345,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="300dp"
                             android:background="@drawable/dashlineborder"
-                            android:onClick="viewPhoto"
+                            android:onClick="toImageViewer"
+                            android:visibility="visible"
                             android:layout_marginBottom="20dp"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:layout_weight=".5">
 
                             <LinearLayout
-                                android:id="@+id/userAddReport_linearLayout_previous"
+                                android:id="@+id/userReportStatus_linearLayout_previous"
                                 android:layout_width="50dp"
                                 android:layout_height="90dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -363,14 +364,14 @@
                                 android:visibility="gone">
 
                                 <ImageView
-                                    android:id="@+id/userAddReport_img_previous"
+                                    android:id="@+id/userReportStatus_img_previous"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     app:srcCompat="@drawable/arrowprevious" />
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/userAddReport_linearLayout_next"
+                                android:id="@+id/userReportStatus_linearLayout_next"
                                 android:layout_width="50dp"
                                 android:layout_height="90dp"
                                 android:padding="10dp"
@@ -381,36 +382,15 @@
                                 android:visibility="gone">
 
                                 <ImageView
-                                    android:id="@+id/userAddReport_img_next"
+                                    android:id="@+id/userReportStatus_img_next"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     app:srcCompat="@drawable/arrownext" />
                             </LinearLayout>
 
-                            <ImageView
-                                android:id="@+id/userAddReport_img_addIcon"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                android:layout_margin="15dp"
-                                app:srcCompat="@drawable/addicon"
-                                android:onClick="takePhoto"
-                                android:visibility="gone"/>
-
-                            <ImageView
-                                android:id="@+id/userAddReport_img_deleteIcon"
-                                android:layout_width="45dp"
-                                android:layout_height="45dp"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@+id/userAddReport_img_addIcon"
-                                android:layout_margin="15dp"
-                                app:srcCompat="@drawable/deleteicon2edit"
-                                android:onClick="deletePhoto"
-                                android:visibility="gone"/>
 
                             <com.google.android.material.imageview.ShapeableImageView
-                                android:id="@+id/userAddReport_img_pollutionPhoto"
+                                android:id="@+id/userReportStatus_img_pollutionPhoto"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -421,15 +401,16 @@
                                 app:shapeAppearanceOverlay="@style/roundedCornersImg"/>
 
                             <TextView
-                                android:id="@+id/userAddReport_txt_takePhoto"
+                                android:id="@+id/userReportStatus_txt_takePhoto"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="14dp"
                                 android:fontFamily="@font/nunito_sans"
-                                android:text="Snap photo(s) on the polluted watershed"
+                                android:text="Uploaded Image"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/userAddReport_img_pollutionPhoto" />
+                                app:layout_constraintTop_toBottomOf="@+id/userReportStatus_img_pollutionPhoto" />
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </LinearLayout>
@@ -441,6 +422,5 @@
         </ScrollView>
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
