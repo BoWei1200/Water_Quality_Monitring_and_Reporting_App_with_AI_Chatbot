@@ -39,10 +39,10 @@ public class EmployeeReportRecycleVAdapter extends RecyclerView.Adapter<Employee
 
         view.findViewById(R.id.employeeReportRecycleVLayout_cv_reportList).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
-                TextView userMyReportRecycleVLayout_txt_reportID =  v.findViewById(R.id.employeeReportRecycleVLayout_txt_reportID);
-                String reportID = userMyReportRecycleVLayout_txt_reportID.getText().toString();
+                TextView employeeReportRecycleVLayout_txt_reportID =  v.findViewById(R.id.employeeReportRecycleVLayout_txt_reportID);
+                String reportID = employeeReportRecycleVLayout_txt_reportID.getText().toString();
 
-                Intent intent = new Intent(context, UserReportStatus.class);
+                Intent intent = new Intent(context, EmployeeReportStatus.class);
                 intent.putExtra("reportID", reportID);
                 context.startActivity(intent);
             }
