@@ -22,8 +22,10 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
     private final String userIDPreference = "userID";
+    private final String userTypePreference = "userType";
 
     private String getUserIDPreference = "";
+    private String getUserTypePreference = "";
 
     private TextView examinerExamination_txt_tabPending, examinerExamination_txt_tabCompleted;
 
@@ -48,6 +50,10 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        getUserIDPreference = mPreferences.getString(userIDPreference, null);
+        getUserTypePreference = mPreferences.getString(userTypePreference, null);
 
         examinerExamination_txt_tabPending = findViewById(R.id.examinerExamination_txt_tabPending);
         examinerExamination_txt_tabCompleted = findViewById(R.id.examinerExamination_txt_tabCompleted);
@@ -74,8 +80,19 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
         }
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        Cursor cursorGetMyReport = dbHelper.getReportByExaminerID(getUserIDPreference);
-        int countMyReport = (! (cursorGetMyReport==null)) ? cursorGetMyReport.getCount() : 0;
+
+        Cursor cursorGetReport;
+        if(getUserTypePreference.equals("EX")){
+            cursorGetReport = dbHelper.getReportByExaminerID(getUserIDPreference);
+        }else if(getUserTypePreference.equals("IN")){
+            Cursor cursorGetTeamInfo = dbHelper.getInvestigatorTeamInfoByUserID(getUserTypePreference);
+            String teamID = cursorGetTeamInfo.getString(cursorGetTeamInfo.getColumnIndex("investigationTeamID"));
+            cursorGetReport = dbHelper.getReportByInvestigationTeam(teamID);
+        }else{
+            cursorGetReport = dbHelper.getReportByReportHandler(getUserIDPreference);
+        }
+
+        int countMyReport = !(cursorGetReport==null) ? cursorGetReport.getCount() : 0;
 
         if(countMyReport != 0){
             reportIDs = new String[countMyReport];
@@ -85,9 +102,9 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
             loadMyReportFromDatabase();
 
-//            UserMyReportRecycleVAdapter adapter = new UserMyReportRecycleVAdapter(this, reportIDs, reportDates, reportTimes, reportStatus);
-//            examinerExamination_recycleV_reportList.setAdapter(adapter);
-//            examinerExamination_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
+            EmployeeReportRecycleVAdapter adapter = new EmployeeReportRecycleVAdapter(this, reportIDs, reportDates, reportTimes, reportStatus);
+            examinerExamination_recycleV_reportList.setAdapter(adapter);
+            examinerExamination_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
         }
     }
 
@@ -122,7 +139,18 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
     private void loadMyReportFromDatabase() {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        Cursor cursor = dbHelper.getMyReport(getUserIDPreference);
+
+        Cursor cursor;
+
+        if(getUserTypePreference.equals("EX")){
+            cursor = dbHelper.getReportByExaminerID(getUserIDPreference);
+        }else if(getUserTypePreference.equals("IN")){
+            Cursor cursorGetTeamInfo = dbHelper.getInvestigatorTeamInfoByUserID(getUserTypePreference);
+            String teamID = cursorGetTeamInfo.getString(cursorGetTeamInfo.getColumnIndex("investigationTeamID"));
+            cursor = dbHelper.getReportByInvestigationTeam(teamID);
+        }else{
+            cursor = dbHelper.getReportByReportHandler(getUserIDPreference);
+        }
 
         returnRead(cursor);
     }
