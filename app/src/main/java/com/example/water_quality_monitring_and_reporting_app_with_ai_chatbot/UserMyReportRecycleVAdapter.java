@@ -64,6 +64,9 @@ public class UserMyReportRecycleVAdapter extends RecyclerView.Adapter<UserMyRepo
         holder.userMyReportRecycleVLayout_txt_reportTime.setText(myReportTimes[position]);
         holder.userMyReportRecycleVLayout_txt_reportStatus.setText(myReportStatus[position]);
 
+        if(myReportStatus[position].equals("Investigating1") || myReportStatus[position].equals("Investigating2"))
+            holder.userMyReportRecycleVLayout_txt_reportStatus.setText("Investigating");
+
         int circleImgDrawable = R.drawable.ic_reportpending_icon;
         int circleImgBackgroundDrawable = R.drawable.circle_img_pending;
         int statusTextColor = R.color.circle_img_pending;
@@ -72,7 +75,7 @@ public class UserMyReportRecycleVAdapter extends RecyclerView.Adapter<UserMyRepo
         if(myReportStatus[position].equals("Pending")){
 
         }
-        else if (myReportStatus[position].equals("Investigating")){
+        else if (myReportStatus[position].equals("Investigating1") || myReportStatus[position].equals("Investigating2")){
             circleImgDrawable = R.drawable.ic_search_icon;
             circleImgBackgroundDrawable = R.drawable.circle_img_investigating;
             statusTextColor = R.color.circle_img_investigating;

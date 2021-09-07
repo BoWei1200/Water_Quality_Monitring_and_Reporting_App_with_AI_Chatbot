@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -180,12 +181,10 @@ public class UserReportStatus extends AppCompatActivity{
 
         userReportStatus_txt_reportDesc.setText(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportDesc")));
 
-        try {
-            displayUploadedImageFromFirebase();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        setReportStatus();
+
+        displayUploadedImageFromFirebase();
+
+        setReportStatus(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportStatus")));
     }
 
     @Override //when back button clicked
@@ -210,7 +209,7 @@ public class UserReportStatus extends AppCompatActivity{
         TransitionManager.beginDelayedTransition(userReportStatus_linearLayout_reportStatus, new AutoTransition());
     }
 
-    private void displayUploadedImageFromFirebase() throws MalformedURLException {
+    private void displayUploadedImageFromFirebase(){
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         Cursor cursorGetImageByReportID = dbHelper.getImageByReportID(reportID);
 
@@ -237,10 +236,13 @@ public class UserReportStatus extends AppCompatActivity{
                             if(userReportImageRead.getName().equals(imgName)){
                                 userReportImage[finalI1] = ds.getValue(UserReportImage.class);
                                 System.out.println("IMG URL " + userReportImage[finalI1].getUrl());
-                                Picasso.get().load(imageUri[0]).resize(400,400).centerCrop().into(userReportStatus_img_pollutionPhoto);
-
                                 imageUri[finalI1] = Uri.parse(userReportImage[finalI1].getUrl());
 
+                                Picasso.get().load(imageUri[finalI1]).resize(400,400).centerCrop().into(userReportStatus_img_pollutionPhoto);
+
+                                if (finalI1 == cursorGetImageByReportID.getCount() - 1) {
+                                    Picasso.get().load(imageUri[0]).resize(400,400).centerCrop().into(userReportStatus_img_pollutionPhoto);
+                                }
                                 break;
                             }
                         }catch(Exception e){
@@ -258,28 +260,99 @@ public class UserReportStatus extends AppCompatActivity{
 
             System.out.println("IMG URL FROM DB" + cursorGetImageByReportID.getString(cursorGetImageByReportID.getColumnIndex("reportImageFilePath")));
         }
-            currentDisplayingPhotoIndex = 0;
-            userReportStatus_img_pollutionPhoto.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-            userReportStatus_img_pollutionPhoto.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+        currentDisplayingPhotoIndex = 0;
+        userReportStatus_img_pollutionPhoto.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+        userReportStatus_img_pollutionPhoto.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
-            userReportStatus_img_pollutionPhoto.requestLayout();
+        userReportStatus_img_pollutionPhoto.requestLayout();
 
-            userReportStatus_img_pollutionPhoto.setAdjustViewBounds(true);
+        userReportStatus_img_pollutionPhoto.setAdjustViewBounds(true);
 
-            userReportStatus_img_pollutionPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        userReportStatus_img_pollutionPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-            userReportStatus_img_pollutionPhoto.setOnClickListener(v -> {
-                Intent intent = new Intent(UserReportStatus.this, ReportPhotoViewer.class);
-                intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
-                intent.putExtra("passedActivity", "fromWeb");
-                startActivity(intent);
-            });
-            prevNextandOtherBtnsDisplay();
-
-            cursorGetImageByReportID.moveToNext();
+        userReportStatus_img_pollutionPhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(UserReportStatus.this, ReportPhotoViewer.class);
+            intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
+            intent.putExtra("passedActivity", "fromWeb");
+            startActivity(intent);
+        });
+        prevNextandOtherBtnsDisplay();
     }
 
-    private void setReportStatus() {
+    private void setReportStatus(String reportStatus) {
+        int background = R.drawable.circle_img_resolved;
+        if(!reportStatus.equals("Rejected")){
+            switch(reportStatus){
+                case "Resolved":
+                    userReportStatus_img_dotResolved.setBackground(getResources().getDrawable(R.drawable.circle_img_resolved));
+                    userReportStatus_img_iconResolved.setBackground(getResources().getDrawable(R.drawable.circle_img_resolved));
+                    userReportStatus_txt_resolvedHeader.setTextColor(getResources().getColor(R.color.gray));
+                    userReportStatus_txt_resolved.setTextColor(getResources().getColor(R.color.gray));
+
+                case "Examining":
+                    setResources(reportStatus, "Examining", R.drawable.circle_img_examining,
+                            userReportStatus_img_dotExamining, userReportStatus_img_iconExamining,
+                            userReportStatus_txt_examiningHeader, "Examined",
+                            userReportStatus_txt_examining, "Your report has been examined!",
+                            userReportStatus_view_goToResolved);
+
+                case "Investigating2":
+                    setResources(reportStatus, "Investigating2", R.drawable.circle_img_investigating,
+                            userReportStatus_img_dotSecondInvestigating, userReportStatus_img_iconSecondInvestigating,
+                            userReportStatus_txt_secondInvestigatingHeader, "Investigated",
+                            userReportStatus_txt_secondInvestigating, "Your report has been proceeded second investigation!",
+                            userReportStatus_view_goToExamining);
+
+                case "Resolving":
+                    setResources(reportStatus, "Resolving", R.drawable.circle_img_resolving,
+                            userReportStatus_img_dotResolving, userReportStatus_img_iconResolving,
+                            userReportStatus_txt_resolvingHeader, "Resolving",
+                            userReportStatus_txt_resolving, "Your report has been resolved and under second investigation!",
+                            userReportStatus_view_goToSecondInvestigating);
+
+                case "Investigating1":
+                    setResources(reportStatus, "Investigating1", R.drawable.circle_img_investigating,
+                            userReportStatus_img_dotInvestigating, userReportStatus_img_iconInvestigating,
+                            userReportStatus_txt_investigatingHeader, "Investigated",
+                            userReportStatus_txt_investigating, "Your report has been proceeded first investigation!",
+                            userReportStatus_view_goToResolving);
+
+                case "Pending":
+                    setResources(reportStatus, "Pending", R.drawable.circle_img_pending,
+                            userReportStatus_img_dotPending, userReportStatus_img_iconPending,
+                            userReportStatus_txt_pendingHeader, "Validated",
+                            userReportStatus_txt_pending, "Your report has been validated!",
+                            userReportStatus_view_goToInvestigating);
+            }
+        }else{
+            userReportStatus_img_dotPending.setBackground(getResources().getDrawable(R.drawable.circle_img_rejected));
+            userReportStatus_img_iconPending.setBackground(getResources().getDrawable(R.drawable.circle_img_rejected));
+            userReportStatus_img_iconPending.setImageDrawable(getResources().getDrawable(R.drawable.ic_reportrejected_icon));
+
+            userReportStatus_txt_pendingHeader.setText("Rejected");
+            userReportStatus_txt_pending.setText("Your report has been rejected");
+        }
+    }
+
+    public void setResources(String reportStatus, String reportStatusToCompare, int backgroundPassed,
+                             ImageView dot, ImageView icon,
+                             TextView txtHeader, String headerText,
+                             TextView txt, String text,
+                             View line){
+
+        int background = backgroundPassed;
+
+        if(!reportStatus.equals(reportStatusToCompare)){
+            background = R.drawable.circle_img_resolved;
+            icon.setImageDrawable(getResources().getDrawable(R.drawable.ic_reportresolved_icon));
+            txtHeader.setText(headerText);
+            txt.setText(text);
+        }
+
+        dot.setBackground(getResources().getDrawable(background));
+        icon.setBackground(getResources().getDrawable(background));
+        txtHeader.setTextColor(getResources().getColor(R.color.gray));
+        txt.setTextColor(getResources().getColor(R.color.gray));
 
     }
 
