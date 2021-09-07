@@ -103,7 +103,7 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-
+        redesignLayout();
     }
 
     @Override
@@ -119,15 +119,23 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
     public void toWhichTab(View view) {
         setCurrentlyActiveTab(view.getId());
+        redesignLayout();
 
+    }
+
+    public void redesignLayout(){
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         Cursor cursor = dbHelper.getReportByExaminerID(getUserIDPreference, currentlyActiveTab.getText().toString(), examinerExamination_spinner_filter.getSelectedItem().toString());
-        reportIDs = new String[cursor.getCount()];
-        reportDates = new String[cursor.getCount()];
-        reportTimes = new String[cursor.getCount()];
-        reportStatus = new String[cursor.getCount()];
 
-        returnRead(cursor);
+        int size = (cursor != null) ? cursor.getCount() : 0;
+
+        reportIDs = new String[size];
+        reportDates = new String[size];
+        reportTimes = new String[size];
+        reportStatus = new String[size];
+
+        if(cursor != null)
+            returnRead(cursor);
 
         EmployeeReportRecycleVAdapter adapter = new EmployeeReportRecycleVAdapter(this, reportIDs, reportDates, reportTimes, reportStatus);
         examinerExamination_recycleV_reportList.setAdapter(adapter);

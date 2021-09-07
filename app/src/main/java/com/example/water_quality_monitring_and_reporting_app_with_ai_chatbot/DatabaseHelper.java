@@ -704,28 +704,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String WHERE_CLAUSE = "";
         if(pendingOrCompleted.equals("Pending")){
-            if(filter.equals("Validity of Report") || filter.equals("All")){
+            if(filter.equals("All")){
+                WHERE_CLAUSE += "re.reportStatus = 'Pending' OR (re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath != null) OR (re.reportStatus='Examining')";
+            }
+
+            if(filter.equals("Validity of Report")){
                 WHERE_CLAUSE += "re.reportStatus = 'Pending' ";
             }
 
-            if(filter.equals("1st Investigation") || filter.equals("All")){
-                WHERE_CLAUSE += "OR (re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath != null) ";
+            if(filter.equals("1st Investigation")){
+                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath != null) ";
             }
 
-            if(filter.equals("2nd Investigation & Report on Cleaning Process") || filter.equals("All")){
-                WHERE_CLAUSE += "OR (re.reportStatus='Examining')";
+            if(filter.equals("2nd Investigation & Report on Cleaning Process")){
+                WHERE_CLAUSE += "(re.reportStatus='Examining')";
             }
         }else{
-            if(filter.equals("Validity of Report") || filter.equals("All")){
+            if(filter.equals("All")){
+                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1') OR (re.reportStatus = 'Resolving' ) OR (re.reportStatus='Resolved')";
+            }
+
+            if(filter.equals("Validity of Report")){
                 WHERE_CLAUSE += "(re.reportStatus = 'Investigating1') ";
             }
 
-            if(filter.equals("1st Investigation") || filter.equals("All")){
-                WHERE_CLAUSE += "OR (re.reportStatus = 'Resolving' ) ";
+            if(filter.equals("1st Investigation")){
+                WHERE_CLAUSE += "(re.reportStatus = 'Resolving' ) ";
             }
 
-            if(filter.equals("2nd Investigation & Report on Cleaning Process") || filter.equals("All")){
-                WHERE_CLAUSE += "OR (re.reportStatus='Resolved')";
+            if(filter.equals("2nd Investigation & Report on Cleaning Process")){
+                WHERE_CLAUSE += "(re.reportStatus='Resolved')";
             }
         }
 
