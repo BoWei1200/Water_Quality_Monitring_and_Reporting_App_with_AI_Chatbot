@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.ExceptionCatchingInputStream;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -258,15 +259,19 @@ public class UserReportStatus extends AppCompatActivity{
                 public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 
                     for(DataSnapshot ds : snapshot.getChildren()){
-                        UserReportImage userReportImageRead = ds.getValue(UserReportImage.class);
-                        if(userReportImageRead.getName().equals(imgName)){
-                            userReportImage[finalI1] = ds.getValue(UserReportImage.class);
-                            System.out.println("IMG URL " + userReportImage[finalI1].getUrl());
-                            Picasso.get().load(userReportImage[0].getUrl()).into(userReportStatus_img_pollutionPhoto);
+                        try{
+                            UserReportImage userReportImageRead = ds.getValue(UserReportImage.class);
+                            if(userReportImageRead.getName().equals(imgName)){
+                                userReportImage[finalI1] = ds.getValue(UserReportImage.class);
+                                System.out.println("IMG URL " + userReportImage[finalI1].getUrl());
+                                Picasso.get().load(imageUri[0]).resize(400,400).centerCrop().into(userReportStatus_img_pollutionPhoto);
 
-                            imageUri[finalI1] = Uri.parse(userReportImage[finalI1].getUrl());
-                            currentDisplayingPhotoIndex = 0;
-                            break;
+                                imageUri[finalI1] = Uri.parse(userReportImage[finalI1].getUrl());
+
+                                break;
+                            }
+                        }catch(Exception e){
+                            System.out.println("ERROR IN FETCHING: " + e.toString());
                         }
                     }
                 }
@@ -280,7 +285,7 @@ public class UserReportStatus extends AppCompatActivity{
 
             System.out.println("IMG URL FROM DB" + cursorGetImageByReportID.getString(cursorGetImageByReportID.getColumnIndex("reportImageFilePath")));
         }
-
+            currentDisplayingPhotoIndex = 0;
             userReportStatus_img_pollutionPhoto.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
             userReportStatus_img_pollutionPhoto.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
@@ -298,8 +303,6 @@ public class UserReportStatus extends AppCompatActivity{
             prevNextandOtherBtnsDisplay();
 
             cursorGetImageByReportID.moveToNext();
-
-
     }
 
     private void setReportStatus() {
@@ -311,7 +314,7 @@ public class UserReportStatus extends AppCompatActivity{
 
     public void prevNextandOtherBtnsDisplay(){
 
-        if(imageUri.length - 1 > 1){
+        if(imageUri.length - 1 > 0){
             if(currentDisplayingPhotoIndex > 0){
                 userReportStatus_linearLayout_previous.setVisibility(View.VISIBLE);
             }
@@ -334,14 +337,20 @@ public class UserReportStatus extends AppCompatActivity{
     }
 
     public void viewPrevious(View view) {
-        Picasso.get().load(imageUri[--currentDisplayingPhotoIndex]).into(userReportStatus_img_pollutionPhoto);
+        Picasso.get().load(imageUri[--currentDisplayingPhotoIndex]).resize(400,400).centerCrop().into(userReportStatus_img_pollutionPhoto);
+        //Picasso.get().load(imageUri[--currentDisplayingPhotoIndex]).into(userReportStatus_img_pollutionPhoto);
         //userReportStatus_img_pollutionPhoto.setImageURI(Uri.parse(imageUri[--currentDisplayingPhotoIndex].toString()));
+
+        //Glide.with(this).load(userReportImage[--currentDisplayingPhotoIndex].getUrl()).into(userReportStatus_img_pollutionPhoto);
         prevNextandOtherBtnsDisplay();
     }
 
     public void viewNext(View view) {
-        Picasso.get().load(imageUri[++currentDisplayingPhotoIndex]).into(userReportStatus_img_pollutionPhoto);
+        Picasso.get().load(imageUri[++currentDisplayingPhotoIndex]).resize(400,400).centerCrop().into(userReportStatus_img_pollutionPhoto);
+        //Picasso.get().load(imageUri[++currentDisplayingPhotoIndex]).into(userReportStatus_img_pollutionPhoto);
         //userReportStatus_img_pollutionPhoto.setImageURI(Uri.parse(imageUri[++currentDisplayingPhotoIndex].toString()));
+
+        //Glide.with(this).load(userReportImage[++currentDisplayingPhotoIndex].getUrl()).into(userReportStatus_img_pollutionPhoto);
         prevNextandOtherBtnsDisplay();
     }
 }

@@ -317,10 +317,6 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_PICK_CAMERA_CODE && resultCode == RESULT_OK) {
-//                Bundle extras = data.getExtras();
-//                imageUri[photoIndex] = (Uri) extras.get("data");
-                //Bitmap imageBitmap = (Bitmap) extras.get("data");
-                //ImageView img = findViewById(R.id.imageView);
 
             imageUri[photoIndex] = currentTakenImage;
             currentDisplayingPhotoIndex = photoIndex;
