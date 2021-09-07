@@ -9,9 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapRegionDecoder;
-import android.graphics.Rect;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,7 +17,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.Editable;
@@ -50,8 +46,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -333,8 +327,10 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             userAddReport_img_pollutionPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             userAddReport_img_pollutionPhoto.setOnClickListener(v -> {
-                Intent intent = new Intent(UserAddReport.this, UserAddReportPhotoViewer.class);
+                Intent intent = new Intent(UserAddReport.this, ReportPhotoViewer.class);
                 intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
+                intent.putExtra("passedActivity", "addReport");
+
                 startActivity(intent);
             });
 

@@ -44,7 +44,7 @@
         <activity android:name=".UserUbidotsAccSetup" />
         <activity android:name=".ActivitySuccessfulDisplay" />
         <activity android:name=".UserWQIDetails" />
-        <activity android:name=".UserAddReportPhotoViewer" />
+        <activity android:name=".ReportPhotoViewer" />
         <activity android:name=".UserAIChatting" />
         <activity android:name=".UserMyReport" />
         <activity android:name=".UserAddReport" />
