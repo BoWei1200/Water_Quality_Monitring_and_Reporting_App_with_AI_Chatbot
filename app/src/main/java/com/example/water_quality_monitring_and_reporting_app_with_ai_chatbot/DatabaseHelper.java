@@ -554,7 +554,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getExaminerReportNumByExaminerID(String examinerID){
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT user.userID, COUNT(report.reportID) FROM " + TABLE_REPORT_FROM_USER +" report, "+ TABLE_USER +" user WHERE user.userID=?  AND report.userID = user.userID GROUP BY user.userID ORDER BY COUNT(report.reportID)", new String[]{examinerID});
+        return db.rawQuery("SELECT user.userID, COUNT(report.reportID) FROM " + TABLE_REPORT_FROM_USER +" report, "+ TABLE_USER +" user WHERE user.userID=?  AND report.examiner = user.userID GROUP BY user.userID ORDER BY COUNT(report.reportID)", new String[]{examinerID});
     }
 
     public String getOrgIDWithLeastReports(Cursor cursorAvailableOrgID) {
@@ -653,7 +653,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursorExaminerWithNoReport = null;
 
-        System.out.println("TWO CURSOR: " + Boolean.toString(cursorAvailableExaminerID.getCount() != getExaminerID.getCount()) );
+        System.out.println("TWO CURSOR not equal: " + Boolean.toString(cursorAvailableExaminerID.getCount() != getExaminerID.getCount()) );
 
         if(cursorAvailableExaminerID.getCount() != getExaminerID.getCount()){
             System.out.println("move to first? : " + cursorAvailableExaminerID.moveToFirst());
@@ -664,7 +664,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                 System.out.println("cursorExaminerWithNoReport == null?: " + cursorExaminerWithNoReport == null);
 
+                System.out.println("examiner getCount = " + (cursorExaminerWithNoReport.getCount() == 0));
                 if(cursorExaminerWithNoReport.getCount() == 0){
+                    System.out.println("examiner with 0 to assign : " + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")));
                     return cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID"));
                 }
                 cursorAvailableExaminerID.moveToNext();
@@ -684,6 +686,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getMyReport(String userID) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REPORT_FROM_USER + " WHERE userID=?", new String[]{String.valueOf(userID)});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getReportByExaminerID(String examinerUserID) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REPORT_FROM_USER + " WHERE userID=?", new String[]{String.valueOf(examinerUserID)});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }

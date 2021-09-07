@@ -2,8 +2,11 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,14 +17,27 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 public class ExaminerExamination extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
+    private final String userIDPreference = "userID";
+
+    private String getUserIDPreference = "";
+
     private TextView examinerExamination_txt_tabPending, examinerExamination_txt_tabCompleted;
 
     private TextView currentlyActiveTab;
 
     private Spinner examinerExamination_spinner_filter;
+
+    private RecyclerView examinerExamination_recycleV_reportList;
+
+    private String reportIDs[];
+    private String reportDates[];
+    private String reportTimes[];
+    private String reportStatus[];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +54,9 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
         examinerExamination_spinner_filter = findViewById(R.id.examinerExamination_spinner_filter);
 
-        currentlyActiveTab = examinerExamination_txt_tabPending;
+        examinerExamination_recycleV_reportList = findViewById(R.id.examinerExamination_recycleV_reportList);
 
+        currentlyActiveTab = examinerExamination_txt_tabPending;
 
         if (examinerExamination_spinner_filter != null) {
             examinerExamination_spinner_filter.setOnItemSelectedListener(this);
@@ -54,6 +71,23 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
             if (examinerExamination_spinner_filter != null) {
                 examinerExamination_spinner_filter.setAdapter(adapter);
             }
+        }
+
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        Cursor cursorGetMyReport = dbHelper.getReportByExaminerID(getUserIDPreference);
+        int countMyReport = (! (cursorGetMyReport==null)) ? cursorGetMyReport.getCount() : 0;
+
+        if(countMyReport != 0){
+            reportIDs = new String[countMyReport];
+            reportDates = new String[countMyReport];
+            reportTimes = new String[countMyReport];
+            reportStatus = new String[countMyReport];
+
+            loadMyReportFromDatabase();
+
+//            UserMyReportRecycleVAdapter adapter = new UserMyReportRecycleVAdapter(this, reportIDs, reportDates, reportTimes, reportStatus);
+//            examinerExamination_recycleV_reportList.setAdapter(adapter);
+//            examinerExamination_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
         }
     }
 
@@ -84,6 +118,28 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
         currentlyActiveTab.setBackground(getResources().getDrawable(R.color.tab_background));
 
         //change the recycler view
+    }
+
+    private void loadMyReportFromDatabase() {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        Cursor cursor = dbHelper.getMyReport(getUserIDPreference);
+
+        returnRead(cursor);
+    }
+
+    private Cursor returnRead(Cursor cursor) {
+        int i = 0, j = 0;
+        if (cursor.moveToFirst()) {
+            do {
+                reportIDs[i] = cursor.getString(cursor.getColumnIndex("reportID"));
+                reportDates[i] = cursor.getString(cursor.getColumnIndex("reportDate"));
+                reportTimes[i] = cursor.getString(cursor.getColumnIndex("reportTime"));
+                reportStatus[i] = cursor.getString(cursor.getColumnIndex("reportStatus"));
+
+                i++;
+            } while (cursor.moveToNext());
+        }
+        return cursor;
     }
 
     public void displayToast(String message){

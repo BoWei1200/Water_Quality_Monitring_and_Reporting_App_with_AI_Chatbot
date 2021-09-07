@@ -106,11 +106,25 @@
             <Spinner
                 android:id="@+id/examinerExamination_spinner_filter"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 style="@style/spinner_style" />
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/examinerExamination_recycleV_reportList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:scrollingCache="true"
+        android:smoothScrollbar="true"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/examinerExamination_linearLayout_searchEngine" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
