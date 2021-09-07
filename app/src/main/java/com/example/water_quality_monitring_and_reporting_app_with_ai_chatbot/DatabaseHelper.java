@@ -178,16 +178,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE " + TABLE_REPORT_INVESTIGATION +"(" +
                 "investigationDocID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                "firstInvestigationDocPath TEXT NOT NULL, " +
-                "secondInvestigationDocPath TEXT NOT NULL, " +
+                "firstInvestigationDocPath TEXT, " +
+                "secondInvestigationDocPath TEXT, " +
                 "reportID TEXT NOT NULL, " +
                 "FOREIGN KEY (reportID) REFERENCES " + TABLE_REPORT_FROM_USER + " (reportID));");
 
         db.execSQL("CREATE TABLE " + TABLE_REPORT_CLEANING_PROCESS +"(" +
                 "reportDealingID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                "pollutionCleaningProcDocPath TEXT NOT NULL, " +
-                "documentStatus TEXT NOT NULL, " +
-                "remark TEXT NOT NULL, " +
+                "pollutionCleaningProcDocPath TEXT, " +
+                "documentStatus TEXT, " +
+                "remark TEXT, " +
                 "reportID TEXT NOT NULL, " +
                 "FOREIGN KEY (reportID) REFERENCES " + TABLE_REPORT_FROM_USER + " (reportID));");
 
@@ -294,8 +294,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "('3', '9'), " +
                 "('4', '10'), " +
                 "('4', '11'), " +
-                "('4', '12'), " +
-                "('4', '13'), " +
+                "('2', '12'), " +
+                "('2', '13'), " +
 
                 "('3', '14'), " +
                 "('4', '15'), " +
@@ -402,7 +402,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                              String reportImageFilePaths[],
                              String reportaddressLine, String reportPostcode, String reportCity, String reportState, String reportLatitude, String reportLongitude){
 
-        Boolean insertedReportFromUser = false, insertedReportImage = false, insertedReportLocation = false;
+        Boolean insertedReportFromUser = false, insertedReportImage = false, insertedReportLocation = false,
+                insertedReportInvestigation = false, insertedReportCleaningProcess = false ;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -450,9 +451,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             conValReportLocation.put("reportLongitude", reportLongitude);
             conValReportLocation.put("reportID", reportID);
             insertedReportLocation = db.insert(TABLE_REPORT_LOCATION, null, conValReportLocation) != -1;
+
+            ContentValues conValReportInvestigation = new ContentValues();
+            conValReportInvestigation.put("reportID", reportID);
+            insertedReportInvestigation = db.insert(TABLE_REPORT_INVESTIGATION, null, conValReportInvestigation) != -1;
+
+            ContentValues conValReportCleaning = new ContentValues();
+            conValReportCleaning.put("reportID", reportID);
+            insertedReportCleaningProcess = db.insert(TABLE_REPORT_CLEANING_PROCESS, null, conValReportCleaning) != -1;
         }
 
-        return insertedReportFromUser && insertedReportImage && insertedReportLocation;
+        return insertedReportFromUser && insertedReportImage && insertedReportLocation && insertedReportInvestigation && insertedReportCleaningProcess;
     }
 
     public boolean addInvestigationTeam(String investigationTeamName, String orgID) {
@@ -690,9 +699,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
-    public Cursor getReportByExaminerID(String examinerUserID) {
+    public Cursor getReportByExaminerID(String examinerUserID, String pendingOrCompleted, String filter) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REPORT_FROM_USER + " WHERE examiner=?", new String[]{String.valueOf(examinerUserID)});
+
+        String WHERE_CLAUSE = "";
+        if(pendingOrCompleted.equals("Pending")){
+            if(filter.equals("Validity of Report") || filter.equals("All")){
+                WHERE_CLAUSE += "re.reportStatus = 'Pending' ";
+            }
+
+            if(filter.equals("1st Investigation") || filter.equals("All")){
+                WHERE_CLAUSE += "OR (re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath != null) ";
+            }
+
+            if(filter.equals("2nd Investigation & Report on Cleaning Process") || filter.equals("All")){
+                WHERE_CLAUSE += "OR (re.reportStatus='Examining')";
+            }
+        }else{
+            if(filter.equals("Validity of Report") || filter.equals("All")){
+                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1') ";
+            }
+
+            if(filter.equals("1st Investigation") || filter.equals("All")){
+                WHERE_CLAUSE += "OR (re.reportStatus = 'Resolving' ) ";
+            }
+
+            if(filter.equals("2nd Investigation & Report on Cleaning Process") || filter.equals("All")){
+                WHERE_CLAUSE += "OR (re.reportStatus='Resolved')";
+            }
+        }
+
+
+        String query = "SELECT DISTINCT re.*  FROM reportFromUser re, reportInvestigation inv " +
+                "WHERE re.examiner=?  AND " +
+                "( "+ WHERE_CLAUSE  +" )" +
+                "ORDER BY re.reportDate, re.reportTime";
+
+        System.out.println("query examiner check: " + query);
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(examinerUserID)});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }

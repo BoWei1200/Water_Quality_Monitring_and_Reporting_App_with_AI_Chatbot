@@ -17,6 +17,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+
 public class ExaminerExamination extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private SharedPreferences mPreferences;
@@ -81,16 +83,7 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-        Cursor cursorGetReport;
-        if(getUserTypePreference.equals("EX")){
-            cursorGetReport = dbHelper.getReportByExaminerID(getUserIDPreference);
-        }else if(getUserTypePreference.equals("IN")){
-            Cursor cursorGetTeamInfo = dbHelper.getInvestigatorTeamInfoByUserID(getUserTypePreference);
-            String teamID = cursorGetTeamInfo.getString(cursorGetTeamInfo.getColumnIndex("investigationTeamID"));
-            cursorGetReport = dbHelper.getReportByInvestigationTeam(teamID);
-        }else{
-            cursorGetReport = dbHelper.getReportByReportHandler(getUserIDPreference);
-        }
+        Cursor cursorGetReport = dbHelper.getReportByExaminerID(getUserIDPreference, currentlyActiveTab.getText().toString(), examinerExamination_spinner_filter.getSelectedItem().toString());
 
         int countMyReport = !(cursorGetReport==null) ? cursorGetReport.getCount() : 0;
 
@@ -109,7 +102,9 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {}
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+
+    }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
@@ -124,6 +119,19 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
     public void toWhichTab(View view) {
         setCurrentlyActiveTab(view.getId());
+
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        Cursor cursor = dbHelper.getReportByExaminerID(getUserIDPreference, currentlyActiveTab.getText().toString(), examinerExamination_spinner_filter.getSelectedItem().toString());
+        reportIDs = new String[cursor.getCount()];
+        reportDates = new String[cursor.getCount()];
+        reportTimes = new String[cursor.getCount()];
+        reportStatus = new String[cursor.getCount()];
+
+        returnRead(cursor);
+
+        EmployeeReportRecycleVAdapter adapter = new EmployeeReportRecycleVAdapter(this, reportIDs, reportDates, reportTimes, reportStatus);
+        examinerExamination_recycleV_reportList.setAdapter(adapter);
+        examinerExamination_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void setCurrentlyActiveTab(int txtID){
@@ -140,17 +148,7 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
     private void loadMyReportFromDatabase() {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-        Cursor cursor;
-
-        if(getUserTypePreference.equals("EX")){
-            cursor = dbHelper.getReportByExaminerID(getUserIDPreference);
-        }else if(getUserTypePreference.equals("IN")){
-            Cursor cursorGetTeamInfo = dbHelper.getInvestigatorTeamInfoByUserID(getUserTypePreference);
-            String teamID = cursorGetTeamInfo.getString(cursorGetTeamInfo.getColumnIndex("investigationTeamID"));
-            cursor = dbHelper.getReportByInvestigationTeam(teamID);
-        }else{
-            cursor = dbHelper.getReportByReportHandler(getUserIDPreference);
-        }
+        Cursor cursor = dbHelper.getReportByExaminerID(getUserIDPreference, currentlyActiveTab.getText().toString(), examinerExamination_spinner_filter.getSelectedItem().toString());
 
         returnRead(cursor);
     }

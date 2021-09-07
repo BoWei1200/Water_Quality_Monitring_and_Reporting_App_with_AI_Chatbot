@@ -48,7 +48,7 @@ public class EmployeeReportRecycleVAdapter extends RecyclerView.Adapter<Employee
             }
         });
 
-        return new EmployeeReportRecycleVAdapter.EmployeeReportRecycleViewHolder(view);
+        return new EmployeeReportRecycleViewHolder(view);
     }
 
     @Override
