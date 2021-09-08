@@ -9,10 +9,13 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +35,8 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
     private TextView examinerExamination_txt_tabPending, examinerExamination_txt_tabCompleted;
 
     private TextView currentlyActiveTab;
+
+    private EditText examinerExamination_eTxt_searchBar;
 
     private Spinner examinerExamination_spinner_filter;
 
@@ -60,11 +65,30 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
         examinerExamination_txt_tabPending = findViewById(R.id.examinerExamination_txt_tabPending);
         examinerExamination_txt_tabCompleted = findViewById(R.id.examinerExamination_txt_tabCompleted);
 
+        examinerExamination_eTxt_searchBar = findViewById(R.id.examinerExamination_eTxt_searchBar);
+
         examinerExamination_spinner_filter = findViewById(R.id.examinerExamination_spinner_filter);
 
         examinerExamination_recycleV_reportList = findViewById(R.id.examinerExamination_recycleV_reportList);
 
         currentlyActiveTab = examinerExamination_txt_tabPending;
+
+        examinerExamination_eTxt_searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                redesignLayout();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         if (examinerExamination_spinner_filter != null) {
             examinerExamination_spinner_filter.setOnItemSelectedListener(this);
@@ -83,7 +107,10 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-        Cursor cursorGetReport = dbHelper.getReportByExaminerID(getUserIDPreference, currentlyActiveTab.getText().toString(), examinerExamination_spinner_filter.getSelectedItem().toString());
+        Cursor cursorGetReport = dbHelper.getReportByExaminerID(
+                getUserIDPreference, currentlyActiveTab.getText().toString(),
+                examinerExamination_spinner_filter.getSelectedItem().toString(),
+                examinerExamination_eTxt_searchBar.getText().toString());
 
         int countMyReport = !(cursorGetReport==null) ? cursorGetReport.getCount() : 0;
 
@@ -103,6 +130,7 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+        examinerExamination_eTxt_searchBar.setText("");
         redesignLayout();
     }
 
@@ -119,13 +147,18 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
     public void toWhichTab(View view) {
         setCurrentlyActiveTab(view.getId());
+
+        examinerExamination_eTxt_searchBar.setText("");
         redesignLayout();
 
     }
 
     public void redesignLayout(){
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        Cursor cursor = dbHelper.getReportByExaminerID(getUserIDPreference, currentlyActiveTab.getText().toString(), examinerExamination_spinner_filter.getSelectedItem().toString());
+        Cursor cursor = dbHelper.getReportByExaminerID(getUserIDPreference,
+                currentlyActiveTab.getText().toString(),
+                examinerExamination_spinner_filter.getSelectedItem().toString(),
+                examinerExamination_eTxt_searchBar.getText().toString());
 
         int size = (cursor != null) ? cursor.getCount() : 0;
 
@@ -156,7 +189,10 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
     private void loadMyReportFromDatabase() {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-        Cursor cursor = dbHelper.getReportByExaminerID(getUserIDPreference, currentlyActiveTab.getText().toString(), examinerExamination_spinner_filter.getSelectedItem().toString());
+        Cursor cursor = dbHelper.getReportByExaminerID(
+                getUserIDPreference, currentlyActiveTab.getText().toString(),
+                examinerExamination_spinner_filter.getSelectedItem().toString(),
+                examinerExamination_eTxt_searchBar.getText().toString());
 
         returnRead(cursor);
     }

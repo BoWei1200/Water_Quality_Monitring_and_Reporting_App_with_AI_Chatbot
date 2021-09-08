@@ -699,7 +699,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
-    public Cursor getReportByExaminerID(String examinerUserID, String pendingOrCompleted, String filter) {
+    public Cursor getReportByExaminerID(String examinerUserID, String pendingOrCompleted, String filter, String searchReportID) {
         SQLiteDatabase db = getReadableDatabase();
 
         String WHERE_CLAUSE = "";
@@ -737,9 +737,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
-
         String query = "SELECT DISTINCT re.*  FROM reportFromUser re, reportInvestigation inv " +
-                "WHERE re.examiner=?  AND " +
+                "WHERE re.examiner=?  AND re.reportID LIKE '%"+ searchReportID +"%' AND" +
                 "( "+ WHERE_CLAUSE  +" )" +
                 "ORDER BY re.reportDate, re.reportTime";
 
