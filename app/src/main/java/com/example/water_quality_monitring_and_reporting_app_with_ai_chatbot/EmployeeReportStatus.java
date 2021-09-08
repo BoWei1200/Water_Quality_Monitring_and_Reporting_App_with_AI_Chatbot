@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,13 +16,25 @@ public class EmployeeReportStatus extends AppCompatActivity {
     private TextView employeeReportStatus_txt_reportID, employeeReportStatus_txt_reportDateHeader, employeeReportStatus_txt_reportTime,
             employeeReportStatus_txt_reportAddress, employeeReportStatus_txt_reportLaLongitude, employeeReportStatus_txt_reportOrg,
             employeeReportStatus_txt_reportDuration, employeeReportStatus_txt_reportCause, employeeReportStatus_txt_reportDesc,
-            employeeReportStatus_txt_reportStatus;
+            employeeReportStatus_txt_reportStatus,
+
+            employeeReportStatus_txt_InvDocHeader, employeeReportStatus_txt_INDocURL,
+            employeeReportStatus_txt_uploadedURL, employeeReportStatus_txt_resolvingDocURL;
 
     private ConstraintLayout employeeReportStatus_constraintLayout_images;
 
-    private LinearLayout employeeReportStatus_linearLayout_previous, employeeReportStatus_linearLayout_next;
+    private LinearLayout employeeReportStatus_linearLayout_previous, employeeReportStatus_linearLayout_next,
+            employeeReportStatus_linearLayout_InvDoc, employeeReportStatus_linearLayout_uploadedURL,
+
+            employeeReportStatus_linearLayout_resolvingDoc, employeeReportStatus_linearLayout_uploadedResolvingDocURL,
+
+            employeeReportStatus_linearLayout_btns,
+                    employeeReportStatus_linearLayout_btnSubmit, employeeReportStatus_linearLayout_btnApproveReject;
+
 
     private ImageView employeeReportStatus_img_pollutionPhoto;
+
+    private Button employeeReportStatus_btn_upload, employeeReportStatus_btn_uploadResolvingDoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +57,27 @@ public class EmployeeReportStatus extends AppCompatActivity {
         employeeReportStatus_txt_reportCause = findViewById(R.id.employeeReportStatus_txt_reportCause);
         employeeReportStatus_txt_reportDesc = findViewById(R.id.employeeReportStatus_txt_reportDesc);
         employeeReportStatus_txt_reportStatus = findViewById(R.id.employeeReportStatus_txt_reportStatus);
+        employeeReportStatus_txt_InvDocHeader = findViewById(R.id.employeeReportStatus_txt_InvDocHeader);
+        employeeReportStatus_txt_INDocURL = findViewById(R.id.employeeReportStatus_txt_INDocURL);
+        employeeReportStatus_txt_uploadedURL = findViewById(R.id.employeeReportStatus_txt_uploadedURL);
+        employeeReportStatus_txt_resolvingDocURL = findViewById(R.id.employeeReportStatus_txt_resolvingDocURL);
 
         employeeReportStatus_constraintLayout_images = findViewById(R.id.employeeReportStatus_constraintLayout_images);
+
         employeeReportStatus_linearLayout_previous = findViewById(R.id.employeeReportStatus_linearLayout_previous);
         employeeReportStatus_linearLayout_next = findViewById(R.id.employeeReportStatus_linearLayout_next);
+        employeeReportStatus_linearLayout_InvDoc = findViewById(R.id.employeeReportStatus_linearLayout_InvDoc);
+        employeeReportStatus_linearLayout_uploadedURL = findViewById(R.id.employeeReportStatus_linearLayout_uploadedURL);
+        employeeReportStatus_linearLayout_resolvingDoc = findViewById(R.id.employeeReportStatus_linearLayout_resolvingDoc);
+        employeeReportStatus_linearLayout_uploadedResolvingDocURL = findViewById(R.id.employeeReportStatus_linearLayout_uploadedResolvingDocURL);
+        employeeReportStatus_linearLayout_btns = findViewById(R.id.employeeReportStatus_linearLayout_btns);
+        employeeReportStatus_linearLayout_btnSubmit = findViewById(R.id.employeeReportStatus_linearLayout_btnSubmit);
+        employeeReportStatus_linearLayout_btnApproveReject = findViewById(R.id.employeeReportStatus_linearLayout_btnApproveReject);
 
         employeeReportStatus_img_pollutionPhoto = findViewById(R.id.employeeReportStatus_img_pollutionPhoto);
 
-
+        employeeReportStatus_btn_upload = findViewById(R.id.employeeReportStatus_btn_upload);
+        employeeReportStatus_btn_uploadResolvingDoc = findViewById(R.id.employeeReportStatus_btn_uploadResolvingDoc);
     }
 
     @Override //when back button clicked
