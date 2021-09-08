@@ -200,6 +200,16 @@ public class EmployeeReportStatus extends AppCompatActivity {
                 employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
             }
             else if (reportStatus.equals("Resolving") || reportStatus.equals("Resolved") || reportStatus.equals("Rejected")){
+                if(reportStatus.equals("Resolving") || reportStatus.equals("Resolved")){
+                    employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
+                    employeeReportStatus_txt_INDocURL.setVisibility(View.VISIBLE);
+                    employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+
+                    if(reportStatus.equals("Resolved")){
+                        employeeReportStatus_linearLayout_resolvingDoc.setVisibility(View.VISIBLE);
+                        employeeReportStatus_txt_resolvingDocURL.setVisibility(View.VISIBLE);
+                    }
+                }
                 employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.VISIBLE);
             }
         }

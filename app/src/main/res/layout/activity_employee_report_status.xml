@@ -475,7 +475,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:text="Investigation Documentation"
-                                    android:layout_marginBottom="20dp"
+                                    android:layout_marginBottom="10dp"
                                     android:fontFamily="@font/nunito_sans"
                                     android:textSize="18dp"
                                     android:padding="5dp"/>
@@ -486,7 +486,6 @@
                                     android:layout_height="wrap_content"
                                     android:text="Submitted INV Doc URL"
                                     android:visibility="gone"
-                                    android:layout_marginTop="10dp"
                                     android:layout_marginRight="10dp"
                                     android:layout_marginBottom="20dp"
                                     android:layout_marginLeft="10dp"/>
@@ -557,7 +556,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:text="Pollution Resolving Documentation"
-                                    android:layout_marginBottom="20dp"
+                                    android:layout_marginBottom="10dp"
                                     android:fontFamily="@font/nunito_sans"
                                     android:textSize="18dp"
                                     android:padding="5dp"/>
@@ -568,7 +567,6 @@
                                     android:layout_height="wrap_content"
                                     android:text="ResolvingDocURL"
                                     android:visibility="gone"
-                                    android:layout_marginTop="10dp"
                                     android:layout_marginRight="10dp"
                                     android:layout_marginBottom="20dp"
                                     android:layout_marginLeft="10dp"/>
