@@ -260,7 +260,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
                         String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
 
                         if(firstDoc == null){
-                            updatedStatus = "Investigating 1";
+                            updatedStatus = "Investigating1";
                             firstDocNotExist = true;
                         }
                     }
@@ -305,6 +305,14 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
         if(dbHelper.updateReportStatusByReportID(reportID, updatedStatus)){
             displayToast("Report status updated successfully");
+
+            if(updatedStatus.equals("Investigating1")){
+                Cursor cursorGetReportInfo = dbHelper.getReportInfoByReportID(reportID);
+                String reportOrgID = cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("orgID"));
+
+                Cursor cursorAvailableINTeamInOrg = dbHelper.getAvailableInvestigationTeamByOrgID(reportOrgID);
+            }
+
         }
 
         finish();
