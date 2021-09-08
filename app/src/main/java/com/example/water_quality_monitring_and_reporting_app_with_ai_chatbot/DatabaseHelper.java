@@ -785,6 +785,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
+    public Cursor getFirstInvestigationDocByReportID(String reportID) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT inv.* FROM " + TABLE_REPORT_FROM_USER + " re, "+ TABLE_REPORT_INVESTIGATION +" inv WHERE re.reportID=? AND re.reportID=inv.reportID", new String[]{String.valueOf(reportID)});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
     // Registered user info
     public Cursor readInfo(String userEmail) {
         SQLiteDatabase db = this.getReadableDatabase();

@@ -539,7 +539,7 @@
 
                             </LinearLayout>
 
-                            <!--                        linear for Resolving doc-->
+                            <!--Resolving doc-->
                             <LinearLayout
                                 android:id="@+id/employeeReportStatus_linearLayout_resolvingDoc"
                                 android:layout_width="match_parent"
@@ -620,13 +620,13 @@
 
                             </LinearLayout>
 
-                            <!--Submit, approve, reject Button-->
+                            <!--Submit, update, approve, reject Button-->
                             <LinearLayout
                                 android:id="@+id/employeeReportStatus_linearLayout_btns"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:visibility="visible">
+                                android:visibility="gone">
 
                                 <View
                                     android:layout_height="1dip"
@@ -655,6 +655,29 @@
                                         android:textAllCaps="false"
                                         android:backgroundTint="@color/circle_img_resolving"
                                         android:onClick="submit"/>
+
+                                </LinearLayout>
+
+                                <!--Update btn-->
+                                <LinearLayout
+                                    android:id="@+id/employeeReportStatus_linearLayout_btnUpdate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:layout_marginBottom="20dp"
+                                    android:visibility="gone"
+                                    android:gravity="center">
+
+                                    <Button
+                                        android:layout_width="120dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="Update"
+                                        android:padding="10dp"
+                                        android:textSize="18dp"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:textAllCaps="false"
+                                        android:backgroundTint="@color/circle_img_resolving"
+                                        android:onClick="update"/>
 
                                 </LinearLayout>
 

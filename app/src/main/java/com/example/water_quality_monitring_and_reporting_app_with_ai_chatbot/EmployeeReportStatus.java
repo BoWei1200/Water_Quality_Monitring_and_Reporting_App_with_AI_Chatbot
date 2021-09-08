@@ -58,7 +58,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
             employeeReportStatus_linearLayout_resolvingDoc, employeeReportStatus_linearLayout_uploadedResolvingDocURL,
 
             employeeReportStatus_linearLayout_btns,
-                    employeeReportStatus_linearLayout_btnSubmit, employeeReportStatus_linearLayout_btnApproveReject;
+                    employeeReportStatus_linearLayout_btnSubmit, employeeReportStatus_linearLayout_btnApproveReject, employeeReportStatus_linearLayout_btnUpdate;
 
 
     private ImageView employeeReportStatus_img_pollutionPhoto, employeeReportStatus_img_arrowRightOrDown;
@@ -111,6 +111,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
         employeeReportStatus_linearLayout_resolvingDoc = findViewById(R.id.employeeReportStatus_linearLayout_resolvingDoc);
         employeeReportStatus_linearLayout_uploadedResolvingDocURL = findViewById(R.id.employeeReportStatus_linearLayout_uploadedResolvingDocURL);
         employeeReportStatus_linearLayout_btns = findViewById(R.id.employeeReportStatus_linearLayout_btns);
+        employeeReportStatus_linearLayout_btnUpdate = findViewById(R.id.employeeReportStatus_linearLayout_btnUpdate);
         employeeReportStatus_linearLayout_btnSubmit = findViewById(R.id.employeeReportStatus_linearLayout_btnSubmit);
         employeeReportStatus_linearLayout_btnApproveReject = findViewById(R.id.employeeReportStatus_linearLayout_btnApproveReject);
 
@@ -164,13 +165,37 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
 
         if(getUserTypePreference.equals("EX")){
+            employeeReportStatus_linearLayout_btns.setVisibility(View.VISIBLE);
             if(reportStatus.equals("Pending")){
-                employeeReportStatus_linearLayout_btns.setVisibility(View.VISIBLE);
                 employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
             }
 
-            else if(reportStatus.equals("")){
+            else if(reportStatus.equals("Investigating1")){
+                Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getFirstInvestigationDocByReportID(reportID);
+                String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
 
+                if(firstDoc == null){
+                    employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.VISIBLE);
+                }else{
+                    employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
+                    employeeReportStatus_txt_INDocURL.setVisibility(View.VISIBLE);
+                    employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+                    employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
+                }
+            }
+
+            else if (reportStatus.equals("Examining")){
+                employeeReportStatus_linearLayout_resolvingDoc.setVisibility(View.VISIBLE);
+                employeeReportStatus_txt_resolvingDocURL.setVisibility(View.VISIBLE);
+
+                employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
+                employeeReportStatus_txt_INDocURL.setVisibility(View.VISIBLE);
+                employeeReportStatus_txt_InvDocHeader.setText("Second Investigation Doc");
+
+                employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
+            }
+            else if (reportStatus.equals("Resolving") || reportStatus.equals("Resolved")){
+                employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.VISIBLE);
             }
         }
         else if (getUserTypePreference.equals("IN")){
@@ -187,6 +212,28 @@ public class EmployeeReportStatus extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void upload(View view) {
+    }
+
+    public void removeFile(View view) {
+    }
+
+    public void submit(View view) {
+    }
+
+    public void approveOrReject(View view) {
+        switch (view.getId()){
+            case R.id.employeeReportStatus_btn_approve:
+                break;
+
+            case R.id.employeeReportStatus_btn_reject:
+                break;
+        }
+    }
+
+    public void update(View view) {
     }
 
     private void displayUploadedImageFromFirebase() {
@@ -308,24 +355,5 @@ public class EmployeeReportStatus extends AppCompatActivity {
     public void viewNext(View view) {
         Picasso.get().load(imageUri[++currentDisplayingPhotoIndex]).resize(400,400).centerCrop().into(employeeReportStatus_img_pollutionPhoto);
         prevNextandOtherBtnsDisplay();
-    }
-
-    public void upload(View view) {
-    }
-
-    public void removeFile(View view) {
-    }
-
-    public void submit(View view) {
-    }
-
-    public void approveOrReject(View view) {
-        switch (view.getId()){
-            case R.id.employeeReportStatus_btn_approve:
-                break;
-
-            case R.id.employeeReportStatus_btn_reject:
-                break;
-        }
     }
 }
