@@ -721,8 +721,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }else{
             if(filter.equals("All")){
-                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath IS null) " +
-                        "OR (re.reportStatus = 'Resolving' ) OR (re.reportStatus='Resolved')";
+                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath IS null) OR (re.reportStatus = 'Resolving' ) OR (re.reportStatus='Resolved') OR (re.reportStatus='Rejected')";
             }
 
             if(filter.equals("Validity of Report")){
@@ -820,6 +819,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_isADMIN + " ='0' ORDER BY "+COLUMN_IC+" ASC", null);
     }
 
+    public boolean updateReportStatusByReportID(String reportID, String updatedStatus) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("reportStatus", updatedStatus);
+
+        return db.update(TABLE_REPORT_FROM_USER, conVal, "reportID=?", new String[]{reportID}) == 1;
+    }
+
     public boolean updateUser(String IC, String name, String age, String phone, String address, String status, String notes, String vaccineID) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues conVal = new ContentValues();
@@ -852,4 +860,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION, null);
         return cursor.getCount();
     }
+
+
 }

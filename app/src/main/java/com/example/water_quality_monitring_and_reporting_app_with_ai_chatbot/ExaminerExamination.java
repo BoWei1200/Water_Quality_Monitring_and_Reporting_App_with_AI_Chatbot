@@ -129,6 +129,12 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
     }
 
     @Override
+    public void onRestart(){
+        super.onRestart();
+        redesignLayout();
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
         examinerExamination_eTxt_searchBar.setText("");
         redesignLayout();

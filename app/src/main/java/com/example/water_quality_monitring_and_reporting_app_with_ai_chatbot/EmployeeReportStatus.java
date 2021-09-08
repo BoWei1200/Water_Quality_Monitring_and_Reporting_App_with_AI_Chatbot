@@ -2,10 +2,12 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -14,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -70,6 +74,8 @@ public class EmployeeReportStatus extends AppCompatActivity {
     private String reportID = "";
 
     private UserReportImage[] userReportImage;
+
+    private String reportStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,11 +164,10 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
         employeeReportStatus_txt_reportDesc.setText(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportDesc")));
 
-        String reportStatus = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportStatus"));
+        reportStatus = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportStatus"));
         employeeReportStatus_txt_reportStatus.setText(reportStatus);
 
         displayUploadedImageFromFirebase();
-
 
         if(getUserTypePreference.equals("EX")){
             employeeReportStatus_linearLayout_btns.setVisibility(View.VISIBLE);
@@ -194,7 +199,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
                 employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
             }
-            else if (reportStatus.equals("Resolving") || reportStatus.equals("Resolved")){
+            else if (reportStatus.equals("Resolving") || reportStatus.equals("Resolved") || reportStatus.equals("Rejected")){
                 employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.VISIBLE);
             }
         }
@@ -215,25 +220,137 @@ public class EmployeeReportStatus extends AppCompatActivity {
     }
 
     public void upload(View view) {
+
     }
 
     public void removeFile(View view) {
+
     }
 
     public void submit(View view) {
+
     }
 
     public void approveOrReject(View view) {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        String updatedStatus = "";
+        boolean firstDocNotExist = false;
         switch (view.getId()){
             case R.id.employeeReportStatus_btn_approve:
+
+                if(reportStatus.equals("Pending")){
+                    updatedStatus = "Investigating1";
+                }
+
+                else if(reportStatus.equals("Investigating1") || reportStatus.equals("Resolving")){
+                    updatedStatus = "Resolving";
+
+                    if(reportStatus.equals("Investigating1")){
+                        Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getFirstInvestigationDocByReportID(reportID);
+                        String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
+
+                        if(firstDoc == null){
+                            updatedStatus = "Investigating 1";
+                            firstDocNotExist = true;
+                        }
+                    }
+                }
+
+                else if (reportStatus.equals("Examining") || reportStatus.equals("Resolved")){
+                    updatedStatus = "Resolved";
+                }
+
+                else if (reportStatus.equals("Rejected")){
+                    updatedStatus = "Investigating1";
+                }
+
                 break;
 
             case R.id.employeeReportStatus_btn_reject:
+                if(reportStatus.equals("Pending") || reportStatus.equals("Rejected")){
+                    updatedStatus = "Rejected";
+                }
+
+                else if(reportStatus.equals("Investigating1") || reportStatus.equals("Resolving")){
+                    updatedStatus = "Rejected";
+
+                    if(reportStatus.equals("Investigating1")){
+                        Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getFirstInvestigationDocByReportID(reportID);
+                        String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
+
+                        if(firstDoc == null){
+                            firstDocNotExist = true;
+                        }
+                    }
+                }
+
+                else if (reportStatus.equals("Examining") || reportStatus.equals("Resolved")){
+                    updatedStatus = "Resolving";
+//                    cleaning process redo;
+                    //clear document
+                }
+
                 break;
         }
+
+        if(dbHelper.updateReportStatusByReportID(reportID, updatedStatus)){
+            displayToast("Report status updated successfully");
+        }
+
+        finish();
+        displayToast(updatedStatus);
     }
 
     public void update(View view) {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        String statusSetText = "";
+        boolean firstDocNotExist = false;
+
+        if(getUserTypePreference.equals("EX")){
+            if(reportStatus.equals("Investigating1")){
+                statusSetText = "Pending";
+            }
+            else if (reportStatus.equals("Resolving")){
+                statusSetText = "Investigating1";
+            }
+            else if (reportStatus.equals("Resolved")){
+                statusSetText = "Examining";
+            }
+            else if (reportStatus.equals("Rejected")){
+                statusSetText = "Pending";
+            }
+
+            employeeReportStatus_txt_reportStatus.setText(statusSetText);
+            employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.GONE);
+            employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void displayAlert(int title, int msg, int drawable){
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch(title){
+                            case R.string.discard_report_title:
+
+                                break;
+
+                            case R.string.delete_photo_title:
+
+                                break;
+                        }
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(drawable)
+                .show();
     }
 
     private void displayUploadedImageFromFirebase() {
@@ -355,5 +472,9 @@ public class EmployeeReportStatus extends AppCompatActivity {
     public void viewNext(View view) {
         Picasso.get().load(imageUri[++currentDisplayingPhotoIndex]).resize(400,400).centerCrop().into(employeeReportStatus_img_pollutionPhoto);
         prevNextandOtherBtnsDisplay();
+    }
+
+    public void displayToast(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 }
