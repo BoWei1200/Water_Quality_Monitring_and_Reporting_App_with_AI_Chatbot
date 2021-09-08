@@ -7,7 +7,7 @@
     tools:context=".EmployeeReportStatus">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/userReportStatus_toolbar"
+        android:id="@+id/employeeReportStatus_toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:padding="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/userReportStatus_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/employeeReportStatus_toolbar">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/userReportStatus_txt_reportID"
+                    android:id="@+id/employeeReportStatus_txt_reportID"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Report# "
@@ -52,7 +52,7 @@
                     android:layout_marginBottom="10dp"/>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/userReportStatus_cv_reportStatus"
+                    android:id="@+id/employeeReportStatus_cv_reportStatus"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
@@ -77,14 +77,14 @@
                             android:padding="5dp">
 
                             <TableRow
-                                android:id="@+id/userReportStatus_tableRow_reportDate"
+                                android:id="@+id/employeeReportStatus_tableRow_reportDate"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportDateHeader"
+                                    android:id="@+id/employeeReportStatus_txt_reportDateHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -95,7 +95,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportDate"
+                                    android:id="@+id/employeeReportStatus_txt_reportDate"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -108,14 +108,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userReportStatus_tableRow_reportTime"
+                                android:id="@+id/employeeReportStatus_tableRow_reportTime"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportTimeHeader"
+                                    android:id="@+id/employeeReportStatus_txt_reportTimeHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -126,7 +126,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportTime"
+                                    android:id="@+id/employeeReportStatus_txt_reportTime"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_column="2"
@@ -139,14 +139,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userReportStatus_tableRow_reportAddress"
+                                android:id="@+id/employeeReportStatus_tableRow_reportAddress"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportAddressHeader"
+                                    android:id="@+id/employeeReportStatus_txt_reportAddressHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -157,7 +157,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportAddress"
+                                    android:id="@+id/employeeReportStatus_txt_reportAddress"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -170,14 +170,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userReportStatus_tableRow_reportLaLongitude"
+                                android:id="@+id/employeeReportStatus_tableRow_reportLaLongitude"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportLaLongitudeHeader"
+                                    android:id="@+id/employeeReportStatus_txt_reportLaLongitudeHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -188,7 +188,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportLaLongitude"
+                                    android:id="@+id/employeeReportStatus_txt_reportLaLongitude"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -201,14 +201,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userReportStatus_tableRow_reportOrg"
+                                android:id="@+id/employeeReportStatus_tableRow_reportOrg"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportOrgHeader"
+                                    android:id="@+id/employeeReportStatus_txt_reportOrgHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -219,7 +219,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportOrg"
+                                    android:id="@+id/employeeReportStatus_txt_reportOrg"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -232,14 +232,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userReportStatus_tableRow_reportDuration"
+                                android:id="@+id/employeeReportStatus_tableRow_reportDuration"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportDurationHeader"
+                                    android:id="@+id/employeeReportStatus_txt_reportDurationHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -250,7 +250,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportDuration"
+                                    android:id="@+id/employeeReportStatus_txt_reportDuration"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -263,14 +263,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userReportStatus_tableRow_reportCause"
+                                android:id="@+id/employeeReportStatus_tableRow_reportCause"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportCauseHeader"
+                                    android:id="@+id/employeeReportStatus_txt_reportCauseHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -281,7 +281,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportCause"
+                                    android:id="@+id/employeeReportStatus_txt_reportCause"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -294,14 +294,14 @@
                             </TableRow>
 
                             <TableRow
-                                android:id="@+id/userReportStatus_tableRow_reportDesc"
+                                android:id="@+id/employeeReportStatus_tableRow_reportDesc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:weightSum="10"
                                 android:paddingBottom="20dp">
 
                                 <TextView
-                                    android:id="@+id/uuserReportStatus_txt_reportDescHeader"
+                                    android:id="@+id/employeeReportStatus_txt_reportDescHeader"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_column="1"
@@ -312,7 +312,7 @@
                                     android:textSize="16dp"/>
 
                                 <TextView
-                                    android:id="@+id/userReportStatus_txt_reportDesc"
+                                    android:id="@+id/employeeReportStatus_txt_reportDesc"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
                                     android:layout_column="2"
@@ -320,6 +320,38 @@
                                     android:fontFamily="@font/nunito_sans"
                                     android:gravity="center_vertical"
                                     android:text="description description "
+                                    android:inputType="textMultiLine"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold"/>
+                            </TableRow>
+
+                            <TableRow
+                                android:id="@+id/employeeReportStatus_tableRow_reportStatus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="10"
+                                android:paddingBottom="20dp">
+
+                                <TextView
+                                    android:id="@+id/employeeReportStatus_txt_reportStatusHeader"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_column="1"
+                                    android:text="Report Status :"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textColor="#9A9A9A"
+                                    android:layout_weight="4"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/employeeReportStatus_txt_reportStatus"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_column="2"
+                                    android:layout_weight="6"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="center_vertical"
+                                    android:text="Report Status"
                                     android:inputType="textMultiLine"
                                     android:textSize="16dp"
                                     android:textStyle="bold"/>
@@ -349,7 +381,7 @@
                                 android:padding="5dp"/>
 
                             <ImageView
-                                android:id="@+id/userReportStatus_img_arrowRightOrDown"
+                                android:id="@+id/employeeReportStatus_img_arrowRightOrDown"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/ic_arrow_right_icon"/>
@@ -357,7 +389,7 @@
                         </LinearLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/userReportStatus_constraintLayout_images"
+                            android:id="@+id/employeeReportStatus_constraintLayout_images"
                             android:layout_width="match_parent"
                             android:layout_height="300dp"
                             android:background="@drawable/dashlineborder"
@@ -369,7 +401,7 @@
                             android:layout_weight=".5">
 
                             <LinearLayout
-                                android:id="@+id/userReportStatus_linearLayout_previous"
+                                android:id="@+id/employeeReportStatus_linearLayout_previous"
                                 android:layout_width="50dp"
                                 android:layout_height="90dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -380,14 +412,14 @@
                                 android:visibility="gone">
 
                                 <ImageView
-                                    android:id="@+id/userReportStatus_img_previous"
+                                    android:id="@+id/employeeReportStatus_img_previous"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     app:srcCompat="@drawable/arrowprevious" />
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/userReportStatus_linearLayout_next"
+                                android:id="@+id/employeeReportStatus_linearLayout_next"
                                 android:layout_width="50dp"
                                 android:layout_height="90dp"
                                 android:padding="10dp"
@@ -406,7 +438,7 @@
 
 
                             <com.google.android.material.imageview.ShapeableImageView
-                                android:id="@+id/userReportStatus_img_pollutionPhoto"
+                                android:id="@+id/employeeReportStatus_img_pollutionPhoto"
                                 android:layout_width="70dp"
                                 android:layout_height="70dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -419,7 +451,173 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <LinearLayout
-                            android:id="@+id/employeeReportStatus_linearLayout_INV1"
+                            android:id="@+id/employeeReportStatus_linearLayout_InvDoc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_height="1dip"
+                                android:layout_width="match_parent"
+                                android:background="#FF909090"
+                                android:layout_marginBottom="20dp"/>
+
+                            <TextView
+                                android:id="@+id/employeeReportStatus_txt_InvDocHeader"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="Investigation Documentation"
+                                android:layout_marginBottom="20dp"
+                                android:fontFamily="@font/nunito_sans"
+                                android:textSize="18dp"
+                                android:padding="5dp"/>
+
+                            <TextView
+                                android:id="@+id/employeeReportStatus_txt_INDocURL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Submitted INV Doc URL"
+                                android:visibility="gone"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginBottom="20dp"
+                                android:layout_marginLeft="10dp"/>
+
+                            <Button
+                                android:id="@+id/employeeReportStatus_btn_upload"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Upload"
+                                android:visibility="gone"
+                                android:onClick="upload"
+                                android:textAllCaps="false"
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="20dp"/>
+
+                            <LinearLayout
+                                android:id="@+id/employeeReportStatus_linearLayout_uploadedURL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginBottom="20dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/employeeReportStatus_txt_uploadedURL"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight=".92"
+                                    android:text="uploaded URL"
+                                    android:padding="10dp"/>
+
+                                <ImageView
+                                    android:id="@+id/employeeReportStatus_img_removeUploadedFile"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight=".08"
+                                    android:onClick="removeFile"
+                                    android:src="@drawable/ic_reportrejected_icon"
+                                    android:background="@drawable/circle_img_rejected"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+<!--                        linear for Resolving doc-->
+                        <LinearLayout
+                            android:id="@+id/employeeReportStatus_linearLayout_resolvingDoc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <View
+                                android:layout_height="1dip"
+                                android:layout_width="match_parent"
+                                android:background="#FF909090"
+                                android:layout_marginBottom="20dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="Pollution Resolving Documentation"
+                                android:layout_marginBottom="20dp"
+                                android:fontFamily="@font/nunito_sans"
+                                android:textSize="18dp"
+                                android:padding="5dp"/>
+
+                            <TextView
+                                android:id="@+id/employeeReportStatus_txt_resolvingDocURL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="ResolvingDocURL"
+                                android:visibility="gone"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginBottom="20dp"
+                                android:layout_marginLeft="10dp"/>
+
+                            <Button
+                                android:id="@+id/employeeReportStatus_btn_uploadResolvingDoc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Upload"
+                                android:visibility="gone"
+                                android:fontFamily="@font/nunito_sans"
+                                android:onClick="upload"
+                                android:textAllCaps="false"
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="20dp"/>
+
+                            <LinearLayout
+                                android:id="@+id/employeeReportStatus_linearLayout_uploadedResolvingDocURL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginBottom="20dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/employeeReportStatus_txt_uploadedResolvingDocURL"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight=".92"
+                                    android:padding="10dp"
+                                    android:text="Uploaded URL"/>
+
+                                <ImageView
+                                    android:id="@+id/employeeReportStatus_img_removeUploadedresolvingFile"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight=".08"
+                                    android:onClick="removeFile"
+                                    android:src="@drawable/ic_reportrejected_icon"
+                                    android:background="@drawable/circle_img_rejected"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+
+
+                        </LinearLayout>
+
+                        <!--Submit, approve, reject Button-->
+                        <LinearLayout
+                            android:id="@+id/employeeReportStatus_linearLayout_btns"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -432,123 +630,67 @@
                                 android:layout_marginBottom="20dp"/>
 
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:text="First Investigation Documentation"
-                                android:layout_marginBottom="20dp"
-                                android:fontFamily="@font/nunito_sans"
-                                android:textSize="18dp"
-                                android:padding="5dp"/>
-
-                            <TextView
-                                android:id="@+id/employeeReportStatus_txt_examinerINDoc1URL"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Submitted IN1 Doc URL"
-                                android:visibility="gone"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginBottom="20dp"
-                                android:layout_marginLeft="10dp"/>
-
-                            <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Upload"
-                                android:visibility="gone"
-                                android:onClick="upload"
-                                android:textAllCaps="false"
-                                android:layout_gravity="center"/>
-
+                            <!--Submit Button-->
                             <LinearLayout
+                                android:id="@+id/employeeReportStatus_linearLayout_btnSubmit"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
+                                android:layout_marginBottom="20dp"
+                                android:visibility="gone"
                                 android:gravity="center"
-                                android:layout_marginBottom="20dp"
-                                android:visibility="gone">
-
-                                <TextView
-                                    android:layout_width="0dp"
+                                android:onClick="viewImage">
+                                
+                                <Button
+                                    android:layout_width="120dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".92"
-                                    android:text="https://www.google.com/search?q=file+upload+interface&rlz=1C1CHBF_enMY955MY955&sxsrf=AOaemvIcPDPS6gwCLI6gas9t1P9TkyE7vA:1631077421939&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjHv9fyzO7yAhWuwzgGHZEnAt8Q_AUoAXoECAEQAw&biw=1536&bih=722"/>
-
-                                <ImageView
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight=".08"
-                                    android:onClick="removeFile"
-                                    android:src="@drawable/ic_reportrejected_icon"
-                                    android:background="@drawable/circle_img_rejected"/>
-
+                                    android:text="Submit"
+                                    android:padding="10dp"
+                                    android:textSize="18dp"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textAllCaps="false"
+                                    android:backgroundTint="@color/circle_img_resolving"
+                                    android:onClick="submit"/>
+                                
                             </LinearLayout>
 
-
-
+                            <!--Approve & Reject Button-->
                             <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/employeeReportStatus_linearLayout_INV1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <View
-                            android:layout_height="1dip"
-                            android:layout_width="match_parent"
-                            android:background="#FF909090"
-                            android:layout_marginBottom="20dp"/>
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:text="First Investigation Documentation"
-                            android:layout_marginBottom="20dp"
-                            android:fontFamily="@font/nunito_sans"
-                            android:textSize="18dp"
-                            android:padding="5dp"/>
-
-                    </LinearLayout>
-
-
-
-                        <LinearLayout
-                            android:id="@+id/userReportStatus_linearLayout_reportStatus"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <View
-                                android:layout_height="1dip"
-                                android:layout_width="match_parent"
-                                android:background="#FF909090"
-                                android:layout_marginBottom="20dp"/>
-
-                            <LinearLayout
+                                android:id="@+id/employeeReportStatus_linearLayout_btnApproveReject"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
                                 android:layout_marginBottom="20dp"
+                                android:visibility="gone"
                                 android:onClick="viewImage">
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:text="Report Status"
-                                    android:textStyle="bold"
-                                    android:textSize="20dp"
-                                    android:padding="5dp"/>
+                                <Button
+                                    android:id="@+id/employeeReportStatus_btn_approve"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight=".5"
+                                    android:layout_marginRight="5dp"
+                                    android:text="Approve"
+                                    android:padding="10dp"
+                                    android:textSize="18dp"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textAllCaps="false"
+                                    android:backgroundTint="@color/circle_img_resolved"
+                                    android:onClick="approveOrReject"/>
+
+                                <Button
+                                    android:id="@+id/employeeReportStatus_btn_reject"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight=".5"
+                                    android:layout_marginLeft="5dp"
+                                    android:text="Reject"
+                                    android:padding="10dp"
+                                    android:textSize="18dp"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textAllCaps="false"
+                                    android:backgroundTint="@color/circle_img_rejected"
+                                    android:onClick="approveOrReject"/>
 
                             </LinearLayout>
 
