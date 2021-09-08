@@ -705,7 +705,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String WHERE_CLAUSE = "";
         if(pendingOrCompleted.equals("Pending")){
             if(filter.equals("All")){
-                WHERE_CLAUSE += "re.reportStatus = 'Pending' OR (re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath != null) OR (re.reportStatus='Examining')";
+                WHERE_CLAUSE += "re.reportStatus = 'Pending' OR (re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath IS NOT null) OR (re.reportStatus='Examining')";
             }
 
             if(filter.equals("Validity of Report")){
@@ -713,7 +713,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
 
             if(filter.equals("1st Investigation")){
-                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath != null) ";
+                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath IS NOT null) ";
             }
 
             if(filter.equals("2nd Investigation & Report on Cleaning Process")){
@@ -721,11 +721,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }else{
             if(filter.equals("All")){
-                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1') OR (re.reportStatus = 'Resolving' ) OR (re.reportStatus='Resolved')";
+                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath IS null) " +
+                        "OR (re.reportStatus = 'Resolving' ) OR (re.reportStatus='Resolved')";
             }
 
             if(filter.equals("Validity of Report")){
-                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1') ";
+                WHERE_CLAUSE += "(re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath IS null) ";
             }
 
             if(filter.equals("1st Investigation")){

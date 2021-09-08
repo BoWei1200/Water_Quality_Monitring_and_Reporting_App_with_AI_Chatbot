@@ -450,246 +450,253 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <!--INV doc-->
                         <LinearLayout
-                            android:id="@+id/employeeReportStatus_linearLayout_InvDoc"
+                            android:id="@+id/employeeReportStatus_linearLayout_belowImages"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone">
+                            android:orientation="vertical">
 
-                            <View
-                                android:layout_height="1dip"
-                                android:layout_width="match_parent"
-                                android:background="#FF909090"
-                                android:layout_marginBottom="20dp"/>
-
-                            <TextView
-                                android:id="@+id/employeeReportStatus_txt_InvDocHeader"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:text="Investigation Documentation"
-                                android:layout_marginBottom="20dp"
-                                android:fontFamily="@font/nunito_sans"
-                                android:textSize="18dp"
-                                android:padding="5dp"/>
-
-                            <TextView
-                                android:id="@+id/employeeReportStatus_txt_INDocURL"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Submitted INV Doc URL"
-                                android:visibility="gone"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginBottom="20dp"
-                                android:layout_marginLeft="10dp"/>
-
-                            <Button
-                                android:id="@+id/employeeReportStatus_btn_upload"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Upload"
-                                android:visibility="gone"
-                                android:onClick="upload"
-                                android:textAllCaps="false"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="20dp"/>
-
+                            <!--INV doc-->
                             <LinearLayout
-                                android:id="@+id/employeeReportStatus_linearLayout_uploadedURL"
+                                android:id="@+id/employeeReportStatus_linearLayout_InvDoc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginBottom="20dp"
+                                android:orientation="vertical"
                                 android:visibility="gone">
 
+                                <View
+                                    android:layout_height="1dip"
+                                    android:layout_width="match_parent"
+                                    android:background="#FF909090"
+                                    android:layout_marginBottom="20dp"/>
+
                                 <TextView
-                                    android:id="@+id/employeeReportStatus_txt_uploadedURL"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight=".92"
-                                    android:text="uploaded URL"
-                                    android:padding="10dp"/>
-
-                                <ImageView
-                                    android:id="@+id/employeeReportStatus_img_removeUploadedFile"
-                                    android:layout_width="0dp"
+                                    android:id="@+id/employeeReportStatus_txt_InvDocHeader"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:layout_weight=".08"
-                                    android:onClick="removeFile"
-                                    android:src="@drawable/ic_reportrejected_icon"
-                                    android:background="@drawable/circle_img_rejected"/>
+                                    android:text="Investigation Documentation"
+                                    android:layout_marginBottom="20dp"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textSize="18dp"
+                                    android:padding="5dp"/>
+
+                                <TextView
+                                    android:id="@+id/employeeReportStatus_txt_INDocURL"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Submitted INV Doc URL"
+                                    android:visibility="gone"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="20dp"
+                                    android:layout_marginLeft="10dp"/>
+
+                                <Button
+                                    android:id="@+id/employeeReportStatus_btn_upload"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Upload"
+                                    android:visibility="gone"
+                                    android:onClick="upload"
+                                    android:textAllCaps="false"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="20dp"/>
+
+                                <LinearLayout
+                                    android:id="@+id/employeeReportStatus_linearLayout_uploadedURL"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="20dp"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:id="@+id/employeeReportStatus_txt_uploadedURL"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".92"
+                                        android:text="uploaded URL"
+                                        android:padding="10dp"/>
+
+                                    <ImageView
+                                        android:id="@+id/employeeReportStatus_img_removeUploadedFile"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight=".08"
+                                        android:onClick="removeFile"
+                                        android:src="@drawable/ic_reportrejected_icon"
+                                        android:background="@drawable/circle_img_rejected"/>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
+                            <!--                        linear for Resolving doc-->
                             <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-
-<!--                        linear for Resolving doc-->
-                        <LinearLayout
-                            android:id="@+id/employeeReportStatus_linearLayout_resolvingDoc"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <View
-                                android:layout_height="1dip"
-                                android:layout_width="match_parent"
-                                android:background="#FF909090"
-                                android:layout_marginBottom="20dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:text="Pollution Resolving Documentation"
-                                android:layout_marginBottom="20dp"
-                                android:fontFamily="@font/nunito_sans"
-                                android:textSize="18dp"
-                                android:padding="5dp"/>
-
-                            <TextView
-                                android:id="@+id/employeeReportStatus_txt_resolvingDocURL"
+                                android:id="@+id/employeeReportStatus_linearLayout_resolvingDoc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="ResolvingDocURL"
-                                android:visibility="gone"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginBottom="20dp"
-                                android:layout_marginLeft="10dp"/>
-
-                            <Button
-                                android:id="@+id/employeeReportStatus_btn_uploadResolvingDoc"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Upload"
-                                android:visibility="gone"
-                                android:fontFamily="@font/nunito_sans"
-                                android:onClick="upload"
-                                android:textAllCaps="false"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="20dp"/>
-
-                            <LinearLayout
-                                android:id="@+id/employeeReportStatus_linearLayout_uploadedResolvingDocURL"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginBottom="20dp"
+                                android:orientation="vertical"
                                 android:visibility="gone">
 
+                                <View
+                                    android:layout_height="1dip"
+                                    android:layout_width="match_parent"
+                                    android:background="#FF909090"
+                                    android:layout_marginBottom="20dp"/>
+
                                 <TextView
-                                    android:id="@+id/employeeReportStatus_txt_uploadedResolvingDocURL"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight=".92"
-                                    android:padding="10dp"
-                                    android:text="Uploaded URL"/>
-
-                                <ImageView
-                                    android:id="@+id/employeeReportStatus_img_removeUploadedresolvingFile"
-                                    android:layout_width="0dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:layout_weight=".08"
-                                    android:onClick="removeFile"
-                                    android:src="@drawable/ic_reportrejected_icon"
-                                    android:background="@drawable/circle_img_rejected"/>
+                                    android:text="Pollution Resolving Documentation"
+                                    android:layout_marginBottom="20dp"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textSize="18dp"
+                                    android:padding="5dp"/>
+
+                                <TextView
+                                    android:id="@+id/employeeReportStatus_txt_resolvingDocURL"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="ResolvingDocURL"
+                                    android:visibility="gone"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="20dp"
+                                    android:layout_marginLeft="10dp"/>
+
+                                <Button
+                                    android:id="@+id/employeeReportStatus_btn_uploadResolvingDoc"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Upload"
+                                    android:visibility="gone"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:onClick="upload"
+                                    android:textAllCaps="false"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="20dp"/>
+
+                                <LinearLayout
+                                    android:id="@+id/employeeReportStatus_linearLayout_uploadedResolvingDocURL"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center"
+                                    android:layout_marginRight="10dp"
+                                    android:layout_marginBottom="20dp"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:id="@+id/employeeReportStatus_txt_uploadedResolvingDocURL"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".92"
+                                        android:padding="10dp"
+                                        android:text="Uploaded URL"/>
+
+                                    <ImageView
+                                        android:id="@+id/employeeReportStatus_img_removeUploadedresolvingFile"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight=".08"
+                                        android:onClick="removeFile"
+                                        android:src="@drawable/ic_reportrejected_icon"
+                                        android:background="@drawable/circle_img_rejected"/>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"/>
 
                             </LinearLayout>
 
+                            <!--Submit, approve, reject Button-->
                             <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"/>
-
-                        </LinearLayout>
-
-                        <!--Submit, approve, reject Button-->
-                        <LinearLayout
-                            android:id="@+id/employeeReportStatus_linearLayout_btns"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="visible">
-
-                            <View
-                                android:layout_height="1dip"
-                                android:layout_width="match_parent"
-                                android:background="#FF909090"
-                                android:layout_marginBottom="20dp"/>
-
-                            <!--Submit Button-->
-                            <LinearLayout
-                                android:id="@+id/employeeReportStatus_linearLayout_btnSubmit"
+                                android:id="@+id/employeeReportStatus_linearLayout_btns"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="20dp"
-                                android:visibility="gone"
-                                android:gravity="center"
-                                android:onClick="viewImage">
-                                
-                                <Button
-                                    android:layout_width="120dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="Submit"
-                                    android:padding="10dp"
-                                    android:textSize="18dp"
-                                    android:fontFamily="@font/nunito_sans"
-                                    android:textAllCaps="false"
-                                    android:backgroundTint="@color/circle_img_resolving"
-                                    android:onClick="submit"/>
-                                
-                            </LinearLayout>
+                                android:orientation="vertical"
+                                android:visibility="visible">
 
-                            <!--Approve & Reject Button-->
-                            <LinearLayout
-                                android:id="@+id/employeeReportStatus_linearLayout_btnApproveReject"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="20dp"
-                                android:visibility="gone"
-                                android:onClick="viewImage">
+                                <View
+                                    android:layout_height="1dip"
+                                    android:layout_width="match_parent"
+                                    android:background="#FF909090"
+                                    android:layout_marginBottom="20dp"/>
 
-                                <Button
-                                    android:id="@+id/employeeReportStatus_btn_approve"
-                                    android:layout_width="0dp"
+                                <!--Submit Button-->
+                                <LinearLayout
+                                    android:id="@+id/employeeReportStatus_linearLayout_btnSubmit"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:layout_marginRight="5dp"
-                                    android:text="Approve"
-                                    android:padding="10dp"
-                                    android:textSize="18dp"
-                                    android:fontFamily="@font/nunito_sans"
-                                    android:textAllCaps="false"
-                                    android:backgroundTint="@color/circle_img_resolved"
-                                    android:onClick="approveOrReject"/>
+                                    android:orientation="horizontal"
+                                    android:layout_marginBottom="20dp"
+                                    android:visibility="gone"
+                                    android:gravity="center"
+                                    android:onClick="viewImage">
 
-                                <Button
-                                    android:id="@+id/employeeReportStatus_btn_reject"
-                                    android:layout_width="0dp"
+                                    <Button
+                                        android:layout_width="120dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="Submit"
+                                        android:padding="10dp"
+                                        android:textSize="18dp"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:textAllCaps="false"
+                                        android:backgroundTint="@color/circle_img_resolving"
+                                        android:onClick="submit"/>
+
+                                </LinearLayout>
+
+                                <!--Approve & Reject Button-->
+                                <LinearLayout
+                                    android:id="@+id/employeeReportStatus_linearLayout_btnApproveReject"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight=".5"
-                                    android:layout_marginLeft="5dp"
-                                    android:text="Reject"
-                                    android:padding="10dp"
-                                    android:textSize="18dp"
-                                    android:fontFamily="@font/nunito_sans"
-                                    android:textAllCaps="false"
-                                    android:backgroundTint="@color/circle_img_rejected"
-                                    android:onClick="approveOrReject"/>
+                                    android:orientation="horizontal"
+                                    android:layout_marginBottom="20dp"
+                                    android:visibility="gone"
+                                    android:onClick="viewImage">
+
+                                    <Button
+                                        android:id="@+id/employeeReportStatus_btn_approve"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:layout_marginRight="5dp"
+                                        android:text="Approve"
+                                        android:padding="10dp"
+                                        android:textSize="18dp"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:textAllCaps="false"
+                                        android:backgroundTint="@color/circle_img_resolved"
+                                        android:onClick="approveOrReject"/>
+
+                                    <Button
+                                        android:id="@+id/employeeReportStatus_btn_reject"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight=".5"
+                                        android:layout_marginLeft="5dp"
+                                        android:text="Reject"
+                                        android:padding="10dp"
+                                        android:textSize="18dp"
+                                        android:fontFamily="@font/nunito_sans"
+                                        android:textAllCaps="false"
+                                        android:backgroundTint="@color/circle_img_rejected"
+                                        android:onClick="approveOrReject"/>
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
