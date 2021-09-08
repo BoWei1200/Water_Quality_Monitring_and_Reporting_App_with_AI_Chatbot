@@ -20,13 +20,15 @@ public class EmployeeReportRecycleVAdapter extends RecyclerView.Adapter<Employee
     String[] myReportDates;
     String[] myReportTimes;
     String[] myReportStatus;
+    String userType;
 
-    public EmployeeReportRecycleVAdapter(Context context, String[] myReportIDs, String[] myReportDates, String[] myReportTimes, String[] myReportStatus) {
+    public EmployeeReportRecycleVAdapter(Context context, String[] myReportIDs, String[] myReportDates, String[] myReportTimes, String[] myReportStatus, String userType) {
         this.context = context;
         this.myReportIDs = myReportIDs;
         this.myReportDates = myReportDates;
         this.myReportTimes = myReportTimes;
         this.myReportStatus = myReportStatus;
+        this.userType = userType;
     }
 
     @NonNull

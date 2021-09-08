@@ -103,7 +103,7 @@
                                     android:fontFamily="@font/nunito_sans"
                                     android:gravity="center_vertical"
                                     android:text=" 2021/20/20"
-                                    android:textSize="18dp"
+                                    android:textSize="16dp"
                                     android:textStyle="bold"/>
                             </TableRow>
 
@@ -134,7 +134,7 @@
                                     android:fontFamily="@font/nunito_sans"
                                     android:gravity="center_vertical"
                                     android:text=" --.--.--"
-                                    android:textSize="18dp"
+                                    android:textSize="16dp"
                                     android:textStyle="bold"/>
                             </TableRow>
 
@@ -165,7 +165,7 @@
                                     android:fontFamily="@font/nunito_sans"
                                     android:gravity="center_vertical"
                                     android:text="address line"
-                                    android:textSize="18dp"
+                                    android:textSize="16dp"
                                     android:textStyle="bold"/>
                             </TableRow>
 
@@ -196,7 +196,7 @@
                                     android:fontFamily="@font/nunito_sans"
                                     android:gravity="center_vertical"
                                     android:text="000000, 00000"
-                                    android:textSize="18dp"
+                                    android:textSize="16dp"
                                     android:textStyle="bold"/>
                             </TableRow>
 
@@ -227,7 +227,7 @@
                                     android:fontFamily="@font/nunito_sans"
                                     android:gravity="center_vertical"
                                     android:text="organization"
-                                    android:textSize="18dp"
+                                    android:textSize="16dp"
                                     android:textStyle="bold"/>
                             </TableRow>
 
@@ -258,7 +258,7 @@
                                     android:fontFamily="@font/nunito_sans"
                                     android:gravity="center_vertical"
                                     android:text=" - "
-                                    android:textSize="18dp"
+                                    android:textSize="16dp"
                                     android:textStyle="bold"/>
                             </TableRow>
 
@@ -289,7 +289,7 @@
                                     android:fontFamily="@font/nunito_sans"
                                     android:gravity="center_vertical"
                                     android:text=" - "
-                                    android:textSize="18dp"
+                                    android:textSize="16dp"
                                     android:textStyle="bold"/>
                             </TableRow>
 
@@ -321,7 +321,7 @@
                                     android:gravity="center_vertical"
                                     android:text="description description "
                                     android:inputType="textMultiLine"
-                                    android:textSize="18dp"
+                                    android:textSize="16dp"
                                     android:textStyle="bold"/>
                             </TableRow>
 

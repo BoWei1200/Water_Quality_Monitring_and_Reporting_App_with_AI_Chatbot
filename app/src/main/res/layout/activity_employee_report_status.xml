@@ -6,4 +6,566 @@
     android:layout_height="match_parent"
     tools:context=".EmployeeReportStatus">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/userReportStatus_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/mainTheme"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/Toolbar_back_button_style"
+        app:title="Report Status"
+        app:titleMargin="2dp"
+        app:titleTextColor="#FFFFFF" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/userReportStatus_toolbar">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/userReportStatus_txt_reportID"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Report# "
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:textSize="26dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/userReportStatus_cv_reportStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginLeft="1dp"
+                    app:cardCornerRadius="7dp"
+                    app:cardUseCompatPadding="false">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:orientation="vertical">
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp">
+
+                            <TableRow
+                                android:id="@+id/userReportStatus_tableRow_reportDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="10"
+                                android:paddingBottom="20dp">
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportDateHeader"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_column="1"
+                                    android:text="Report Date : "
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textColor="#9A9A9A"
+                                    android:layout_weight="4"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportDate"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_column="2"
+                                    android:layout_weight="6"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="center_vertical"
+                                    android:text=" 2021/20/20"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold"/>
+                            </TableRow>
+
+                            <TableRow
+                                android:id="@+id/userReportStatus_tableRow_reportTime"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="10"
+                                android:paddingBottom="20dp">
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportTimeHeader"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_column="1"
+                                    android:text="Report Time : "
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textColor="#9A9A9A"
+                                    android:layout_weight="4"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportTime"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_column="2"
+                                    android:layout_weight="6"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="center_vertical"
+                                    android:text=" --.--.--"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold"/>
+                            </TableRow>
+
+                            <TableRow
+                                android:id="@+id/userReportStatus_tableRow_reportAddress"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="10"
+                                android:paddingBottom="20dp">
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportAddressHeader"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_column="1"
+                                    android:text="Report Address :"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textColor="#9A9A9A"
+                                    android:layout_weight="4"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportAddress"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_column="2"
+                                    android:layout_weight="6"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="center_vertical"
+                                    android:text="address line"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold"/>
+                            </TableRow>
+
+                            <TableRow
+                                android:id="@+id/userReportStatus_tableRow_reportLaLongitude"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="10"
+                                android:paddingBottom="20dp">
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportLaLongitudeHeader"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_column="1"
+                                    android:text="Latitude, Longitude :"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textColor="#9A9A9A"
+                                    android:layout_weight="4"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportLaLongitude"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_column="2"
+                                    android:layout_weight="6"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="center_vertical"
+                                    android:text="000000, 00000"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold"/>
+                            </TableRow>
+
+                            <TableRow
+                                android:id="@+id/userReportStatus_tableRow_reportOrg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="10"
+                                android:paddingBottom="20dp">
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportOrgHeader"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_column="1"
+                                    android:text="Assigned Organization :"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textColor="#9A9A9A"
+                                    android:layout_weight="4"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportOrg"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_column="2"
+                                    android:layout_weight="6"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="center_vertical"
+                                    android:text="organization"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold"/>
+                            </TableRow>
+
+                            <TableRow
+                                android:id="@+id/userReportStatus_tableRow_reportDuration"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="10"
+                                android:paddingBottom="20dp">
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportDurationHeader"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_column="1"
+                                    android:text="Estimated Cleaning Duration :"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textColor="#9A9A9A"
+                                    android:layout_weight="4"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportDuration"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_column="2"
+                                    android:layout_weight="6"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="center_vertical"
+                                    android:text=" - "
+                                    android:textSize="16dp"
+                                    android:textStyle="bold"/>
+                            </TableRow>
+
+                            <TableRow
+                                android:id="@+id/userReportStatus_tableRow_reportCause"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="10"
+                                android:paddingBottom="20dp">
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportCauseHeader"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_column="1"
+                                    android:text="Cause(s) of Pollution :"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textColor="#9A9A9A"
+                                    android:layout_weight="4"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportCause"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_column="2"
+                                    android:layout_weight="6"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="center_vertical"
+                                    android:text=" - "
+                                    android:textSize="16dp"
+                                    android:textStyle="bold"/>
+                            </TableRow>
+
+                            <TableRow
+                                android:id="@+id/userReportStatus_tableRow_reportDesc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="10"
+                                android:paddingBottom="20dp">
+
+                                <TextView
+                                    android:id="@+id/uuserReportStatus_txt_reportDescHeader"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_column="1"
+                                    android:text="Report Description :"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textColor="#9A9A9A"
+                                    android:layout_weight="4"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportDesc"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_column="2"
+                                    android:layout_weight="6"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="center_vertical"
+                                    android:text="description description "
+                                    android:inputType="textMultiLine"
+                                    android:textSize="16dp"
+                                    android:textStyle="bold"/>
+                            </TableRow>
+
+                        </TableLayout>
+
+                        <View
+                            android:layout_height="1dip"
+                            android:layout_width="match_parent"
+                            android:background="#FF909090"
+                            android:layout_marginBottom="20dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="20dp"
+                            android:onClick="viewImage">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="Uploaded Image(s)"
+                                android:fontFamily="@font/nunito_sans"
+                                android:textSize="18dp"
+                                android:padding="5dp"/>
+
+                            <ImageView
+                                android:id="@+id/userReportStatus_img_arrowRightOrDown"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_arrow_right_icon"/>
+
+                        </LinearLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/userReportStatus_constraintLayout_images"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:background="@drawable/dashlineborder"
+                            android:onClick="toImageViewer"
+                            android:visibility="gone"
+                            android:layout_marginBottom="20dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight=".5">
+
+                            <LinearLayout
+                                android:id="@+id/userReportStatus_linearLayout_previous"
+                                android:layout_width="50dp"
+                                android:layout_height="90dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:padding="10dp"
+                                android:onClick="viewPrevious"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:id="@+id/userReportStatus_img_previous"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    app:srcCompat="@drawable/arrowprevious" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/userReportStatus_linearLayout_next"
+                                android:layout_width="50dp"
+                                android:layout_height="90dp"
+                                android:padding="10dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:onClick="viewNext"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:id="@+id/userReportStatus_img_next"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    app:srcCompat="@drawable/arrownext" />
+                            </LinearLayout>
+
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/userReportStatus_img_pollutionPhoto"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/takephoto"
+                                app:shapeAppearanceOverlay="@style/roundedCornersImg"/>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <LinearLayout
+                            android:id="@+id/employeeReportStatus_linearLayout_INV1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
+                            <View
+                                android:layout_height="1dip"
+                                android:layout_width="match_parent"
+                                android:background="#FF909090"
+                                android:layout_marginBottom="20dp"/>
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="First Investigation Documentation"
+                                android:layout_marginBottom="20dp"
+                                android:fontFamily="@font/nunito_sans"
+                                android:textSize="18dp"
+                                android:padding="5dp"/>
+
+                            <TextView
+                                android:id="@+id/employeeReportStatus_txt_examinerINDoc1URL"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Submitted IN1 Doc URL"
+                                android:visibility="gone"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginBottom="20dp"
+                                android:layout_marginLeft="10dp"/>
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Upload"
+                                android:visibility="gone"
+                                android:onClick="upload"
+                                android:textAllCaps="false"
+                                android:layout_gravity="center"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:layout_marginBottom="20dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight=".92"
+                                    android:text="https://www.google.com/search?q=file+upload+interface&rlz=1C1CHBF_enMY955MY955&sxsrf=AOaemvIcPDPS6gwCLI6gas9t1P9TkyE7vA:1631077421939&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjHv9fyzO7yAhWuwzgGHZEnAt8Q_AUoAXoECAEQAw&biw=1536&bih=722"/>
+
+                                <ImageView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight=".08"
+                                    android:onClick="removeFile"
+                                    android:src="@drawable/ic_reportrejected_icon"
+                                    android:background="@drawable/circle_img_rejected"/>
+
+                            </LinearLayout>
+
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/employeeReportStatus_linearLayout_INV1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <View
+                            android:layout_height="1dip"
+                            android:layout_width="match_parent"
+                            android:background="#FF909090"
+                            android:layout_marginBottom="20dp"/>
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="First Investigation Documentation"
+                            android:layout_marginBottom="20dp"
+                            android:fontFamily="@font/nunito_sans"
+                            android:textSize="18dp"
+                            android:padding="5dp"/>
+
+                    </LinearLayout>
+
+
+
+                        <LinearLayout
+                            android:id="@+id/userReportStatus_linearLayout_reportStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_height="1dip"
+                                android:layout_width="match_parent"
+                                android:background="#FF909090"
+                                android:layout_marginBottom="20dp"/>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="20dp"
+                                android:onClick="viewImage">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:text="Report Status"
+                                    android:textStyle="bold"
+                                    android:textSize="20dp"
+                                    android:padding="5dp"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

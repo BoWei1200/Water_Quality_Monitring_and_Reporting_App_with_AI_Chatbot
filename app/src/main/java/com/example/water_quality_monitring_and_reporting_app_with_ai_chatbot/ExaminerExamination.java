@@ -122,7 +122,7 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
             loadMyReportFromDatabase();
 
-            EmployeeReportRecycleVAdapter adapter = new EmployeeReportRecycleVAdapter(this, reportIDs, reportDates, reportTimes, reportStatus);
+            EmployeeReportRecycleVAdapter adapter = new EmployeeReportRecycleVAdapter(this, reportIDs, reportDates, reportTimes, reportStatus, getUserTypePreference);
             examinerExamination_recycleV_reportList.setAdapter(adapter);
             examinerExamination_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -170,7 +170,7 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
         if(cursor != null)
             returnRead(cursor);
 
-        EmployeeReportRecycleVAdapter adapter = new EmployeeReportRecycleVAdapter(this, reportIDs, reportDates, reportTimes, reportStatus);
+        EmployeeReportRecycleVAdapter adapter = new EmployeeReportRecycleVAdapter(this, reportIDs, reportDates, reportTimes, reportStatus, getUserTypePreference);
         examinerExamination_recycleV_reportList.setAdapter(adapter);
         examinerExamination_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
     }
