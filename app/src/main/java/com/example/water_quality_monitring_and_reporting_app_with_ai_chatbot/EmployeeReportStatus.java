@@ -16,9 +16,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +38,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,9 +52,6 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
     private String getUserIDPreference = "";
     private String getUserTypePreference = "";
-
-    private DatabaseReference databaseReference;
-    private StorageReference storageReference;
 
     private TextView employeeReportStatus_txt_reportID, employeeReportStatus_txt_reportDate, employeeReportStatus_txt_reportTime,
             employeeReportStatus_txt_reportAddress, employeeReportStatus_txt_reportLaLongitude, employeeReportStatus_txt_reportOrg,
@@ -74,7 +75,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
     private ImageView employeeReportStatus_img_pollutionPhoto, employeeReportStatus_img_arrowRightOrDown;
 
-    private Button employeeReportStatus_btn_upload, employeeReportStatus_btn_uploadResolvingDoc;
+    private Button employeeReportStatus_btn_upload, employeeReportStatus_btn_uploadResolvingDoc, employeeReportStatus_btn_submit;
 
     private Uri[] imageUri;  private int photoIndex = 0; private int currentDisplayingPhotoIndex = 0;
 
@@ -98,9 +99,6 @@ public class EmployeeReportStatus extends AppCompatActivity {
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         getUserIDPreference = mPreferences.getString(userIDPreference, null);
         getUserTypePreference = mPreferences.getString(userTypePreference, null);
-
-        storageReference = FirebaseStorage.getInstance().getReference();
-        databaseReference = FirebaseDatabase.getInstance().getReference("reportFromUserImage");
 
         employeeReportStatus_txt_reportID = findViewById(R.id.employeeReportStatus_txt_reportID);
         employeeReportStatus_txt_reportDate = findViewById(R.id.employeeReportStatus_txt_reportDate);
@@ -136,6 +134,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
         employeeReportStatus_btn_upload = findViewById(R.id.employeeReportStatus_btn_upload);
         employeeReportStatus_btn_uploadResolvingDoc = findViewById(R.id.employeeReportStatus_btn_uploadResolvingDoc);
+        employeeReportStatus_btn_submit = findViewById(R.id.employeeReportStatus_btn_submit);
 
         Intent intent = getIntent();
         reportID = intent.getStringExtra("reportID");
@@ -186,7 +185,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
             }
 
             else if(reportStatus.equals("Investigating1")){
-                Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getFirstInvestigationDocByReportID(reportID);
+                Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getInvestigationDocByReportID(reportID);
                 String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
 
                 if(firstDoc == null){
@@ -227,7 +226,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
         else if (getUserTypePreference.equals("IN")){
             employeeReportStatus_linearLayout_btns.setVisibility(View.VISIBLE);
             if(reportStatus.equals("Investigating1")){
-                Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getFirstInvestigationDocByReportID(reportID);
+                Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getInvestigationDocByReportID(reportID);
                 String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
 
                 employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
@@ -237,6 +236,15 @@ public class EmployeeReportStatus extends AppCompatActivity {
                     employeeReportStatus_txt_INDocURL.setVisibility(View.VISIBLE);
                     employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
                     employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.VISIBLE);
+
+                    employeeReportStatus_txt_INDocURL.setClickable(true);
+                    employeeReportStatus_txt_INDocURL.setMovementMethod(LinkMovementMethod.getInstance());
+                    String text = "        \n\nFor more information about how COVID-19 spreads, visit the <a href = 'https://www.cdc.gov/coronavirus/2019-ncov/prevent-getting-sick/how-covid-spreads.html'>How COVID-19 Spreads page</a> to learn how COVID-19 spreads and how to protect yourself.";
+
+                    String filenameWithURL = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
+
+
+                    employeeReportStatus_txt_INDocURL.setText(Html.fromHtml(text));
                 }
             }
         }
@@ -268,8 +276,60 @@ public class EmployeeReportStatus extends AppCompatActivity {
             employeeReportStatus_btn_upload.setVisibility(View.GONE);
 
             employeeReportStatus_linearLayout_uploadedURL.setVisibility(View.VISIBLE);
-            employeeReportStatus_txt_uploadedURL.setText(data.getDataString().substring(data.getDataString().lastIndexOf("/") + 1));
-           // employeeReportStatus_txt_uploadedURL.setText(getFileName(data.getData()));
+            //employeeReportStatus_txt_uploadedURL.setText(data.getDataString().substring(data.getDataString().lastIndexOf("/") + 1));
+            employeeReportStatus_txt_uploadedURL.setText(getFileName(data.getData()));
+
+            employeeReportStatus_linearLayout_btnSubmit.setVisibility(View.VISIBLE);
+
+            employeeReportStatus_btn_submit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseHelper dbHelper = new DatabaseHelper(EmployeeReportStatus.this);
+                    if(getUserTypePreference.equals("IN")){
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                        DatabaseReference databaseReference = null;
+                        String fileID = "";
+
+                        if(reportStatus.equals("Investigating1")){
+                            Cursor cursorGetFileID = dbHelper.getInvestigationDocByReportID(reportID);
+                            fileID = cursorGetFileID.getString(cursorGetFileID.getColumnIndex("investigationDocID"));
+
+                            databaseReference = FirebaseDatabase.getInstance().getReference("reportFirstInvestigationFile");
+
+                            if(dbHelper.updateFirstInvestigationDoc(getFileName(data.getData()), reportID)){
+                                displayToast("Documentation updated successfully!");
+                            }else{
+                                displayToast("Problem in uploading document");
+                            }
+                        }
+                        else{
+                            databaseReference = FirebaseDatabase.getInstance().getReference("reportSecondInvestigationFile");
+                        }
+
+                        StorageReference reference = storageReference.child(getFileName(data.getData()));
+                        DatabaseReference finalDatabaseReference = databaseReference;
+                        String finalFileID = fileID;
+
+                        reference.putFile(data.getData()).addOnSuccessListener(
+                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                                    while(!uriTask.isComplete()) ;
+                                    Uri uri = uriTask.getResult();
+                                    EmployeeReportFile employeeReportFile = new EmployeeReportFile(finalFileID, getFileName(data.getData()), uri.toString());
+
+                                    finalDatabaseReference.child(finalDatabaseReference.push().getKey()).setValue(employeeReportFile);
+
+                                    displayToast("File uploaded");
+                                }
+                            }
+                        );
+                    }
+
+                    finish();
+                }
+            });
         }
     }
 
@@ -292,11 +352,10 @@ public class EmployeeReportStatus extends AppCompatActivity {
     }
 
     public void removeFile(View view) {
+        employeeReportStatus_btn_upload.setVisibility(View.VISIBLE);
 
-    }
-
-    public void submit(View view) {
-
+        employeeReportStatus_linearLayout_uploadedURL.setVisibility(View.GONE);
+        employeeReportStatus_linearLayout_btnSubmit.setVisibility(View.GONE);
     }
 
     public void approveOrReject(View view) {
@@ -314,7 +373,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
                     updatedStatus = "Resolving";
 
                     if(reportStatus.equals("Investigating1")){
-                        Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getFirstInvestigationDocByReportID(reportID);
+                        Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getInvestigationDocByReportID(reportID);
                         String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
 
                         if(firstDoc == null){
@@ -343,7 +402,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
                     updatedStatus = "Rejected";
 
                     if(reportStatus.equals("Investigating1")){
-                        Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getFirstInvestigationDocByReportID(reportID);
+                        Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getInvestigationDocByReportID(reportID);
                         String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
 
                         if(firstDoc == null){

@@ -851,7 +851,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
-    public Cursor getFirstInvestigationDocByReportID(String reportID) {
+    public Cursor getInvestigationDocByReportID(String reportID) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT inv.* FROM " + TABLE_REPORT_FROM_USER + " re, "+ TABLE_REPORT_INVESTIGATION +" inv WHERE re.reportID=? AND re.reportID=inv.reportID", new String[]{String.valueOf(reportID)});
 
@@ -904,6 +904,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.update(TABLE_REPORT_FROM_USER, conVal, "reportID=?", new String[]{reportID}) == 1;
     }
 
+    public boolean updateFirstInvestigationDoc(String fileName, String reportID) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("firstInvestigationDocPath", fileName);
+
+        return db.update(TABLE_REPORT_INVESTIGATION, conVal, "reportID=?", new String[]{reportID}) == 1;
+    }
+
     public boolean updateUser(String IC, String name, String age, String phone, String address, String status, String notes, String vaccineID) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues conVal = new ContentValues();
@@ -917,12 +926,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         conVal.put(COLUMN_VACCINE_ID, vaccineID); // before come to here need to speficy the id//9
 
         return db.update(TABLE_USER, conVal, COLUMN_IC + "=?", new String[]{String.valueOf(IC)}) == 1;
-    }
-
-    public Cursor searchUserBy(String clause) {
-        SQLiteDatabase db = getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_isADMIN + " ='0' AND "
-                + COLUMN_IC + " LIKE '%" + clause + "%'", null); //%NRIC%
     }
 
     public int getTeamMemberNum(String teamID) {

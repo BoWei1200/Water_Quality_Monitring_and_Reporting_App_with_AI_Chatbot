@@ -489,6 +489,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                             UserReportImage reportImage = new UserReportImage(imageNameConcat, uri.toString());
 
                             databaseReferece.child(databaseReferece.push().getKey()).setValue(reportImage);
+
+                            displayToast("Image uploaded");
                         }
                     }
             );
