@@ -541,6 +541,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
                             //employeeReportFile = employeeReportFileRead;
                             String fileNameWithURL = "<u>"+ employeeReportFileRead.getName() +"</u>";
                             employeeReportStatus_txt_INDocURL.setText(Html.fromHtml(fileNameWithURL));
+                            employeeReportStatus_txt_INDocURL.setTextColor(getResources().getColor(R.color.teal_700));
                             employeeReportStatus_txt_INDocURL.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
