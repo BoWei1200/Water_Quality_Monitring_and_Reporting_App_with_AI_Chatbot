@@ -85,6 +85,9 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
     private String reportStatus;
 
+    private EmployeeReportFile employeeReportFile;
+    private String IN1DocURL = "", IN2DocURL = "", RHDocURL = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -239,12 +242,12 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
                     employeeReportStatus_txt_INDocURL.setClickable(true);
                     employeeReportStatus_txt_INDocURL.setMovementMethod(LinkMovementMethod.getInstance());
-                    String text = "        \n\nFor more information about how COVID-19 spreads, visit the <a href = 'https://www.cdc.gov/coronavirus/2019-ncov/prevent-getting-sick/how-covid-spreads.html'>How COVID-19 Spreads page</a> to learn how COVID-19 spreads and how to protect yourself.";
-
-                    String filenameWithURL = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
 
 
-                    employeeReportStatus_txt_INDocURL.setText(Html.fromHtml(text));
+                    retrieveFile("IN1");
+
+
+                   // System.out.println("GET URL: " + employeeReportFile.getUrl());
                 }
             }
         }
@@ -501,7 +504,70 @@ public class EmployeeReportStatus extends AppCompatActivity {
                 .show();
     }
 
-    private void displayUploadedImageFromFirebase() {
+    public void retrieveFile(String docType){
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        DatabaseReference databaseReference = null;
+        Cursor cursorGetDoc;
+
+        String fileName = "";
+
+        if(docType.equals("IN1")){
+            databaseReference = FirebaseDatabase.getInstance().getReference("reportFirstInvestigationFile");
+            cursorGetDoc = dbHelper.getInvestigationDocByReportID(reportID);
+            fileName = cursorGetDoc.getString(cursorGetDoc.getColumnIndex("firstInvestigationDocPath"));
+        }
+        else if(docType.equals("IN2")){
+            cursorGetDoc = dbHelper.getInvestigationDocByReportID(reportID);
+            fileName = cursorGetDoc.getString(cursorGetDoc.getColumnIndex("secondInvestigationDocPath"));
+        }
+        else{
+
+        }
+
+        String finalFileName = fileName;
+
+        System.out.println("Filename"+ fileName);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+
+                for(DataSnapshot ds : snapshot.getChildren()){
+                    try{
+                        EmployeeReportFile employeeReportFileRead = ds.getValue(EmployeeReportFile.class);
+
+                        if(employeeReportFileRead.getName().equals(finalFileName)){
+                            System.out.println("FILE EQUAL" + employeeReportFileRead.getName());
+
+                            //employeeReportFile = employeeReportFileRead;
+                            String fileNameWithURL = "<u>"+ employeeReportFileRead.getName() +"</u>";
+                            employeeReportStatus_txt_INDocURL.setText(Html.fromHtml(fileNameWithURL));
+                            employeeReportStatus_txt_INDocURL.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setType("application/*");
+                                    intent.setType("application/pdf");
+                                    intent.setData(Uri.parse(employeeReportFileRead.getUrl()));
+                                    startActivity(intent);
+                                }
+                            });
+                            break;
+                        }
+                    }catch(Exception e){
+                        System.out.println("ERROR IN FETCHING: " + e.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+                System.out.println("ERROR IN CANCEL " + error.toString());
+            }
+        });
+
+    }
+
+    public void displayUploadedImageFromFirebase() {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         Cursor cursorGetImageByReportID = dbHelper.getImageByReportID(reportID);
 
