@@ -308,11 +308,24 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
             if(updatedStatus.equals("Investigating1")){
                 Cursor cursorGetReportInfo = dbHelper.getReportInfoByReportID(reportID);
-                String reportOrgID = cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("orgID"));
 
-                Cursor cursorAvailableINTeamInOrg = dbHelper.getAvailableInvestigationTeamByOrgID(reportOrgID);
+                if(cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("reportInvestigationTeam")) == null){
+                    String reportOrgID = cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("orgID"));
+
+                    String selectedInvestigationTeamID = "";
+                    Cursor cursorAvailableINTeamInOrg = dbHelper.getAvailableInvestigationTeamByOrgID(reportOrgID);
+                    if(cursorAvailableINTeamInOrg != null){
+                        selectedInvestigationTeamID = dbHelper.getInvestigationTeamIDWithLeastReports(cursorAvailableINTeamInOrg);
+                    }
+
+                    if(dbHelper.updateReportInvestigationTeamByReportID(reportID, selectedInvestigationTeamID)){
+                        System.out.println("Team ID assigned: " + selectedInvestigationTeamID);
+                    }
+                    else{
+                        System.out.println("Assigned failed");
+                    }
+                }
             }
-
         }
 
         finish();

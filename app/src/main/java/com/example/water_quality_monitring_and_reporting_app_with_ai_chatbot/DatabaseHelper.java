@@ -640,16 +640,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String WHERE_clause = "";
 
         for (int i = 0; i < cursorAvailableExaminerID.getCount(); i++){
-//            try{
-                if(i == 0){
-                    WHERE_clause += "examiner=" + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")) + " ";
-                }else{
-                    WHERE_clause += "OR examiner=" + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")) + " ";
-                }
-//            }catch(Exception e){
-//                System.out.println("ERROR in Where" + e.toString());
-//            }
-
+            if(i == 0){
+                WHERE_clause += "examiner=" + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")) + " ";
+            }else{
+                WHERE_clause += "OR examiner=" + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")) + " ";
+            }
 
             cursorAvailableExaminerID.moveToNext();
         }
@@ -750,7 +745,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAvailableInvestigationTeamByOrgID(String orgID) {
-        return null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT investigationTeamID FROM " + TABLE_INVESTIGATION_TEAM + " WHERE investigationTeamOrgID=?", new String[]{orgID});
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getInvestigationTeamReportNumByTeamID(String investigationTeamID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT inv.investigationTeamID, COUNT(report.reportID) FROM " + TABLE_REPORT_FROM_USER+ " report, "+ TABLE_INVESTIGATION_TEAM +" inv WHERE inv.investigationTeamID=?  AND report.reportInvestigationTeam = inv.investigationTeamID GROUP BY inv.investigationTeamID ORDER BY COUNT(report.reportID)", new String[]{investigationTeamID});
+    }
+
+    public String getInvestigationTeamIDWithLeastReports(Cursor cursorAvailableINTeamInOrg) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String WHERE_clause = "";
+
+        for (int i = 0; i < cursorAvailableINTeamInOrg.getCount(); i++){
+            if(i == 0){
+                WHERE_clause += "reportInvestigationTeam=" + cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID")) + " ";
+            }else{
+                WHERE_clause += "OR reportInvestigationTeam=" + cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID")) + " ";
+            }
+
+            cursorAvailableINTeamInOrg.moveToNext();
+        }
+
+        String query = "SELECT reportInvestigationTeam, COUNT(reportID) FROM reportFromUser WHERE " + WHERE_clause + " GROUP BY reportInvestigationTeam ORDER BY COUNT(reportID)";
+
+        System.out.println("QUERY CHECK: " + query);
+
+        Cursor getInvestigationTeamID = db.rawQuery(query, null);
+
+        Cursor cursorInvestigationTeamWithNoReport = null;
+
+        System.out.println("TWO CURSOR not equal: " + Boolean.toString(cursorAvailableINTeamInOrg.getCount() != getInvestigationTeamID.getCount()) );
+
+        if(cursorAvailableINTeamInOrg.getCount() != getInvestigationTeamID.getCount()){
+            System.out.println("move to first? : " + cursorAvailableINTeamInOrg.moveToFirst());
+
+            for(int i = 0; i < cursorAvailableINTeamInOrg.getCount(); i++){
+                cursorInvestigationTeamWithNoReport = getInvestigationTeamReportNumByTeamID(cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID")));
+                cursorInvestigationTeamWithNoReport.moveToFirst();
+
+                System.out.println("cursorExaminerWithNoReport == null?: " + cursorInvestigationTeamWithNoReport == null);
+
+                System.out.println("IN Team getCount = " + (cursorInvestigationTeamWithNoReport.getCount() == 0));
+                if(cursorInvestigationTeamWithNoReport.getCount() == 0){
+                    System.out.println("IN Team with 0 to assign : " + cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID")));
+                    return cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID"));
+                }
+                cursorAvailableINTeamInOrg.moveToNext();
+            }
+        }
+
+        return (getInvestigationTeamID.moveToFirst()) ? getInvestigationTeamID.getString(getInvestigationTeamID.getColumnIndex("reportInvestigationTeam")) : "";
     }
 
     public Cursor getReportByInvestigationTeam(String investigationTeamID) {
@@ -828,6 +876,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues conVal = new ContentValues();
 
         conVal.put("reportStatus", updatedStatus);
+
+        return db.update(TABLE_REPORT_FROM_USER, conVal, "reportID=?", new String[]{reportID}) == 1;
+    }
+
+    public boolean updateReportInvestigationTeamByReportID(String reportID, String selectedInvestigationTeamID) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("reportInvestigationTeam", selectedInvestigationTeamID);
 
         return db.update(TABLE_REPORT_FROM_USER, conVal, "reportID=?", new String[]{reportID}) == 1;
     }
