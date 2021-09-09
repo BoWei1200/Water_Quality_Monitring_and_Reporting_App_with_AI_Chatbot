@@ -156,7 +156,6 @@ public class ExaminerExamination extends AppCompatActivity implements AdapterVie
 
         examinerExamination_eTxt_searchBar.setText("");
         redesignLayout();
-
     }
 
     public void redesignLayout(){

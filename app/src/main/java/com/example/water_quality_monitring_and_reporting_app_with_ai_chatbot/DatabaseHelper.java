@@ -801,9 +801,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (getInvestigationTeamID.moveToFirst()) ? getInvestigationTeamID.getString(getInvestigationTeamID.getColumnIndex("reportInvestigationTeam")) : "";
     }
 
-    public Cursor getReportByInvestigationTeam(String investigationTeamID) {
+    public Cursor getReportByInvestigationTeam(String investigationTeamID, String pendingOrCompleted, String searchReportID) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REPORT_FROM_USER + " WHERE reportInvestigationTeam=?", new String[]{String.valueOf(investigationTeamID)});
+
+        String WHERE_CLAUSE = "";
+        if(pendingOrCompleted.equals("Pending")){
+            WHERE_CLAUSE += "(re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath IS null) OR (re.reportStatus = 'Investigating2' AND re.reportID=inv.reportID AND inv.secondInvestigationDocPath IS null)";
+        }else{
+            WHERE_CLAUSE += "(re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath IS NOT null) OR (re.reportStatus = 'Examining' )";
+        }
+
+        String query = "SELECT DISTINCT re.*  FROM reportFromUser re, reportInvestigation inv " +
+                "WHERE re.reportInvestigationTeam=?  AND re.reportID LIKE '%"+ searchReportID +"%' AND" +
+                "( "+ WHERE_CLAUSE  +" )" +
+                "ORDER BY re.reportDate, re.reportTime";
+
+        System.out.println("query examiner check: " + query);
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(investigationTeamID)});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }

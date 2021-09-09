@@ -1,6 +1,7 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.util.TypedValue;
@@ -31,6 +33,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +48,9 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
     private String getUserIDPreference = "";
     private String getUserTypePreference = "";
+
+    private DatabaseReference databaseReference;
+    private StorageReference storageReference;
 
     private TextView employeeReportStatus_txt_reportID, employeeReportStatus_txt_reportDate, employeeReportStatus_txt_reportTime,
             employeeReportStatus_txt_reportAddress, employeeReportStatus_txt_reportLaLongitude, employeeReportStatus_txt_reportOrg,
@@ -91,6 +98,9 @@ public class EmployeeReportStatus extends AppCompatActivity {
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         getUserIDPreference = mPreferences.getString(userIDPreference, null);
         getUserTypePreference = mPreferences.getString(userTypePreference, null);
+
+        storageReference = FirebaseStorage.getInstance().getReference();
+        databaseReference = FirebaseDatabase.getInstance().getReference("reportFromUserImage");
 
         employeeReportStatus_txt_reportID = findViewById(R.id.employeeReportStatus_txt_reportID);
         employeeReportStatus_txt_reportDate = findViewById(R.id.employeeReportStatus_txt_reportDate);
@@ -199,6 +209,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
                 employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
             }
+
             else if (reportStatus.equals("Resolving") || reportStatus.equals("Resolved") || reportStatus.equals("Rejected")){
                 if(reportStatus.equals("Resolving") || reportStatus.equals("Resolved")){
                     employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
@@ -214,7 +225,20 @@ public class EmployeeReportStatus extends AppCompatActivity {
             }
         }
         else if (getUserTypePreference.equals("IN")){
+            employeeReportStatus_linearLayout_btns.setVisibility(View.VISIBLE);
+            if(reportStatus.equals("Investigating1")){
+                Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getFirstInvestigationDocByReportID(reportID);
+                String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
 
+                employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
+                if(firstDoc == null){
+                    employeeReportStatus_btn_upload.setVisibility(View.VISIBLE);
+                }else{
+                    employeeReportStatus_txt_INDocURL.setVisibility(View.VISIBLE);
+                    employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+                    employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.VISIBLE);
+                }
+            }
         }
         else{
 
@@ -230,7 +254,41 @@ public class EmployeeReportStatus extends AppCompatActivity {
     }
 
     public void upload(View view) {
+        Intent intent = new Intent();
+        intent.setType("*/*");
+        intent.setAction(intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select file to upload"), 12);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 12 && resultCode == RESULT_OK && data != null && data.getData() != null){
+            employeeReportStatus_btn_upload.setVisibility(View.GONE);
+
+            employeeReportStatus_linearLayout_uploadedURL.setVisibility(View.VISIBLE);
+            employeeReportStatus_txt_uploadedURL.setText(data.getDataString().substring(data.getDataString().lastIndexOf("/") + 1));
+           // employeeReportStatus_txt_uploadedURL.setText(getFileName(data.getData()));
+        }
+    }
+
+    private String getFileName(Uri uri) throws IllegalArgumentException {
+        // Obtain a cursor with information regarding this uri
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+
+        if (cursor.getCount() <= 0) {
+            cursor.close();
+            throw new IllegalArgumentException("Can't obtain file name, cursor is empty");
+        }
+
+        cursor.moveToFirst();
+
+        String fileName = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
+
+        cursor.close();
+
+        return fileName;
     }
 
     public void removeFile(View view) {

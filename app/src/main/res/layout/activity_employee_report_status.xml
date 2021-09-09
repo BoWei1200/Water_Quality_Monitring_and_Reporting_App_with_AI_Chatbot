@@ -497,6 +497,7 @@
                                     android:text="Upload"
                                     android:visibility="gone"
                                     android:onClick="upload"
+                                    android:fontFamily="@font/nunito_sans"
                                     android:textAllCaps="false"
                                     android:layout_gravity="center"
                                     android:layout_marginBottom="20dp"/>

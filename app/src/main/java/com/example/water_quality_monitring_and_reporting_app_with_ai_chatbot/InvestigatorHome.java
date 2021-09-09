@@ -104,12 +104,14 @@ public class InvestigatorHome extends AppCompatActivity {
 
             case R.id.investigatorHome_cv_pendingInvestigation:
                 intent = new Intent(this, InvestigatorInvestigation.class);
-                intent.putExtra("passedActivity", "pending");
+                intent.putExtra("teamID", teamID);
+                intent.putExtra("passedActivity", "Pending");
                 break;
 
             case R.id.investigatorHome_cv_myInvestigation:
                 intent = new Intent(this, InvestigatorInvestigation.class);
-                intent.putExtra("passedActivity", "completed");
+                intent.putExtra("teamID", teamID);
+                intent.putExtra("passedActivity", "Completed");
                 break;
 
             case R.id.investigatorHome_cv_news:
