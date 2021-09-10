@@ -464,6 +464,27 @@ public class EmployeeReportStatus extends AppCompatActivity {
                     }
                 }
             }
+            else if(updatedStatus.equals("Resolving")){
+                Cursor cursorGetReportInfo = dbHelper.getReportInfoByReportID(reportID);
+
+                if(cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("reportHandler")) == null){
+                    String reportOrgID = cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("orgID"));
+
+                    String selectedReportHandler = "";
+                    Cursor cursorAvailableReportHandlerInOrg = dbHelper.getAvailableReportHandlerByOrgID(reportOrgID);
+
+                    if(cursorAvailableReportHandlerInOrg != null){
+                        selectedReportHandler = dbHelper.getReportHandlerWithLeastReports(cursorAvailableReportHandlerInOrg);
+                    }
+
+                    if(dbHelper.updateReportHandlerByReportID(reportID, selectedReportHandler)){
+                        System.out.println("Report Handler ID assigned: " + selectedReportHandler);
+                    }
+                    else{
+                        System.out.println("Assigned failed");
+                    }
+                }
+            }
         }
 
         finish();

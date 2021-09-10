@@ -858,6 +858,63 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
+    public Cursor getAvailableReportHandlerByOrgID(String orgID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT user.userID, employOrg.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " employOrg WHERE user.userType='RH' AND employOrg.orgID=? AND employOrg.userID=user.userID", new String[]{orgID});
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getReportHandlerReportNumByReportHandlerID(String reportHandler){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT user.userID, COUNT(report.reportID) FROM " + TABLE_REPORT_FROM_USER +" report, "+ TABLE_USER +" user WHERE user.userID=?  AND report.reportHandler = user.userID GROUP BY user.userID ORDER BY COUNT(report.reportID)", new String[]{reportHandler});
+    }
+
+    public String getReportHandlerWithLeastReports(Cursor cursorAvailableReportHandlerInOrg) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String WHERE_clause = "";
+
+        for (int i = 0; i < cursorAvailableReportHandlerInOrg.getCount(); i++){
+            if(i == 0){
+                WHERE_clause += "reportHandler=" + cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID")) + " ";
+            }else{
+                WHERE_clause += "OR reportHandler=" + cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID")) + " ";
+            }
+
+            cursorAvailableReportHandlerInOrg.moveToNext();
+        }
+
+        String query = "SELECT reportHandler, COUNT(reportID) FROM reportFromUser WHERE " + WHERE_clause + " GROUP BY reportHandler ORDER BY COUNT(reportID)";
+
+        System.out.println("QUERY CHECK: " + query);
+
+        Cursor getReportHandlerID = db.rawQuery(query, null);
+
+        Cursor cursorReportHandlerWithNoReport = null;
+
+        System.out.println("TWO CURSOR not equal: " + Boolean.toString(cursorAvailableReportHandlerInOrg.getCount() != getReportHandlerID.getCount()) );
+
+        if(cursorAvailableReportHandlerInOrg.getCount() != getReportHandlerID.getCount()){
+            System.out.println("move to first? : " + cursorAvailableReportHandlerInOrg.moveToFirst());
+
+            for(int i = 0; i < cursorAvailableReportHandlerInOrg.getCount(); i++){
+                cursorReportHandlerWithNoReport = getReportHandlerReportNumByReportHandlerID(cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID")));
+                cursorReportHandlerWithNoReport.moveToFirst();
+
+                System.out.println("cursorReportHandlerWithNoReport == null?: " + cursorReportHandlerWithNoReport == null);
+
+                System.out.println("reportHandler getCount = " + (cursorReportHandlerWithNoReport.getCount() == 0));
+                if(cursorReportHandlerWithNoReport.getCount() == 0){
+                    System.out.println("RH with 0 to assign : " + cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID")));
+                    return cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID"));
+                }
+                cursorAvailableReportHandlerInOrg.moveToNext();
+            }
+        }
+
+        return (getReportHandlerID.moveToFirst()) ? getReportHandlerID.getString(getReportHandlerID.getColumnIndex("reportHandler")) : "";
+    }
+
     // Registered user info
     public Cursor readInfo(String userEmail) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -904,6 +961,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.update(TABLE_REPORT_FROM_USER, conVal, "reportID=?", new String[]{reportID}) == 1;
     }
 
+    public boolean updateReportHandlerByReportID(String reportID, String selectedReportHandler) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("reportHandler", selectedReportHandler);
+
+        return db.update(TABLE_REPORT_FROM_USER, conVal, "reportID=?", new String[]{reportID}) == 1;
+    }
+
     public boolean updateFirstInvestigationDoc(String fileName, String reportID) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues conVal = new ContentValues();
@@ -911,21 +977,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         conVal.put("firstInvestigationDocPath", fileName);
 
         return db.update(TABLE_REPORT_INVESTIGATION, conVal, "reportID=?", new String[]{reportID}) == 1;
-    }
-
-    public boolean updateUser(String IC, String name, String age, String phone, String address, String status, String notes, String vaccineID) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues conVal = new ContentValues();
-        conVal.put(COLUMN_IC, IC); //0
-        conVal.put(COLUMN_NAME, name);//1
-        conVal.put(COLUMN_AGE, age);//3
-        conVal.put(COLUMN_PHONE, phone);//4
-        conVal.put(COLUMN_ADDRESS, address);//5
-        conVal.put(COLUMN_VACCINE_STATUS, status);//default value is pending//6
-        conVal.put(COLUMN_NOTES, notes);//7
-        conVal.put(COLUMN_VACCINE_ID, vaccineID); // before come to here need to speficy the id//9
-
-        return db.update(TABLE_USER, conVal, COLUMN_IC + "=?", new String[]{String.valueOf(IC)}) == 1;
     }
 
     public int getTeamMemberNum(String teamID) {
