@@ -369,6 +369,48 @@ public class EmployeeReportStatus extends AppCompatActivity {
                         );
                     }
 
+                    else{
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                        DatabaseReference databaseReference = null;
+                        String fileID = "";
+
+                        Cursor cursorGetFileID = dbHelper.getPollutionResolvingDocByReportID(reportID);
+                        fileID = cursorGetFileID.getString(cursorGetFileID.getColumnIndex("reportDealingID"));
+
+                        databaseReference = FirebaseDatabase.getInstance().getReference("reportPollutionResolvingFile");
+
+                        if(dbHelper.updatePollutionResolvingDoc(getFileName(data.getData()), reportID)){
+                            displayToast("Documentation updated successfully!");
+
+                            if(dbHelper.updateReportStatusByReportID(reportID, "Examining")){
+
+                            }
+                        }else{
+                            displayToast("Problem in uploading document");
+                        }
+
+                        String filename = getFileName(data.getData());
+                        StorageReference reference = storageReference.child(filename);
+                        DatabaseReference finalDatabaseReference = databaseReference;
+                        String finalFileID = fileID;
+
+                        reference.putFile(data.getData()).addOnSuccessListener(
+                                new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                                        while(!uriTask.isComplete()) ;
+                                        Uri uri = uriTask.getResult();
+                                        EmployeeReportFile employeeReportFile = new EmployeeReportFile(finalFileID, filename, uri.toString());
+
+                                        finalDatabaseReference.child(finalDatabaseReference.push().getKey()).setValue(employeeReportFile);
+
+                                        displayToast("File uploaded");
+                                    }
+                                }
+                        );
+                    }
+
                     finish();
                 }
             });

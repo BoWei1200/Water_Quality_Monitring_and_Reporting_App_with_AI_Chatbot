@@ -935,6 +935,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (getReportHandlerID.moveToFirst()) ? getReportHandlerID.getString(getReportHandlerID.getColumnIndex("reportHandler")) : "";
     }
 
+    public Cursor getPollutionResolvingDocByReportID(String reportID) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT clean.* FROM " + TABLE_REPORT_FROM_USER + " re, "+ TABLE_REPORT_CLEANING_PROCESS +" clean WHERE re.reportID=? AND re.reportID=clean.reportID", new String[]{String.valueOf(reportID)});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
     // Registered user info
     public Cursor readInfo(String userEmail) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -997,6 +1004,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         conVal.put("firstInvestigationDocPath", fileName);
 
         return db.update(TABLE_REPORT_INVESTIGATION, conVal, "reportID=?", new String[]{reportID}) == 1;
+    }
+
+    public boolean updatePollutionResolvingDoc(String fileName, String reportID) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("pollutionCleaningProcDocPath", fileName);
+
+        return db.update(TABLE_REPORT_CLEANING_PROCESS, conVal, "reportID=?", new String[]{reportID}) == 1;
     }
 
     public int getTeamMemberNum(String teamID) {
