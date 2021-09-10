@@ -183,6 +183,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
         if(getUserTypePreference.equals("EX")){
             employeeReportStatus_linearLayout_btns.setVisibility(View.VISIBLE);
+
             if(reportStatus.equals("Pending")){
                 employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
             }
@@ -197,6 +198,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
                     employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
                     employeeReportStatus_txt_INDocURL.setVisibility(View.VISIBLE);
                     employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+                    retrieveFile("IN1");
                     employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
                 }
             }
@@ -216,16 +218,36 @@ public class EmployeeReportStatus extends AppCompatActivity {
                 if(reportStatus.equals("Resolving") || reportStatus.equals("Resolved")){
                     employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
                     employeeReportStatus_txt_INDocURL.setVisibility(View.VISIBLE);
-                    employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+
+                    if(reportStatus.equals("Resolving")){
+                        employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+                        retrieveFile("IN1");
+                    }else{
+                        employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+                        retrieveFile("IN1");
+                    }
 
                     if(reportStatus.equals("Resolved")){
                         employeeReportStatus_linearLayout_resolvingDoc.setVisibility(View.VISIBLE);
                         employeeReportStatus_txt_resolvingDocURL.setVisibility(View.VISIBLE);
                     }
                 }
+                else{
+                    Cursor cursorGetFirstInvestigationDocByReportID = dbHelper.getInvestigationDocByReportID(reportID);
+                    String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
+
+                    if(firstDoc != null){
+                        employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
+                        employeeReportStatus_txt_INDocURL.setVisibility(View.VISIBLE);
+                        employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+                        retrieveFile("IN1");
+                    }
+                }
+
                 employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.VISIBLE);
             }
         }
+
         else if (getUserTypePreference.equals("IN")){
             employeeReportStatus_linearLayout_btns.setVisibility(View.VISIBLE);
             if(reportStatus.equals("Investigating1")){
@@ -233,21 +255,16 @@ public class EmployeeReportStatus extends AppCompatActivity {
                 String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
 
                 employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
+                employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+
                 if(firstDoc == null){
                     employeeReportStatus_btn_upload.setVisibility(View.VISIBLE);
                 }else{
                     employeeReportStatus_txt_INDocURL.setVisibility(View.VISIBLE);
-                    employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+
                     employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.VISIBLE);
 
-                    employeeReportStatus_txt_INDocURL.setClickable(true);
-                    employeeReportStatus_txt_INDocURL.setMovementMethod(LinkMovementMethod.getInstance());
-
-
                     retrieveFile("IN1");
-
-
-                   // System.out.println("GET URL: " + employeeReportFile.getUrl());
                 }
             }
         }
@@ -309,7 +326,8 @@ public class EmployeeReportStatus extends AppCompatActivity {
                             databaseReference = FirebaseDatabase.getInstance().getReference("reportSecondInvestigationFile");
                         }
 
-                        StorageReference reference = storageReference.child(getFileName(data.getData()));
+                        String filename = getFileName(data.getData());
+                        StorageReference reference = storageReference.child(filename);
                         DatabaseReference finalDatabaseReference = databaseReference;
                         String finalFileID = fileID;
 
@@ -320,7 +338,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
                                     Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                                     while(!uriTask.isComplete()) ;
                                     Uri uri = uriTask.getResult();
-                                    EmployeeReportFile employeeReportFile = new EmployeeReportFile(finalFileID, getFileName(data.getData()), uri.toString());
+                                    EmployeeReportFile employeeReportFile = new EmployeeReportFile(finalFileID, filename, uri.toString());
 
                                     finalDatabaseReference.child(finalDatabaseReference.push().getKey()).setValue(employeeReportFile);
 
@@ -474,6 +492,11 @@ public class EmployeeReportStatus extends AppCompatActivity {
             employeeReportStatus_txt_reportStatus.setText(statusSetText);
             employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.GONE);
             employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
+        }
+
+        else if(getUserTypePreference.equals("IN")){
+            employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.GONE);
+            employeeReportStatus_btn_upload.setVisibility(View.VISIBLE);
         }
     }
 
