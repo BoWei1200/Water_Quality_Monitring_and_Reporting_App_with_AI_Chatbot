@@ -823,9 +823,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
-    public Cursor getReportByReportHandler(String reportHandlerID) {
+    public Cursor getReportByReportHandler(String reportHandler, String currentTab, String searchKey) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REPORT_FROM_USER + " WHERE reportHandler=?", new String[]{String.valueOf(reportHandlerID)});
+
+        String WHERE_CLAUSE = "";
+        if(currentTab.equals("Pending")){
+            //WHERE_CLAUSE += "(re.reportStatus = 'Investigating1' AND re.reportID=inv.reportID AND inv.firstInvestigationDocPath IS NOT null) OR (re.reportStatus = 'Examining' )";
+            WHERE_CLAUSE += "(reportStatus='Resolving')";
+        }
+        else if(currentTab.equals("Examining")){
+            WHERE_CLAUSE += "(reportStatus='Examining')";
+        }
+        else{
+            WHERE_CLAUSE += "(reportStatus='Resolved')";
+        }
+
+        String query = "SELECT *  FROM reportFromUser " +
+                "WHERE reportHandler=?  AND reportID LIKE '%"+ searchKey +"%' AND " +
+                "( "+ WHERE_CLAUSE  +" )" +
+                "ORDER BY reportDate, reportTime";
+
+        System.out.println("query reportHandler check: " + query);
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(reportHandler)});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }

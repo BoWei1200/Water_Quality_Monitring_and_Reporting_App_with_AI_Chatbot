@@ -79,27 +79,6 @@ public class InvestigatorInvestigation extends AppCompatActivity {
         });
 
         redesignLayout();
-
-//        DatabaseHelper dbHelper = new DatabaseHelper(this);
-//
-//        Cursor cursorGetReport = dbHelper.getReportByInvestigationTeam(
-//                teamID, passedActivity,
-//                investigatorInvestigation_eTxt_searchBar.getText().toString());
-//
-//        int countMyReport = !(cursorGetReport==null) ? cursorGetReport.getCount() : 0;
-//
-//        if(countMyReport != 0){
-//            reportIDs = new String[countMyReport];
-//            reportDates = new String[countMyReport];
-//            reportTimes = new String[countMyReport];
-//            reportStatus = new String[countMyReport];
-//
-//
-//
-//            EmployeeReportRecycleVAdapter adapter = new EmployeeReportRecycleVAdapter(this, reportIDs, reportDates, reportTimes, reportStatus, getUserTypePreference);
-//            investigatorInvestigation_recycleV_reportList.setAdapter(adapter);
-//            investigatorInvestigation_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
-//        }
     }
 
     @Override

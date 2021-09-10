@@ -59,7 +59,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
             employeeReportStatus_txt_reportStatus,
 
             employeeReportStatus_txt_InvDocHeader, employeeReportStatus_txt_INDocURL,
-            employeeReportStatus_txt_uploadedURL, employeeReportStatus_txt_resolvingDocURL;
+            employeeReportStatus_txt_uploadedURL, employeeReportStatus_txt_resolvingDocURL, employeeReportStatus_txt_uploadedResolvingDocURL;
 
     private ConstraintLayout employeeReportStatus_constraintLayout_images;
 
@@ -117,6 +117,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
         employeeReportStatus_txt_INDocURL = findViewById(R.id.employeeReportStatus_txt_INDocURL);
         employeeReportStatus_txt_uploadedURL = findViewById(R.id.employeeReportStatus_txt_uploadedURL);
         employeeReportStatus_txt_resolvingDocURL = findViewById(R.id.employeeReportStatus_txt_resolvingDocURL);
+        employeeReportStatus_txt_uploadedResolvingDocURL = findViewById(R.id.employeeReportStatus_txt_uploadedResolvingDocURL);
 
         employeeReportStatus_constraintLayout_images = findViewById(R.id.employeeReportStatus_constraintLayout_images);
 
@@ -268,7 +269,19 @@ public class EmployeeReportStatus extends AppCompatActivity {
                 }
             }
         }
+
         else{
+            employeeReportStatus_linearLayout_btns.setVisibility(View.VISIBLE);
+            if(reportStatus.equals("Resolving")){
+                employeeReportStatus_linearLayout_InvDoc.setVisibility(View.VISIBLE);
+                employeeReportStatus_txt_InvDocHeader.setText("First Investigation Doc");
+                employeeReportStatus_txt_INDocURL.setVisibility(View.VISIBLE);
+
+                retrieveFile("IN1");
+
+                employeeReportStatus_linearLayout_resolvingDoc.setVisibility(View.VISIBLE);
+                employeeReportStatus_btn_uploadResolvingDoc.setVisibility(View.VISIBLE);
+            }
 
         }
     }
@@ -293,11 +306,19 @@ public class EmployeeReportStatus extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 12 && resultCode == RESULT_OK && data != null && data.getData() != null){
-            employeeReportStatus_btn_upload.setVisibility(View.GONE);
 
-            employeeReportStatus_linearLayout_uploadedURL.setVisibility(View.VISIBLE);
+            if(getUserTypePreference.equals("IN")){
+                employeeReportStatus_btn_upload.setVisibility(View.GONE);
+                employeeReportStatus_linearLayout_uploadedURL.setVisibility(View.VISIBLE);
+                employeeReportStatus_txt_uploadedURL.setText(getFileName(data.getData()));
+
+            }else{
+                employeeReportStatus_btn_uploadResolvingDoc.setVisibility(View.GONE);
+                employeeReportStatus_linearLayout_uploadedResolvingDocURL.setVisibility(View.VISIBLE);
+                employeeReportStatus_txt_uploadedResolvingDocURL.setText(getFileName(data.getData()));
+            }
+
             //employeeReportStatus_txt_uploadedURL.setText(data.getDataString().substring(data.getDataString().lastIndexOf("/") + 1));
-            employeeReportStatus_txt_uploadedURL.setText(getFileName(data.getData()));
 
             employeeReportStatus_linearLayout_btnSubmit.setVisibility(View.VISIBLE);
 
@@ -373,9 +394,15 @@ public class EmployeeReportStatus extends AppCompatActivity {
     }
 
     public void removeFile(View view) {
-        employeeReportStatus_btn_upload.setVisibility(View.VISIBLE);
+        if(getUserTypePreference.equals("IN")){
+            employeeReportStatus_btn_upload.setVisibility(View.VISIBLE);
+            employeeReportStatus_linearLayout_uploadedURL.setVisibility(View.GONE);
+        }
+        else{
+            employeeReportStatus_btn_uploadResolvingDoc.setVisibility(View.VISIBLE);
+            employeeReportStatus_linearLayout_uploadedResolvingDocURL.setVisibility(View.GONE);
+        }
 
-        employeeReportStatus_linearLayout_uploadedURL.setVisibility(View.GONE);
         employeeReportStatus_linearLayout_btnSubmit.setVisibility(View.GONE);
     }
 
