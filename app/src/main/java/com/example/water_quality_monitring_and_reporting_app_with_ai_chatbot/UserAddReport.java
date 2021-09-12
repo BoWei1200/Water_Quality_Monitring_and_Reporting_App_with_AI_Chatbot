@@ -25,6 +25,7 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -268,6 +270,21 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             userAddReport_txt_errorMsgLaLongitude.setVisibility(View.GONE);
             userAddReport_txt_errorMsgAddress.setVisibility(View.GONE);
 
+            if(!addressList.get(0).getCountryName().equals("Malaysia")){
+                userAddReport_txt_Address.setText("");
+                userAddReport_txt_LongLatitude.setText("");
+                userAddReport_txt_errorMsgLaLongitude.setVisibility(View.VISIBLE);
+                userAddReport_txt_errorMsgLaLongitude.setText("Reporting function is only supported within Malaysia");
+
+                Button userAddReport_btn_report = findViewById(R.id.userAddReport_btn_report);
+                ConstraintLayout userAddReport_constraintLayout_takePhoto = findViewById(R.id.userAddReport_constraintLayout_takePhoto);
+
+                userAddReport_constraintLayout_takePhoto.setEnabled(false);
+                userAddReport_btn_report.setEnabled(false);
+                userAddReport_etxtInput_pollutionDesc.setEnabled(false);
+
+                displayToast("You are not allowed to report!");
+            }
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "Unable to detect your location.", Toast.LENGTH_SHORT).show();
@@ -291,6 +308,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     }
 
     public void takePhoto(View view) {
+
         if(photoIndex < 5){
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             try {
