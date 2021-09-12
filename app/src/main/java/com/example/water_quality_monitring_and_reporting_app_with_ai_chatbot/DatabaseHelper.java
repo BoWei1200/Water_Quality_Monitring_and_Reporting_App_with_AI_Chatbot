@@ -832,7 +832,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             WHERE_CLAUSE += "(reportStatus='Resolving')";
         }
         else if(currentTab.equals("Examining")){
-            WHERE_CLAUSE += "(reportStatus='Examining')";
+            WHERE_CLAUSE += "(reportStatus='Examining') OR (reportStatus='Investigating2')";
         }
         else{
             WHERE_CLAUSE += "(reportStatus='Resolved')";
@@ -1002,6 +1002,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues conVal = new ContentValues();
 
         conVal.put("firstInvestigationDocPath", fileName);
+
+        return db.update(TABLE_REPORT_INVESTIGATION, conVal, "reportID=?", new String[]{reportID}) == 1;
+    }
+
+    public boolean updateSecondInvestigationDoc(String fileName, String reportID) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("secondInvestigationDocPath", fileName);
 
         return db.update(TABLE_REPORT_INVESTIGATION, conVal, "reportID=?", new String[]{reportID}) == 1;
     }

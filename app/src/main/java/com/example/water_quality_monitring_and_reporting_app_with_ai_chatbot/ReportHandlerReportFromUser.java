@@ -110,6 +110,8 @@ public class ReportHandlerReportFromUser extends AppCompatActivity {
         currentlyActiveTab.setTextColor(getResources().getColor(R.color.tab_text_color));
         currentlyActiveTab.setBackground(getResources().getDrawable(R.color.tab_background));
         redesignLayout();
+
+        reportHandlerReportFromUser_eTxt_searchBar.setText("");
         //change the recycler view
     }
 
