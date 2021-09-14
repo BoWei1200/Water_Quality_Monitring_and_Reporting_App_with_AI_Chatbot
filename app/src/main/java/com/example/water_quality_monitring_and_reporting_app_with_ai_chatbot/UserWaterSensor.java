@@ -12,6 +12,7 @@ public class UserWaterSensor implements Runnable{
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
     private final String stopSensorPreference = "stopSensor";
+    private final String completeGetDataFromUbidotsPreference = "completeGetDataFromUbidots";
 
     //private final String demoVariableID = "60f2b0be4763e74e29fcc3aa";
 
@@ -77,34 +78,30 @@ public class UserWaterSensor implements Runnable{
                 SS = variables[j];
         }
 
-
         while (!stop) {
-
-            //continuously detect water quality and store it in ubidots
-            //need try catch for network connection
             System.out.println("detect for "+ i++ +" times");
 
             try{
                 System.out.println("API in Thread: " + API_KEY);
-                System.out.println(BOD.getName());
-                System.out.println(DO.getName());
-                System.out.println(SS.getName());
 
-                //variables.saveValue(i);
+                DO.saveValue(i);
+                BOD.saveValue(i);
+                COD.saveValue(i);
+                NH3N.saveValue(i);
+                SS.saveValue(i);
+                pH.saveValue((int)(Math.random() * 14));
             }catch(Exception e){
                 System.out.println("ERROR IN SAVING VALUE: "+e.toString());
             }
 
-
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException e) {
                 System.out.println("Thread class: error: "+e.toString());
             }
 
             stop = getStop();
         }
-
     }
 
     public void stopThread(){
@@ -113,6 +110,10 @@ public class UserWaterSensor implements Runnable{
 
     public Boolean getStop(){
         return (mPreferences.getString(stopSensorPreference, null).equals("1"));
+    }
+
+    public Boolean getCompleteGetDataFromUbidots(){
+        return (mPreferences.getString(completeGetDataFromUbidotsPreference, null).equals("1"));
     }
 
 }

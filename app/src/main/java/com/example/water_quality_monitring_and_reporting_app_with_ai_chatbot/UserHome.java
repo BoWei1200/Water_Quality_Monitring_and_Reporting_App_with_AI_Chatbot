@@ -359,15 +359,7 @@ public class UserHome extends AppCompatActivity{
         protected void onPostExecute(Value[] variableValues) {
             super.onPostExecute(variableValues);
 
-            try{
-                System.out.println(String.valueOf(variableValues[0].getValue()));
-            }catch(Exception e){
-                System.out.println(e.toString());
-            }
-
-            // Update your views here
-
-            int listSize = 11;
+            int listSize = 30;
             DataPoint[] dataPoints = new DataPoint[listSize];
             int y = listSize - 1;
 
@@ -375,17 +367,17 @@ public class UserHome extends AppCompatActivity{
             for (int i = 0; i < listSize; i++) {
                 // add new DataPoint object to the array for each of your list entries
                 try{
-                    Value[] DO = userIoTValues.getValuesDO();
+
                     WQIcalc = new UserIoTWQICalculation(
-                            Double.parseDouble(String.valueOf(userIoTValues.getValuesDO()[y - i].getValue())),
-                            Double.parseDouble(String.valueOf(userIoTValues.getValuesBOD()[y - i].getValue())),
-                            Double.parseDouble(String.valueOf(userIoTValues.getValuesCOD()[y - i].getValue())),
-                            Double.parseDouble(String.valueOf(userIoTValues.getValuesNH3N()[y - i].getValue())),
-                            Double.parseDouble(String.valueOf(userIoTValues.getValuesSS()[y - i].getValue())),
-                            Double.parseDouble(String.valueOf(userIoTValues.getValuespH()[y - i].getValue()))
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesDO()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesBOD()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesCOD()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesNH3N()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesSS()[y - i].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuespH()[y - i].getValue()))
                     );
                 }catch(Exception e){
-
+                    System.out.println("ERROR IN CALCULATING");
                 }
 
                 WQIcalc.calculateWQI();
@@ -399,6 +391,13 @@ public class UserHome extends AppCompatActivity{
             System.out.println(userHome_txt_currentWQI.getText() + "  from txt");
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
+
+            Value[] DO = userIoTValues.getValuesDO();
+            for(Value i : DO){
+                System.out.print(String.format("%.2f",i.getValue()) + ", ");
+            }
+            System.out.println();
+
             graphWQI.removeAllSeries();
             graphWQI.addSeries(series);
 
