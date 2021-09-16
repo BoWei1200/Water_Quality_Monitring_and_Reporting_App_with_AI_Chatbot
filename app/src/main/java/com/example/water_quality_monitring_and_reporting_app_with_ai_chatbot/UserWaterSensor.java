@@ -23,17 +23,9 @@ public class UserWaterSensor implements Runnable{
     public UserWaterSensor(Context context, int MODE_PRIVATE, String API_KEY) {
         mPreferences = context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         this.API_KEY = API_KEY;
-        try{
-
-        }catch (Exception e){
-            System.out.println("ERROR IN THREAD API: " + e.toString());
-        }
-
     }
 
     public void run() {
-        // we add 100 new entries
-
         int i = 0;
         //stop = get from session to stop
         apiClient = new ApiClient(API_KEY);
@@ -84,12 +76,28 @@ public class UserWaterSensor implements Runnable{
             try{
                 System.out.println("API in Thread: " + API_KEY);
 
-                DO.saveValue(i);
-                BOD.saveValue(i);
-                COD.saveValue(i);
-                NH3N.saveValue(i);
-                SS.saveValue(i);
-                pH.saveValue((int)(Math.random() * 14));
+                //clean water
+                double doVal = (Math.random() * (120-80)) + 80;
+                double bodVal = (Math.random() * (5-1)) + 1;
+                double codVal = (Math.random() * (20-5)) + 5;
+                double nh3nVal = (Math.random() * (4-0)) + 0;
+                double ssVal = (Math.random() * 50);
+                double pHVal = (Math.random() * (8.5-7)) + 7;
+
+//                if(pollutantIsDetected){
+//                    nh3nVal = (Math.random() * (100-4)) + 4;
+//
+//                    bodVal = (Math.random() * (5-1)) + 1;
+//                    do---;
+//                }
+
+                DO.saveValue(doVal);
+                BOD.saveValue(bodVal);
+                COD.saveValue(codVal);
+                NH3N.saveValue(nh3nVal);
+                SS.saveValue(ssVal);
+                pH.saveValue(pHVal);
+
             }catch(Exception e){
                 System.out.println("ERROR IN SAVING VALUE: "+e.toString());
             }
@@ -102,10 +110,6 @@ public class UserWaterSensor implements Runnable{
 
             stop = getStop();
         }
-    }
-
-    public void stopThread(){
-        stop = true;
     }
 
     public Boolean getStop(){

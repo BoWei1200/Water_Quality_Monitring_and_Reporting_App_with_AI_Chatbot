@@ -202,11 +202,6 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                                     }
                                 }
                             });
-
-//                                try {
-//                                    Thread.sleep(1000);
-//                                } catch (InterruptedException e) {
-//                                }
                         }
                     }).start();
 

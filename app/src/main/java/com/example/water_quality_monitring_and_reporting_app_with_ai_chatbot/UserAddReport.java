@@ -69,6 +69,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     private DatabaseReference databaseReferece;
 
     private LinearLayout userAddReport_linearLayout_previous, userAddReport_linearLayout_next;
+
     private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude,
             userAddReport_txt_photoAmount, userAddReport_txt_errorMsgDesc,
             userAddReport_txt_errorMsgLaLongitude, userAddReport_txt_errorMsgAddress;
@@ -178,8 +179,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         }
     }
 
-    public void getLocation(View view) { // WHEN USER CLICK ON 'location' ICON
-        //progressBar.setVisibility(View.VISIBLE);//enable the progressbar
+    public void getLocation(View view) {
         grantPermission();//check if user have permission
         checkLocationIsEnabled(); // redirect user to location setting
         getLocation();//get the exact location
@@ -226,7 +226,6 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //Intent is used to redirect to GPS setting
                             finish();
                         }
                     }).show();
@@ -497,20 +496,19 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             reportImageFilePaths[i] = imageNameConcat;
             StorageReference reference = storageReference.child(imageNameConcat);
             reference.putFile(imageUri[i]).addOnSuccessListener(
-                    new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while(!uriTask.isComplete()) ;
+                        Uri uri = uriTask.getResult();
+                        UserReportImage reportImage = new UserReportImage(imageNameConcat, uri.toString());
 
-                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                            while(!uriTask.isComplete()) ;
-                            Uri uri = uriTask.getResult();
-                            UserReportImage reportImage = new UserReportImage(imageNameConcat, uri.toString());
+                        databaseReferece.child(databaseReferece.push().getKey()).setValue(reportImage);
 
-                            databaseReferece.child(databaseReferece.push().getKey()).setValue(reportImage);
-
-                            displayToast("Image uploaded");
-                        }
+                        displayToast("Image uploaded");
                     }
+                }
             );
         }
     }
@@ -566,7 +564,6 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(msg)
-
                 // Specifying a listener allows you to take an action before dismissing the dialog.
                 // The dialog is automatically dismissed when a dialog button is clicked.
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
