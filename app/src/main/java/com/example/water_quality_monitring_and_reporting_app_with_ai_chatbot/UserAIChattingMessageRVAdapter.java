@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MessageRVAdapter extends RecyclerView.Adapter {
+public class UserAIChattingMessageRVAdapter extends RecyclerView.Adapter {
 
-    private ArrayList<MessageModal> messageModalArrayList;
+    private ArrayList<UserAIChattingMessageModal> userAIChattingMessageModalArrayList;
     private Context context;
 
-    public MessageRVAdapter(ArrayList<MessageModal> messageModalArrayList, Context context) {
-        this.messageModalArrayList = messageModalArrayList;
+    public UserAIChattingMessageRVAdapter(ArrayList<UserAIChattingMessageModal> userAIChattingMessageModalArrayList, Context context) {
+        this.userAIChattingMessageModalArrayList = userAIChattingMessageModalArrayList;
         this.context = context;
     }
 
@@ -27,10 +27,10 @@ public class MessageRVAdapter extends RecyclerView.Adapter {
         View view;
         switch (viewType) {
             case 0:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_msg, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_ai_chatting_user_msg, parent, false);
                 return new UserViewHolder(view);
             case 1:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bot_msg, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_ai_chatting_bot_msg, parent, false);
                 return new BotViewHolder(view);
         }
         return null;
@@ -38,7 +38,7 @@ public class MessageRVAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        MessageModal modal = messageModalArrayList.get(position);
+        UserAIChattingMessageModal modal = userAIChattingMessageModalArrayList.get(position);
         switch (modal.getSender()) {
             case "user":
                 ((UserViewHolder) holder).userTV.setText(modal.getMessage());
@@ -51,12 +51,12 @@ public class MessageRVAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return messageModalArrayList.size();
+        return userAIChattingMessageModalArrayList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        switch (messageModalArrayList.get(position).getSender()) {
+        switch (userAIChattingMessageModalArrayList.get(position).getSender()) {
             case "user":
                 return 0;
             case "bot":

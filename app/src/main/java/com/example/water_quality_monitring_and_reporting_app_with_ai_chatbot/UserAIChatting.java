@@ -33,8 +33,8 @@ public class UserAIChatting extends AppCompatActivity {
 
     private RequestQueue mRequestQueue;
 
-    private ArrayList<MessageModal> messageModalArrayList;
-    private MessageRVAdapter messageRVAdapter;
+    private ArrayList<UserAIChattingMessageModal> userAIChattingMessageModalArrayList;
+    private UserAIChattingMessageRVAdapter userAIChattingMessageRVAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class UserAIChatting extends AppCompatActivity {
         mRequestQueue = Volley.newRequestQueue(UserAIChatting.this);
         mRequestQueue.getCache().clear();
 
-        messageModalArrayList = new ArrayList<>();
+        userAIChattingMessageModalArrayList = new ArrayList<>();
 
         sendMsgIB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,16 +65,16 @@ public class UserAIChatting extends AppCompatActivity {
             }
         });
 
-        messageRVAdapter = new MessageRVAdapter(messageModalArrayList, this);
+        userAIChattingMessageRVAdapter = new UserAIChattingMessageRVAdapter(userAIChattingMessageModalArrayList, this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(UserAIChatting.this, RecyclerView.VERTICAL, false);
         chatsRV.setLayoutManager(linearLayoutManager);
-        chatsRV.setAdapter(messageRVAdapter);
+        chatsRV.setAdapter(userAIChattingMessageRVAdapter);
     }
 
     private void sendMessage(String userMsg) {
-        messageModalArrayList.add(new MessageModal(userMsg, USER_KEY));
-        messageRVAdapter.notifyDataSetChanged();
+        userAIChattingMessageModalArrayList.add(new UserAIChattingMessageModal(userMsg, USER_KEY));
+        userAIChattingMessageRVAdapter.notifyDataSetChanged();
 
         String url = "http://api.brainshop.ai/get?bid=159458&key=q29yTPbDHr89KUNu&uid=[uid]&msg=" + userMsg;
 
@@ -85,20 +85,20 @@ public class UserAIChatting extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     String botResponse = response.getString("cnt");
-                    messageModalArrayList.add(new MessageModal(botResponse, BOT_KEY));
-                    messageRVAdapter.notifyDataSetChanged();
-                    chatsRV.smoothScrollToPosition(messageModalArrayList.size()-1);
+                    userAIChattingMessageModalArrayList.add(new UserAIChattingMessageModal(botResponse, BOT_KEY));
+                    userAIChattingMessageRVAdapter.notifyDataSetChanged();
+                    chatsRV.smoothScrollToPosition(userAIChattingMessageModalArrayList.size()-1);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    messageModalArrayList.add(new MessageModal("No response", BOT_KEY));
-                    messageRVAdapter.notifyDataSetChanged();
+                    userAIChattingMessageModalArrayList.add(new UserAIChattingMessageModal("No response", BOT_KEY));
+                    userAIChattingMessageRVAdapter.notifyDataSetChanged();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                messageModalArrayList.add(new MessageModal("Sorry no response found", BOT_KEY));
+                userAIChattingMessageModalArrayList.add(new UserAIChattingMessageModal("Sorry no response found", BOT_KEY));
             }
         });
 
