@@ -3,7 +3,12 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
@@ -30,6 +35,12 @@ import com.ubidots.Variable;
 
 import com.jjoe64.graphview.GraphView;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
+
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class UserHome extends AppCompatActivity{
 
     private SharedPreferences mPreferences;
@@ -64,10 +75,16 @@ public class UserHome extends AppCompatActivity{
     private String getStopSensorPreference = "";
     private String getCurrentRunningSensorPreference = "";
 
+    DateTimeFormatter currentTime = DateTimeFormatter.ofPattern("HH:mm");
+    LocalDateTime nowTime = LocalDateTime.now();
+    String currentTimeString = currentTime.format(nowTime);
+    private LocalTime timePreviousNotification = LocalTime.parse(currentTimeString);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
+
 
         apiUbidots = new ApiUbidots();
 
@@ -98,23 +115,14 @@ public class UserHome extends AppCompatActivity{
             public boolean onMenuItemClick(MenuItem item) {
                 switch(item.getItemId()){
                     case R.id.userSettingMenu_logout:
-                        // calling method to edit values in shared prefs.
                         SharedPreferences.Editor editor = mPreferences.edit();
 
-                        // below line will clear
-                        // the data in shared prefs.
                         editor.putString(stopSensorPreference, "1");
                         editor.clear();
-                        //userWaterSensor.stopThread();
+                        editor.apply();
 
                         runApiUbidots(false);
 
-                        // below line will apply empty
-                        // data to shared prefs.
-                        editor.apply();
-
-                        // starting mainactivity after
-                        // clearing values in shared preferences.
                         Intent i = new Intent(UserHome.this, Login.class);
                         startActivity(i);
                         finish();
@@ -145,7 +153,8 @@ public class UserHome extends AppCompatActivity{
             userHome_txt_clickToViewMore.setVisibility(View.GONE);
             userHome_linearlayout_callToSetup.setVisibility(View.VISIBLE);
             graphWQI.setVisibility(View.GONE);
-        } else if(getScannedDeviceExistPreference.equals("")){
+        }
+        else if(getScannedDeviceExistPreference.equals("")){
             userHome_txt_clickToViewMore.setVisibility(View.GONE);
             userHome_txt_callToSetup.setText("Oops! You haven't set up your water sensor");
             userHome_linearlayout_callToSetup.setVisibility(View.VISIBLE);
@@ -216,6 +225,39 @@ public class UserHome extends AppCompatActivity{
             }
         }
     }
+    
+    public void createNotification(int drawableIcon, String title, String content){
+        createNotificationChannel();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "hydroMyNotification")
+                .setSmallIcon(drawableIcon)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(UserHome.this);
+        managerCompat.notify(1, builder.build());
+
+        Intent intent = new Intent(this, UserHome.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        builder.setContentIntent(pendingIntent);
+
+        // Add as notification
+        NotificationManager manager = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        manager.notify(0, builder.build());
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("hydroMyNotification", "hydroMyNotification", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 
     public void toOtherPages(View view) {
         Intent intent = new Intent();
@@ -249,17 +291,19 @@ public class UserHome extends AppCompatActivity{
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void viewGraphDetails(View view) {
-        if(!getAPIPreference.equals("")){
-            TransitionManager.beginDelayedTransition(userHome_linearlayout_others, new AutoTransition());
-            if(userHome_linearlayout_graphDetails_hide.getVisibility() == View.GONE){
-                userHome_linearlayout_graphDetails_hide.setVisibility(View.VISIBLE);
-                userHome_txt_clickToViewMore.setText(R.string.hide);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(!getAPIPreference.equals("")){
+                TransitionManager.beginDelayedTransition(userHome_linearlayout_others, new AutoTransition());
+                if(userHome_linearlayout_graphDetails_hide.getVisibility() == View.GONE){
+                    userHome_linearlayout_graphDetails_hide.setVisibility(View.VISIBLE);
+                    userHome_txt_clickToViewMore.setText(R.string.hide);
+                }
+                else{
+                    userHome_linearlayout_graphDetails_hide.setVisibility(View.GONE);
+                    userHome_txt_clickToViewMore.setText(R.string.view_more);
+                }
+                TransitionManager.beginDelayedTransition(userHome_cv_graph, new AutoTransition());
             }
-            else{
-                userHome_linearlayout_graphDetails_hide.setVisibility(View.GONE);
-                userHome_txt_clickToViewMore.setText(R.string.view_more);
-            }
-            TransitionManager.beginDelayedTransition(userHome_cv_graph, new AutoTransition());
         }
     }
 
@@ -289,6 +333,8 @@ public class UserHome extends AppCompatActivity{
             API_KEY = dbHelper.getAPIKey(getuserIDPreference);
 
             System.out.println("Running onPreExecute ...");
+
+            //if network disable
         }
 
         @Override
@@ -355,6 +401,7 @@ public class UserHome extends AppCompatActivity{
         }
 
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected void onPostExecute(Value[] variableValues) {
             super.onPostExecute(variableValues);
@@ -367,7 +414,6 @@ public class UserHome extends AppCompatActivity{
             for (int i = 0; i < listSize; i++) {
                 // add new DataPoint object to the array for each of your list entries
                 try{
-
                     WQIcalc = new UserIoTWQICalculation(
                         Double.parseDouble(String.valueOf(userIoTValues.getValuesDO()[y - i].getValue())),
                         Double.parseDouble(String.valueOf(userIoTValues.getValuesBOD()[y - i].getValue())),
@@ -382,8 +428,38 @@ public class UserHome extends AppCompatActivity{
 
                 WQIcalc.calculateWQI();
                 calculatedWQI = WQIcalc.getWQI();
+
+                String status = "";
+
+                if(calculatedWQI < 31.0){
+                    status = "heavily polluted";
+                }else{
+                    status = "polluted";
+                }
+
+                if(!status.equals("")){
+                    DateTimeFormatter currentTime = DateTimeFormatter.ofPattern("HH:mm");
+                    LocalDateTime nowTime = LocalDateTime.now();
+                    String currentTimeString = currentTime.format(nowTime);
+
+                    LocalTime currentTimeParse = LocalTime.parse(currentTimeString);
+
+                    //System.out.println(currentTimeParse + " " + timePreviousNotification);
+                    int diffTime = currentTimeParse.compareTo(timePreviousNotification);
+                    //System.out.println("difference" + diffTime);
+
+                    //if(diffTime > 30){
+                        timePreviousNotification = currentTimeParse;
+                        int drawable = (status.equals("heavily polluted")) ? R.drawable.warningiconedit : R.drawable.warningiconedit;
+                        String notificationTitle = "Water from your faucet is " + status + "!";
+                        String notificationText = "Detected WQI: " + calculatedWQI;
+                        createNotification(drawable, notificationTitle, notificationText);
+                        //System.out.println("Notification created");
+
+                    //}
+                }
+
                 dataPoints[i] = new DataPoint(i, calculatedWQI); //calculated WQI
-                //dataPoints[i] = new DataPoint(i, Double.parseDouble(String.valueOf(variableValues[y - i].getValue()))); //calculated WQI
             }
 
             userHome_txt_currentWQI.setText(String.format("%.2f", calculatedWQI));
@@ -393,10 +469,6 @@ public class UserHome extends AppCompatActivity{
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
 
             Value[] DO = userIoTValues.getValuesDO();
-            for(Value i : DO){
-                System.out.print(String.format("%.2f",i.getValue()) + ", ");
-            }
-            System.out.println();
 
             graphWQI.removeAllSeries();
             graphWQI.addSeries(series);

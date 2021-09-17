@@ -177,12 +177,8 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                     dbHelper.addAPIKey(API_KEY, userID);
 
                     SharedPreferences.Editor editor = mPreferences.edit();
-
                     editor.putString(apiPreference, API_KEY);
-
                     editor.commit();
-
-                    //store API key based on the userID
 
                     startActivity(new Intent(UserUbidotsAccSetup.this, UserUbidotsScanDevice.class));
                     abidotsSetup.cancel(true);
