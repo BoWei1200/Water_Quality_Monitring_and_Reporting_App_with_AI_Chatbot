@@ -41,9 +41,9 @@ public class UserAIChatting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_aichatting);
 
-        chatsRV = findViewById(R.id.idRVChats);
-        sendMsgIB = findViewById(R.id.idIBSend);
-        userMsgEdt = findViewById(R.id.idEdtMessage);
+        chatsRV = findViewById(R.id.userAIChatting_recyclerV_chat);
+        sendMsgIB = findViewById(R.id.userAIChatting_imgBtn_send);
+        userMsgEdt = findViewById(R.id.userAIChatting_eTxt_message);
 
         mRequestQueue = Volley.newRequestQueue(UserAIChatting.this);
         mRequestQueue.getCache().clear();

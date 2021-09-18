@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="#008eb1 "
+        android:background="@color/mainTheme"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
         app:titleTextColor="#FFFFFF" />
 
     <LinearLayout
-        android:id="@+id/systemAdminHome_linearParent"
+        android:id="@+id/userAIChatting_linearParent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -36,36 +36,37 @@
 
         <!--recycler view to display our chats-->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/idRVChats"
+            android:id="@+id/userAIChatting_recyclerV_chat"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight=".92"
             android:padding="5dp"/>
 
         <LinearLayout
-            android:id="@+id/idLLMessage"
+            android:id="@+id/userAIChatting_linearLayout_message"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:weightSum="5">
+            android:orientation="horizontal">
 
             <!--edit text to enter message-->
             <EditText
-                android:id="@+id/idEdtMessage"
+                android:id="@+id/userAIChatting_eTxt_message"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:hint="Enter Message" />
+                android:layout_height="match_parent"
+                android:layout_weight=".85"
+                android:hint="Enter Message"
+                android:fontFamily="@font/nunito_sans"/>
 
             <!--button to send message-->
             <ImageButton
-                android:id="@+id/idIBSend"
+                android:id="@+id/userAIChatting_imgBtn_send"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@color/purple_200"
+                android:layout_weight=".15"
+                android:background="@drawable/circle_img_ai_chat_send"
                 android:src="@android:drawable/ic_menu_send"
                 app:tint="@color/white" />
 
