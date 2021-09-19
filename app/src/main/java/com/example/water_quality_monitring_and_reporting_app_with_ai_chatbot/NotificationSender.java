@@ -36,7 +36,6 @@ public class NotificationSender extends Thread{
         }catch (InterruptedException e){
             System.out.println(e.toString());
         }
-
     }
 
     public void createNotification(Context context, int drawableIcon, String title, String content){

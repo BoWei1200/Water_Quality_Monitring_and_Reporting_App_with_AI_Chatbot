@@ -21,6 +21,7 @@ import android.view.View;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -70,6 +71,7 @@ public class UserHome extends AppCompatActivity{
     private UserIoTWQICalculation WQIcalc;
     private ImageView userHome_img_setting;
     private PopupMenu userHome_popupMenu_setting;
+    private Button userHome_btn_setUpNow;
 
     private String getAPIPreference = "";
     private String getScannedDeviceExistPreference = "";
@@ -107,6 +109,8 @@ public class UserHome extends AppCompatActivity{
 
         userHome_cv_graph = findViewById(R.id.userHome_cv_graph);
         userHome_img_setting = findViewById(R.id.userHome_img_setting);
+
+        userHome_btn_setUpNow = findViewById(R.id.userHome_btn_setUpNow);
 
         WQIcalc = new UserIoTWQICalculation();
 
@@ -223,6 +227,7 @@ public class UserHome extends AppCompatActivity{
                     userHome_txt_callToSetup.setText("Oops! No internet connection ...");
                     userHome_linearlayout_callToSetup.setVisibility(View.VISIBLE);
                     graphWQI.setVisibility(View.GONE);
+                    userHome_btn_setUpNow.setVisibility(View.GONE);
                 }
 
             }

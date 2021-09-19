@@ -89,6 +89,7 @@ public class UserAIChatting extends AppCompatActivity {
                     userAIChattingMessageRVAdapter.notifyDataSetChanged();
                     userAIChatting_recyclerV_chat.smoothScrollToPosition(userAIChattingMessageModalArrayList.size()-1);
 
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     userAIChattingMessageModalArrayList.add(new UserAIChattingMessageModal("No response", BOT_KEY));
