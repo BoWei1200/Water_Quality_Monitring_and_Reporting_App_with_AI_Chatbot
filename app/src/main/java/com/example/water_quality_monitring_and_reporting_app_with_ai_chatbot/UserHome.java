@@ -12,6 +12,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
@@ -165,25 +166,20 @@ public class UserHome extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
-
         runApiUbidots(true);
-
         Toast.makeText(this,"Start!",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onRestart(){
         super.onRestart();
-
         runApiUbidots(true);
-
         Toast.makeText(this,"Restart!",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         Toast.makeText(this,"Resume!",Toast.LENGTH_SHORT).show();
 
         new Thread(new Runnable() {
@@ -210,53 +206,33 @@ public class UserHome extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         System.out.println("App completely terminated");
     }
 
     public void runApiUbidots(Boolean run){
         if(!getAPIPreference.equals(null) && !getScannedDeviceExistPreference.equals(null)){
             if(!getAPIPreference.equals("") && !getScannedDeviceExistPreference.equals("")){
-                if(run){
-                    ubidotsAsyncTask = new ApiUbidots().execute();
-                }else{
-                    ubidotsAsyncTask.cancel(true);
+                if(isNetworkConnected()){
+                    if(run)
+                        ubidotsAsyncTask = new ApiUbidots().execute();
+                    else
+                        ubidotsAsyncTask.cancel(true);
                 }
+                else{
+                    userHome_txt_clickToViewMore.setVisibility(View.GONE);
+                    userHome_txt_callToSetup.setText("Oops! No internet connection ...");
+                    userHome_linearlayout_callToSetup.setVisibility(View.VISIBLE);
+                    graphWQI.setVisibility(View.GONE);
+                }
+
             }
         }
     }
-    
-    public void createNotification(int drawableIcon, String title, String content){
-        createNotificationChannel();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "hydroMyNotification")
-                .setSmallIcon(drawableIcon)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true);
 
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(UserHome.this);
-        managerCompat.notify(1, builder.build());
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
 
-        Intent intent = new Intent(this, UserHome.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-        builder.setContentIntent(pendingIntent);
-
-        // Add as notification
-        NotificationManager manager = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
-    }
-
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("hydroMyNotification", "hydroMyNotification", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
     public void toOtherPages(View view) {
@@ -341,6 +317,9 @@ public class UserHome extends AppCompatActivity{
         protected Value[] doInBackground(Integer... params) {
             System.out.println("Running doInBackGround ...");
 
+            if(!isNetworkConnected())
+                return null;
+
             Value[] valuesDO = new Value[0];
             ApiClient apiClient = new ApiClient(API_KEY);
 
@@ -406,6 +385,9 @@ public class UserHome extends AppCompatActivity{
         protected void onPostExecute(Value[] variableValues) {
             super.onPostExecute(variableValues);
 
+            if(!isNetworkConnected())
+                return;
+
             int listSize = 30;
             DataPoint[] dataPoints = new DataPoint[listSize];
             int y = listSize - 1;
@@ -429,35 +411,35 @@ public class UserHome extends AppCompatActivity{
                 WQIcalc.calculateWQI();
                 calculatedWQI = WQIcalc.getWQI();
 
-                String status = "";
-
-                if(calculatedWQI < 31.0){
-                    status = "heavily polluted";
-                }else{
-                    status = "polluted";
-                }
-
-                if(!status.equals("")){
-                    DateTimeFormatter currentTime = DateTimeFormatter.ofPattern("HH:mm");
-                    LocalDateTime nowTime = LocalDateTime.now();
-                    String currentTimeString = currentTime.format(nowTime);
-
-                    LocalTime currentTimeParse = LocalTime.parse(currentTimeString);
-
-                    //System.out.println(currentTimeParse + " " + timePreviousNotification);
-                    int diffTime = currentTimeParse.compareTo(timePreviousNotification);
-                    //System.out.println("difference" + diffTime);
-
-                    //if(diffTime > 30){
-                        timePreviousNotification = currentTimeParse;
-                        int drawable = (status.equals("heavily polluted")) ? R.drawable.warningiconedit : R.drawable.warningiconedit;
-                        String notificationTitle = "Water from your faucet is " + status + "!";
-                        String notificationText = "Detected WQI: " + calculatedWQI;
-                        createNotification(drawable, notificationTitle, notificationText);
-                        //System.out.println("Notification created");
-
-                    //}
-                }
+//                String status = "";
+//
+//                if(calculatedWQI < 31.0){
+//                    status = "heavily polluted";
+//                }else{
+//                    status = "polluted";
+//                }
+//
+//                if(!status.equals("")){
+//                    DateTimeFormatter currentTime = DateTimeFormatter.ofPattern("HH:mm");
+//                    LocalDateTime nowTime = LocalDateTime.now();
+//                    String currentTimeString = currentTime.format(nowTime);
+//
+//                    LocalTime currentTimeParse = LocalTime.parse(currentTimeString);
+//
+//                    //System.out.println(currentTimeParse + " " + timePreviousNotification);
+//                    int diffTime = currentTimeParse.compareTo(timePreviousNotification);
+//                    //System.out.println("difference" + diffTime);
+//
+//                    //if(diffTime > 30){
+//                        timePreviousNotification = currentTimeParse;
+//                        int drawable = (status.equals("heavily polluted")) ? R.drawable.warningiconedit : R.drawable.warningiconedit;
+//                        String notificationTitle = "Water from your faucet is " + status + "!";
+//                        String notificationText = "Detected WQI: " + calculatedWQI;
+//                        createNotification(drawable, notificationTitle, notificationText);
+//                        //System.out.println("Notification created");
+//
+//                    //}
+//                }
 
                 dataPoints[i] = new DataPoint(i, calculatedWQI); //calculated WQI
             }

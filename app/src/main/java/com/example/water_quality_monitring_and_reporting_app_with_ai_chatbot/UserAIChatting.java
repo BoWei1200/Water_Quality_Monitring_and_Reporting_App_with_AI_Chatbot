@@ -25,9 +25,9 @@ import java.util.ArrayList;
 
 public class UserAIChatting extends AppCompatActivity {
 
-    private RecyclerView chatsRV;
-    private ImageButton sendMsgIB;
-    private EditText userMsgEdt;
+    private RecyclerView userAIChatting_recyclerV_chat;
+    private ImageButton userAIChatting_imgBtn_send;
+    private EditText userAIChatting_eTxt_message;
     private final String USER_KEY = "user";
     private final String BOT_KEY = "bot";
 
@@ -41,35 +41,35 @@ public class UserAIChatting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_aichatting);
 
-        chatsRV = findViewById(R.id.userAIChatting_recyclerV_chat);
-        sendMsgIB = findViewById(R.id.userAIChatting_imgBtn_send);
-        userMsgEdt = findViewById(R.id.userAIChatting_eTxt_message);
+        userAIChatting_recyclerV_chat = findViewById(R.id.userAIChatting_recyclerV_chat);
+        userAIChatting_imgBtn_send = findViewById(R.id.userAIChatting_imgBtn_send);
+        userAIChatting_eTxt_message = findViewById(R.id.userAIChatting_eTxt_message);
 
         mRequestQueue = Volley.newRequestQueue(UserAIChatting.this);
         mRequestQueue.getCache().clear();
 
         userAIChattingMessageModalArrayList = new ArrayList<>();
 
-        sendMsgIB.setOnClickListener(new View.OnClickListener() {
+        userAIChatting_imgBtn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (userMsgEdt.getText().toString().isEmpty()) {
+                if (userAIChatting_eTxt_message.getText().toString().isEmpty()) {
                     Toast.makeText(UserAIChatting.this, "Please enter your message..", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                sendMessage(userMsgEdt.getText().toString());
+                sendMessage(userAIChatting_eTxt_message.getText().toString());
 
-                userMsgEdt.setText("");
+                userAIChatting_eTxt_message.setText("");
             }
         });
 
         userAIChattingMessageRVAdapter = new UserAIChattingMessageRVAdapter(userAIChattingMessageModalArrayList, this);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(UserAIChatting.this, RecyclerView.VERTICAL, false);
-        chatsRV.setLayoutManager(linearLayoutManager);
-        chatsRV.setAdapter(userAIChattingMessageRVAdapter);
+        userAIChatting_recyclerV_chat.setLayoutManager(linearLayoutManager);
+        userAIChatting_recyclerV_chat.setAdapter(userAIChattingMessageRVAdapter);
     }
 
     private void sendMessage(String userMsg) {
@@ -87,7 +87,7 @@ public class UserAIChatting extends AppCompatActivity {
                     String botResponse = response.getString("cnt");
                     userAIChattingMessageModalArrayList.add(new UserAIChattingMessageModal(botResponse, BOT_KEY));
                     userAIChattingMessageRVAdapter.notifyDataSetChanged();
-                    chatsRV.smoothScrollToPosition(userAIChattingMessageModalArrayList.size()-1);
+                    userAIChatting_recyclerV_chat.smoothScrollToPosition(userAIChattingMessageModalArrayList.size()-1);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

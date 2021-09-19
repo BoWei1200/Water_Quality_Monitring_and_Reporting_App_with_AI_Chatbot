@@ -70,8 +70,6 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
         registration_txt_errorAddress = findViewById(R.id.registration_txt_errorAddress);
         registration_txt_errorPassword = findViewById(R.id.registration_txt_errorPassword);
 
-        //RegistrationValidation registrationValidation = new RegistrationValidation();
-
         nameValidation(registration_txtInputET_fName);
         nameValidation(registration_txtInputET_lName);
 

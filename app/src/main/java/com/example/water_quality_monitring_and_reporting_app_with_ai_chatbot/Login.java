@@ -17,7 +17,6 @@ import android.widget.Toast;
 public class Login extends AppCompatActivity {
     private EditText login_eTxt_email;
     private EditText login_eTxt_password;
-    private Button login_btn_login;
     private TextView login_txt_errorMsgEmail, login_txt_errorMsgPassword;
     private DatabaseHelper dbHelper;
 
@@ -38,7 +37,6 @@ public class Login extends AppCompatActivity {
 
         login_eTxt_email = findViewById(R.id.login_eTxt_email);
         login_eTxt_password = findViewById(R.id.login_eTxt_password);
-        login_btn_login = findViewById(R.id.login_btn_login);
         login_txt_errorMsgEmail = findViewById(R.id.login_txt_errorMsgEmail);
         login_txt_errorMsgPassword = findViewById(R.id.login_txt_errorMsgPassword);
 

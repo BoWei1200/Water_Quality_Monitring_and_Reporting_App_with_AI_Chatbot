@@ -1,11 +1,25 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.ubidots.ApiClient;
 import com.ubidots.DataSource;
+import com.ubidots.Value;
 import com.ubidots.Variable;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class UserWaterSensor implements Runnable{
     Boolean stop = false;
@@ -13,6 +27,7 @@ public class UserWaterSensor implements Runnable{
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
     private final String stopSensorPreference = "stopSensor";
     private final String completeGetDataFromUbidotsPreference = "completeGetDataFromUbidots";
+    private Context context;
 
     //private final String demoVariableID = "60f2b0be4763e74e29fcc3aa";
 
@@ -21,10 +36,12 @@ public class UserWaterSensor implements Runnable{
     private Variable[] variables;
 
     public UserWaterSensor(Context context, int MODE_PRIVATE, String API_KEY) {
+        this.context = context;
         mPreferences = context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         this.API_KEY = API_KEY;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void run() {
         int i = 0;
         //stop = get from session to stop
@@ -98,6 +115,43 @@ public class UserWaterSensor implements Runnable{
                 SS.saveValue(ssVal);
                 pH.saveValue(pHVal);
 
+
+                Value[] valuesDO = DO.getValues();
+                Value[] valuesBOD = BOD.getValues();
+                Value[] valuesCOD = COD.getValues();
+                Value[] valuesNH3N = NH3N.getValues();
+                Value[] valuesSS = SS.getValues();
+                Value[] valuespH = pH.getValues();
+
+                UserIoTValues userIoTValues = new UserIoTValues(valuesDO, valuesBOD, valuesCOD, valuesNH3N, valuesSS, valuespH);
+
+                UserIoTWQICalculation WQIcalc = new UserIoTWQICalculation(
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesDO()[0].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesBOD()[0].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesCOD()[0].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesNH3N()[0].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuesSS()[0].getValue())),
+                        Double.parseDouble(String.valueOf(userIoTValues.getValuespH()[0].getValue())));
+
+                WQIcalc.calculateWQI();
+                double calculatedWQI = WQIcalc.getWQI();
+
+                String status = "";
+
+
+                if(calculatedWQI < 51.8){
+                    if(calculatedWQI < 31.0){
+                        status = "heavily polluted";
+                    }else{
+                        status = "polluted";
+                    }
+                    int drawable = R.drawable.appicon;
+                    String notificationTitle = "Water from your faucet is " + status + "!";
+                    String notificationText = "Detected WQI: " + calculatedWQI;
+                    NotificationSender notificationSender = new NotificationSender(context, drawable, notificationTitle, notificationText, "WQI");
+                    notificationSender.start();
+                }
+
             }catch(Exception e){
                 System.out.println("ERROR IN SAVING VALUE: "+e.toString());
             }
@@ -114,10 +168,6 @@ public class UserWaterSensor implements Runnable{
 
     public Boolean getStop(){
         return (mPreferences.getString(stopSensorPreference, null).equals("1"));
-    }
-
-    public Boolean getCompleteGetDataFromUbidots(){
-        return (mPreferences.getString(completeGetDataFromUbidotsPreference, null).equals("1"));
     }
 
 }
