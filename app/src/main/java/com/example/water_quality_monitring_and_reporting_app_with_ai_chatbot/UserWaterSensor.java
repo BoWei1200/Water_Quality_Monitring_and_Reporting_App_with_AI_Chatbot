@@ -1,31 +1,22 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.ubidots.ApiClient;
 import com.ubidots.DataSource;
 import com.ubidots.Value;
 import com.ubidots.Variable;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 public class UserWaterSensor implements Runnable{
     Boolean stop = false;
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
     private final String stopSensorPreference = "stopSensor";
+    private final String finishDetectingPreference = "finishDetecting";
     private final String completeGetDataFromUbidotsPreference = "completeGetDataFromUbidots";
     private Context context;
 
@@ -44,6 +35,8 @@ public class UserWaterSensor implements Runnable{
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void run() {
         int i = 0;
+        boolean countBlock = false;
+        int polluteUntil = 0;
         //stop = get from session to stop
         apiClient = new ApiClient(API_KEY);
 
@@ -67,27 +60,31 @@ public class UserWaterSensor implements Runnable{
         Variable pH = null;
         Variable SS = null;
 
-        for (int j=0; j < variables.length; j++){
-            if(variables[j].getName().equals("bod"))
-                BOD = variables[j];
+        for (Variable variable : variables) {
+            if (variable.getName().equals("bod"))
+                BOD = variable;
 
-            if(variables[j].getName().equals("cod"))
-                COD = variables[j];
+            if (variable.getName().equals("cod"))
+                COD = variable;
 
-            if(variables[j].getName().equals("do"))
-                DO = variables[j];
+            if (variable.getName().equals("do"))
+                DO = variable;
 
-            if(variables[j].getName().equals("nh3n"))
-                NH3N = variables[j];
+            if (variable.getName().equals("nh3n"))
+                NH3N = variable;
 
-            if(variables[j].getName().equals("ph"))
-                pH = variables[j];
+            if (variable.getName().equals("ph"))
+                pH = variable;
 
-            if(variables[j].getName().equals("ss"))
-                SS = variables[j];
+            if (variable.getName().equals("ss"))
+                SS = variable;
         }
+        SharedPreferences.Editor editor = mPreferences.edit();
 
         while (!stop) {
+            editor.putString(finishDetectingPreference, "");
+            editor.commit();
+
             System.out.println("detect for "+ i++ +" times");
 
             try{
@@ -97,16 +94,33 @@ public class UserWaterSensor implements Runnable{
                 double doVal = (Math.random() * (120-80)) + 80;
                 double bodVal = (Math.random() * (5-1)) + 1;
                 double codVal = (Math.random() * (20-5)) + 5;
-                double nh3nVal = (Math.random() * (4-0)) + 0;
+                double nh3nVal = (Math.random() * (3-0)) + 0;
                 double ssVal = (Math.random() * 50);
                 double pHVal = (Math.random() * (8.5-7)) + 7;
 
-//                if(pollutantIsDetected){
-//                    nh3nVal = (Math.random() * (100-4)) + 4;
-//
-//                    bodVal = (Math.random() * (5-1)) + 1;
-//                    do---;
-//                }
+                Value[] valuesNH3N = NH3N.getValues();
+                double nh3nValRead = Double.parseDouble(String.valueOf(valuesNH3N[0].getValue()));
+                if(nh3nValRead > 3){
+                    int polluteForNTimes = (int)(Math.random() * (10-5)) + 5;
+
+                    if(!countBlock){
+                        polluteUntil = i + polluteForNTimes;
+                        countBlock = true;
+                    }
+                    System.out.println("polluteUntil" +  polluteUntil);
+                    if (i <= polluteUntil){
+                        nh3nVal = (Math.random() * ((nh3nValRead + 25) -nh3nValRead)) + nh3nValRead;
+
+                        bodVal = (Math.random() * (100-20)) + 20;
+                        codVal = (Math.random() * (100-20)) + 20;
+                        doVal = (Math.random() * 50);
+                        ssVal = (Math.random() * (100-50)) + 50;
+                    }
+                    else{
+                        nh3nVal = (Math.random() * (3-0)) + 0;
+                        countBlock = false;
+                    }
+                }
 
                 DO.saveValue(doVal);
                 BOD.saveValue(bodVal);
@@ -119,7 +133,7 @@ public class UserWaterSensor implements Runnable{
                 Value[] valuesDO = DO.getValues();
                 Value[] valuesBOD = BOD.getValues();
                 Value[] valuesCOD = COD.getValues();
-                Value[] valuesNH3N = NH3N.getValues();
+                 valuesNH3N = NH3N.getValues();
                 Value[] valuesSS = SS.getValues();
                 Value[] valuespH = pH.getValues();
 
@@ -162,7 +176,10 @@ public class UserWaterSensor implements Runnable{
                 System.out.println("Thread class: error: "+e.toString());
             }
 
+            System.out.println(stop);
             stop = getStop();
+            editor.putString(finishDetectingPreference, "1");
+            editor.commit();
         }
     }
 

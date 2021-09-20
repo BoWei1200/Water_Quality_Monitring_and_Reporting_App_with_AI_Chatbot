@@ -56,8 +56,10 @@ public class UserHome extends AppCompatActivity{
     private final String scannedDeviceExistPreference = "scannedDeviceExist";
     private final String stopSensorPreference = "stopSensor";
     private final String currentRunningSensorPreference = "currentRunningSensor";
+    private final String finishDetectingPreference = "finishDetecting";
 
     private UserWaterSensor userWaterSensor;
+    private Thread userWaterSensorThread;
 
     private ApiUbidots apiUbidots;
 
@@ -77,6 +79,7 @@ public class UserHome extends AppCompatActivity{
     private String getScannedDeviceExistPreference = "";
     private String getStopSensorPreference = "";
     private String getCurrentRunningSensorPreference = "";
+    private String getFinishDetectingPreference = "";
 
     DateTimeFormatter currentTime = DateTimeFormatter.ofPattern("HH:mm");
     LocalDateTime nowTime = LocalDateTime.now();
@@ -87,7 +90,6 @@ public class UserHome extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
-
 
         apiUbidots = new ApiUbidots();
 
@@ -137,22 +139,7 @@ public class UserHome extends AppCompatActivity{
             }
         });
 
-        if(getScannedDeviceExistPreference.equals("1")){
-            try{
-                userWaterSensor = new UserWaterSensor(this, MODE_PRIVATE, getAPIPreference);
-                Thread userWaterSensorThread = new Thread(userWaterSensor);
-                if(!getCurrentRunningSensorPreference.equals("1")){ // if current running thread is not stopped (stop == false), cant start()
-                    userWaterSensorThread.start();
-
-                    SharedPreferences.Editor editor = mPreferences.edit();
-                    editor.putString(currentRunningSensorPreference, "1");
-                    editor.commit();
-                }
-            }catch(Exception e){
-                System.out.println(e.toString());
-                System.out.println("cannot run thread!");
-            }
-        }
+        startWaterSensorThread();
 
         if(getAPIPreference.equals("")){
             userHome_txt_clickToViewMore.setVisibility(View.GONE);
@@ -211,6 +198,26 @@ public class UserHome extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         System.out.println("App completely terminated");
+    }
+
+    public void startWaterSensorThread(){
+        if(getScannedDeviceExistPreference.equals("1")){
+            try{
+                userWaterSensor = new UserWaterSensor(this, MODE_PRIVATE, getAPIPreference);
+                userWaterSensorThread = new Thread(userWaterSensor);
+                if(!getCurrentRunningSensorPreference.equals("1")){ // if current running thread is not stopped (stop == false), cant start()
+                    userWaterSensorThread.start();
+
+                    SharedPreferences.Editor editor = mPreferences.edit();
+                    editor.putString(stopSensorPreference, "");
+                    editor.putString(currentRunningSensorPreference, "1");
+                    editor.commit();
+                }
+            }catch(Exception e){
+                System.out.println(e.toString());
+                System.out.println("cannot run thread!");
+            }
+        }
     }
 
     public void runApiUbidots(Boolean run){
@@ -295,6 +302,22 @@ public class UserHome extends AppCompatActivity{
     public void refresh(View view) {
         startActivity(getIntent());
         finish();
+
+
+//        if(Thread.currentThread().isAlive()){
+//            SharedPreferences.Editor editor = mPreferences.edit();
+//
+//            editor.putString(stopSensorPreference, "1");
+//            editor.putString(currentRunningSensorPreference, "");
+//            editor.commit();
+//
+//            while(!mPreferences.getString(finishDetectingPreference, "").equals("1")){
+//                System.out.println("Waiting for finish detecting in sensor");
+//            }
+//            System.out.println("Finished");
+//
+//            startWaterSensorThread();
+//        }
     }
 
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
@@ -393,83 +416,58 @@ public class UserHome extends AppCompatActivity{
             if(!isNetworkConnected())
                 return;
 
-            int listSize = 30;
-            DataPoint[] dataPoints = new DataPoint[listSize];
-            int y = listSize - 1;
+            try{
+                int listSize = 30;
+                DataPoint[] dataPoints = new DataPoint[listSize];
+                int y = listSize - 1;
 
-            double calculatedWQI = 0.0;
-            for (int i = 0; i < listSize; i++) {
-                // add new DataPoint object to the array for each of your list entries
-                try{
-                    WQIcalc = new UserIoTWQICalculation(
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuesDO()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuesBOD()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuesCOD()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuesNH3N()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuesSS()[y - i].getValue())),
-                        Double.parseDouble(String.valueOf(userIoTValues.getValuespH()[y - i].getValue()))
-                    );
-                }catch(Exception e){
-                    System.out.println("ERROR IN CALCULATING");
+                double calculatedWQI = 0.0;
+                for (int i = 0; i < listSize; i++) {
+                    // add new DataPoint object to the array for each of your list entries
+                    try{
+                        WQIcalc = new UserIoTWQICalculation(
+                                Double.parseDouble(String.valueOf(userIoTValues.getValuesDO()[y - i].getValue())),
+                                Double.parseDouble(String.valueOf(userIoTValues.getValuesBOD()[y - i].getValue())),
+                                Double.parseDouble(String.valueOf(userIoTValues.getValuesCOD()[y - i].getValue())),
+                                Double.parseDouble(String.valueOf(userIoTValues.getValuesNH3N()[y - i].getValue())),
+                                Double.parseDouble(String.valueOf(userIoTValues.getValuesSS()[y - i].getValue())),
+                                Double.parseDouble(String.valueOf(userIoTValues.getValuespH()[y - i].getValue()))
+                        );
+                    }catch(Exception e){
+                        System.out.println("ERROR IN CALCULATING");
+                    }
+
+                    WQIcalc.calculateWQI();
+                    calculatedWQI = WQIcalc.getWQI();
+
+                    dataPoints[i] = new DataPoint(i, calculatedWQI); //calculated WQI
                 }
 
-                WQIcalc.calculateWQI();
-                calculatedWQI = WQIcalc.getWQI();
+                userHome_txt_currentWQI.setText(String.format("%.2f", calculatedWQI));
 
-//                String status = "";
-//
-//                if(calculatedWQI < 31.0){
-//                    status = "heavily polluted";
-//                }else{
-//                    status = "polluted";
-//                }
-//
-//                if(!status.equals("")){
-//                    DateTimeFormatter currentTime = DateTimeFormatter.ofPattern("HH:mm");
-//                    LocalDateTime nowTime = LocalDateTime.now();
-//                    String currentTimeString = currentTime.format(nowTime);
-//
-//                    LocalTime currentTimeParse = LocalTime.parse(currentTimeString);
-//
-//                    //System.out.println(currentTimeParse + " " + timePreviousNotification);
-//                    int diffTime = currentTimeParse.compareTo(timePreviousNotification);
-//                    //System.out.println("difference" + diffTime);
-//
-//                    //if(diffTime > 30){
-//                        timePreviousNotification = currentTimeParse;
-//                        int drawable = (status.equals("heavily polluted")) ? R.drawable.warningiconedit : R.drawable.warningiconedit;
-//                        String notificationTitle = "Water from your faucet is " + status + "!";
-//                        String notificationText = "Detected WQI: " + calculatedWQI;
-//                        createNotification(drawable, notificationTitle, notificationText);
-//                        //System.out.println("Notification created");
-//
-//                    //}
-//                }
+                System.out.println(userHome_txt_currentWQI.getText() + "  from txt");
 
-                dataPoints[i] = new DataPoint(i, calculatedWQI); //calculated WQI
+                LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
+
+                Value[] DO = userIoTValues.getValuesDO();
+
+                graphWQI.removeAllSeries();
+                graphWQI.addSeries(series);
+
+                graphWQI.getViewport().setMinX(0);
+                graphWQI.getViewport().setMaxX(listSize - 1);
+                graphWQI.getViewport().setMinY(0.0);
+                graphWQI.getViewport().setMaxY(100.0);
+
+                graphWQI.getViewport().setYAxisBoundsManual(true);
+                graphWQI.getViewport().setXAxisBoundsManual(true);
+
+                graphWQI.getViewport().setScrollable(true); // enables horizontal scrolling
+                graphWQI.getViewport().setScalable(true); // enables horizontal zooming and scrolling
+            }catch(Exception e){
+                System.out.println("ERROR IN POSTEXEC: " + e.toString());
             }
 
-            userHome_txt_currentWQI.setText(String.format("%.2f", calculatedWQI));
-
-            System.out.println(userHome_txt_currentWQI.getText() + "  from txt");
-
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints);
-
-            Value[] DO = userIoTValues.getValuesDO();
-
-            graphWQI.removeAllSeries();
-            graphWQI.addSeries(series);
-
-            graphWQI.getViewport().setMinX(0);
-            graphWQI.getViewport().setMaxX(listSize - 1);
-            graphWQI.getViewport().setMinY(0.0);
-            graphWQI.getViewport().setMaxY(100.0);
-
-            graphWQI.getViewport().setYAxisBoundsManual(true);
-            graphWQI.getViewport().setXAxisBoundsManual(true);
-
-            graphWQI.getViewport().setScrollable(true); // enables horizontal scrolling
-            graphWQI.getViewport().setScalable(true); // enables horizontal zooming and scrolling
         }
     }
 }
