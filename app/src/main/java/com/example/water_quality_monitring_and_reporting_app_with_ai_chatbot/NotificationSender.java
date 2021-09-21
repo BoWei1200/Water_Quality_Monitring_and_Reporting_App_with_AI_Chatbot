@@ -27,16 +27,15 @@ public class NotificationSender extends Thread{
     }
 
     public void run(){
-//        try{
+        try{
             createNotification(context, drawableIcon, title, content);
 
             if(notificationIdentifier.equals("WQI")){
-
-                //Thread.sleep(60000); // 1 minute
+                Thread.sleep(120000); // 1 minute, will it interrupt other thread?
             }
-//        }catch (InterruptedException e){
-//            System.out.println(e.toString());
-//        }
+        }catch (InterruptedException e){
+            System.out.println(e.toString());
+        }
     }
 
     public void createNotification(Context context, int drawableIcon, String title, String content){

@@ -79,11 +79,11 @@ public class UserWaterSensor implements Runnable{
             if (variable.getName().equals("ss"))
                 SS = variable;
         }
-        SharedPreferences.Editor editor = mPreferences.edit();
+        //SharedPreferences.Editor editor = mPreferences.edit();
 
         while (!stop) {
-            editor.putString(finishDetectingPreference, "");
-            editor.commit();
+//            editor.putString(finishDetectingPreference, "");
+//            editor.commit();
 
             System.out.println("detect for "+ i++ +" times");
 
@@ -101,20 +101,21 @@ public class UserWaterSensor implements Runnable{
                 Value[] valuesNH3N = NH3N.getValues();
                 double nh3nValRead = Double.parseDouble(String.valueOf(valuesNH3N[0].getValue()));
                 if(nh3nValRead > 3){
-                    int polluteForNTimes = (int)(Math.random() * (10-5)) + 5;
+                    int polluteForNTimes = (int)(Math.random() * (15-7)) + 7;
 
                     if(!countBlock){
                         polluteUntil = i + polluteForNTimes;
                         countBlock = true;
                     }
                     System.out.println("polluteUntil" +  polluteUntil);
+
                     if (i <= polluteUntil){
                         nh3nVal = (Math.random() * ((nh3nValRead + 25) -nh3nValRead)) + nh3nValRead;
 
                         bodVal = (Math.random() * (100-20)) + 20;
                         codVal = (Math.random() * (100-20)) + 20;
-                        doVal = (Math.random() * 50);
                         ssVal = (Math.random() * (100-50)) + 50;
+                        doVal = (Math.random() * 50);
                     }
                     else{
                         nh3nVal = (Math.random() * (3-0)) + 0;
@@ -128,7 +129,6 @@ public class UserWaterSensor implements Runnable{
                 NH3N.saveValue(nh3nVal);
                 SS.saveValue(ssVal);
                 pH.saveValue(pHVal);
-
 
                 Value[] valuesDO = DO.getValues();
                 Value[] valuesBOD = BOD.getValues();
@@ -151,7 +151,6 @@ public class UserWaterSensor implements Runnable{
                 double calculatedWQI = WQIcalc.getWQI();
 
                 String status = "";
-
 
                 if(calculatedWQI < 51.8){
                     if(calculatedWQI < 31.0){
@@ -178,8 +177,8 @@ public class UserWaterSensor implements Runnable{
 
             System.out.println(stop);
             stop = getStop();
-            editor.putString(finishDetectingPreference, "1");
-            editor.commit();
+//            editor.putString(finishDetectingPreference, "1");
+//            editor.commit();
         }
     }
 
