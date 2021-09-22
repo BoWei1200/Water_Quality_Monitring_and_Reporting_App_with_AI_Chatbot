@@ -26,6 +26,8 @@ public class AdminHome extends AppCompatActivity {
 
     private PopupMenu adminHome_popupMenu_setting;
 
+    private Cursor cursorGetOrgInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,7 @@ public class AdminHome extends AppCompatActivity {
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-        Cursor cursorGetOrgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+        cursorGetOrgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
 
         try {
             if(cursorGetOrgInfo.moveToFirst()){
@@ -84,6 +86,7 @@ public class AdminHome extends AppCompatActivity {
         switch(view.getId()){
             case R.id.adminHome_cv_org:
                 intent = new Intent(this, OrgDetail.class);
+                intent.putExtra("orgID", cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgID")));
                 break;
 
             case R.id.adminHome_cv_employeeManagement:
