@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AdminHome extends AppCompatActivity {
 
@@ -99,5 +100,9 @@ public class AdminHome extends AppCompatActivity {
         }
 
         startActivity(intent);
+    }
+
+    public void displayToast(String message){
+        Toast.makeText(AdminHome.this,message,Toast.LENGTH_SHORT).show();
     }
 }

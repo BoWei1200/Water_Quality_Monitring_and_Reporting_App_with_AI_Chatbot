@@ -546,6 +546,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT org.orgID, org.orgName FROM " + TABLE_ORGANIZATION + " org, "+ TABLE_EMPLOYEE_ORGANIZATION +" employOrg WHERE employOrg.userID=? AND org.orgID = employOrg.orgID", new String[]{userID});
     }
 
+    public Cursor getOrgEmployeeByOrgIDAndUserType(String orgID, String userType) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT user.* FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " em WHERE em.orgID=? AND user.userID=em.userID AND user.userType=?", new String[]{orgID, userType});
+        return cursor;
+    }
+
     public Cursor getAvailableOrgPostcodeByState(String reportState){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT DISTINCT orgPostCode FROM " + TABLE_ORGANIZATION + " WHERE orgState=? AND orgReady='1' ORDER BY orgPostCode ASC", new String[]{reportState});
@@ -968,6 +974,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllUser() {
         SQLiteDatabase db = getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_isADMIN + " ='0' ORDER BY "+COLUMN_IC+" ASC", null);
+    }
+
+    public boolean updateOrgInfo(String orgID, String orgName, String orgAddressLine, String orgPostcode, String orgCity, String orgState, String orgReady) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("orgName", orgName);
+        conVal.put("orgAddressLine", orgAddressLine);
+        conVal.put("orgPostCode", orgPostcode);
+        conVal.put("orgCity", orgCity);
+        conVal.put("orgState", orgState);
+        conVal.put("orgReady", orgReady);
+
+        return db.update(TABLE_ORGANIZATION, conVal, "orgID=?", new String[]{orgID}) == 1;
     }
 
     public boolean updateReportStatusByReportID(String reportID, String updatedStatus) {

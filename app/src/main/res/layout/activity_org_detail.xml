@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/orgDetail_coordinateLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OrgDetail">
@@ -63,7 +64,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_sans"
             android:text="Name"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="@color/gray"
             android:layout_marginBottom="20dp"/>
@@ -75,15 +76,95 @@
             android:text="Address: "
             android:textSize="15dp"/>
 
-        <EditText
-            android:id="@+id/orgDetail_eTxt_orgAddress"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/registration_txtInputLayout_addressLine"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_sans"
-            android:text="Address"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            android:textColor="@color/gray"
+            android:layout_height="55dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Address line"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:startIconDrawable="@drawable/ic_address_icon"
+            app:startIconTint="@color/mainTheme">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/orgDetail_txtInputET_addressLine"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/nunito_sans"
+                android:inputType="textPersonName"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textSize="15sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginBottom="10dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/registration_txtInputLayout_postcode"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+
+                android:layout_weight=".5"
+                android:hint="Postcode"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:startIconTint="@color/mainTheme">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/orgDetail_txtInputET_postcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nunito_sans"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:textSize="15sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/registration_txtInputLayout_city"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_weight=".5"
+                android:hint="City"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:startIconTint="@color/mainTheme">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/orgDetail_txtInputET_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nunito_sans"
+                    android:gravity="center"
+                    android:inputType="textPersonName"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:textSize="15sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/orgDetail_spinner_state"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            style="@style/spinner_style"
             android:layout_marginBottom="40dp"/>
 
         <Switch
@@ -91,9 +172,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_sans"
-            android:text="Receive Reports from User"
+            android:text="Receive reports from user"
             android:textColor="@color/gray"
-            android:textSize="20dp"/>
+            android:textSize="20dp"
+            android:layout_marginBottom="50dp"/>
+
+        <Button
+            android:layout_width="120dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:text="Update"
+            android:onClick="update"
+            android:textAllCaps="false"
+            android:fontFamily="@font/nunito_sans"
+            android:textSize="18dp"/>
 
     </LinearLayout>
 
