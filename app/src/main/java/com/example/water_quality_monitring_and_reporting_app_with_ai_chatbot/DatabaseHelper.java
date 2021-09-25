@@ -27,19 +27,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_REPORT_INVESTIGATION = "reportInvestigation";
     private static final String TABLE_REPORT_CLEANING_PROCESS = "reportCleaningProcess";
 
-
-    private static final String COLUMN_IC = "ic";
-    private static final String COLUMN_NAME = "name";
-    private static final String COLUMN_PASSWORD = "password";
-    private static final String COLUMN_AGE = "age";
-    private static final String COLUMN_PHONE = "phone";
-    private static final String COLUMN_ADDRESS = "address";
-    private static final String COLUMN_NOTES = "notes";
-    private static final String COLUMN_VACCINE_STATUS = "status";
-    private static final String COLUMN_isADMIN = "isAdmin";
-    //vaccine table
-    private static final String COLUMN_VACCINE_ID = "vaccineID";
-    private static final String COLUMN_VACCINE_NAME = "vaccineName";
+    private static final String TABLE_NEWS = "news";
+    private static final String TABLE_NEWS_IMAGE = "newsImage";
 
     //Constructor
     public DatabaseHelper(@Nullable Context context) {
@@ -71,6 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORT_INVESTIGATION + ";");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REPORT_CLEANING_PROCESS + ";");
 
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS_IMAGE + ";");
 
         onCreate(db);
     }
@@ -117,12 +108,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "orgPostCode TEXT NOT NULL, " +
                 "orgCity TEXT NOT NULL, " +
                 "orgState TEXT NOT NULL, " +
-                "orgReady TEXT NOT NULL);");
+                "orgReady TEXT NOT NULL, " +
+                "reportIsTaken TEXT NOT NULL);");
 
         db.execSQL("CREATE TABLE " + TABLE_EMPLOYEE_ORGANIZATION +"(" +
                 "employOrgID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "orgID TEXT NOT NULL, " +
                 "userID TEXT NOT NULL, " +
+                "reportIsTaken TEXT NOT NULL, " +
                 "FOREIGN KEY (orgID) REFERENCES " + TABLE_ORGANIZATION + " (orgID), " +
                 "FOREIGN KEY (userID) REFERENCES " + TABLE_ORGANIZATION + " (userID));");
 
@@ -130,6 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "investigationTeamID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "investigationTeamName TEXT NOT NULL, " +
                 "investigationTeamOrgID TEXT NOT NULL, " +
+                "reportIsTaken TEXT NOT NULL, " +
                 "FOREIGN KEY (investigationTeamOrgID) REFERENCES "+ TABLE_ORGANIZATION +" (orgID));");
 
         db.execSQL("CREATE TABLE " + TABLE_INVESTIGATION_TEAM_MEMBER +"(" +
@@ -191,6 +185,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "reportID TEXT NOT NULL, " +
                 "FOREIGN KEY (reportID) REFERENCES " + TABLE_REPORT_FROM_USER + " (reportID));");
 
+        db.execSQL("CREATE TABLE " + TABLE_NEWS +"(" +
+                "newsID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "newsTitle TEXT NOT NULL, " +
+                "newsDesc TEXT NOT NULL, " +
+                "newsDate DATE NOT NULL, " +
+                "newsTime TEXT NOT NULL, " +
+                "userID TEXT NOT NULL, " +
+                "FOREIGN KEY (userID) REFERENCES " + TABLE_REPORT_FROM_USER + " (userID));");
+
+        db.execSQL("CREATE TABLE " + TABLE_NEWS_IMAGE +"(" +
+                "newsImageID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "newsImageName TEXT NOT NULL, " +
+                "newsID TEXT NOT NULL, " +
+                "FOREIGN KEY (newsID) REFERENCES " + TABLE_NEWS + " (newsID));");
 
 
         //(investigationDocID, firstInvestigationDoc, secondInvestigationDoc, reportID
@@ -277,44 +285,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "('6 Jln Smile 34 Medan Damai Ukay Hulu Ampang', '81700', 'Kota Tinggi', 'Johor', '24'), " +
                 "('6 Jln Smile 34 Medan Damai Ukay Hulu Ampang', '81700', 'Kota Tinggi', 'Johor', '25')");
 
-        db.execSQL("INSERT INTO " + TABLE_ORGANIZATION + "(orgName, orgAddressLine, orgPostCode, orgCity, orgState, orgReady)" +
-                "VALUES ('Department of Environment (DOE) Kulai', '3, Jln Berjaya, Kampung Berjaya', '81000', 'Kulai', 'Johor', '1'), " +
-                "('Department of Environment (DOE) Kuala Lumpur', '3, Jln BBB, Kampung Sungai Kayu Ara', '47400', 'Petaling Jaya', 'Selangor', '1'), " +
-                "('Water Saver Organization Kota Tinggi', '5, Jln Cerita, Kampung Cerita', '81900', 'Kota Tinggi', 'Johor', '1'), " +
-                "('Water Saver Organization Pasir Gudang', '52, Jln Cerita Baru, Kampung Cerita Baru', '81700', 'Pasir Gudang', 'Johor', '1')");
+        db.execSQL("INSERT INTO " + TABLE_ORGANIZATION + "(orgName, orgAddressLine, orgPostCode, orgCity, orgState, orgReady, reportIsTaken)" +
+                "VALUES ('Department of Environment (DOE) Kulai', '3, Jln Berjaya, Kampung Berjaya', '81000', 'Kulai', 'Johor', '1', '0'), " +
+                "('Department of Environment (DOE) Kuala Lumpur', '3, Jln BBB, Kampung Sungai Kayu Ara', '47400', 'Petaling Jaya', 'Selangor', '1', '0'), " +
+                "('Water Saver Organization Kota Tinggi', '5, Jln Cerita, Kampung Cerita', '81900', 'Kota Tinggi', 'Johor', '1', '0'), " +
+                "('Water Saver Organization Pasir Gudang', '52, Jln Cerita Baru, Kampung Cerita Baru', '81700', 'Pasir Gudang', 'Johor', '1', '0')");
 
-        db.execSQL("INSERT INTO " + TABLE_EMPLOYEE_ORGANIZATION + "(orgID, userID)" +
+        db.execSQL("INSERT INTO " + TABLE_EMPLOYEE_ORGANIZATION + "(orgID, userID, reportIsTaken)" +
                 "VALUES " +
-                "('1', '4'), " +
-                "('2', '5'), " +
+                "('1', '4', '0'), " +
+                "('2', '5', '0'), " +
 
-                "('1', '6'), " +
-                "('1', '7'), " +
-                "('3', '8'), " +
-                "('3', '9'), " +
-                "('4', '10'), " +
-                "('4', '11'), " +
-                "('2', '12'), " +
-                "('2', '13'), " +
+                "('1', '6', '0'), " +
+                "('1', '7', '0'), " +
+                "('3', '8', '0'), " +
+                "('3', '9', '0'), " +
+                "('4', '10', '0'), " +
+                "('4', '11', '0'), " +
+                "('2', '12', '0'), " +
+                "('2', '13', '0'), " +
 
-                "('3', '14'), " +
-                "('4', '15'), " +
+                "('3', '14', '0'), " +
+                "('4', '15', '0'), " +
 
-                "('1', '16'), " +
-                "('2', '17'), " +
-                "('3', '18'), " +
-                "('4', '19'), " +
+                "('1', '16', '0'), " +
+                "('2', '17', '0'), " +
+                "('3', '18', '0'), " +
+                "('4', '19', '0'), " +
 
-                "('1', '20'), " +
-                "('2', '21'), " +
-                "('3', '22'), " +
-                "('4', '23')");
+                "('1', '20', '0'), " +
+                "('2', '21', '0'), " +
+                "('3', '22', '0'), " +
+                "('4', '23', '0')");
 
-        db.execSQL("INSERT INTO " + TABLE_INVESTIGATION_TEAM + "(investigationTeamName, investigationTeamOrgID)" +
-                "VALUES ('Investigation Team 1', '1'), " +
-                "('Investigation Team 2', '3')," +
-                "('Investigation Team 3', '4')," +
-                "('Investigation Team 4', '4')");
+        db.execSQL("INSERT INTO " + TABLE_INVESTIGATION_TEAM + "(investigationTeamName, investigationTeamOrgID, reportIsTaken)" +
+                "VALUES ('Investigation Team 1', '1', '0'), " +
+                "('Investigation Team 2', '3', '0')," +
+                "('Investigation Team 3', '4', '0')," +
+                "('Investigation Team 4', '4', '0')");
 
         db.execSQL("INSERT INTO " + TABLE_INVESTIGATION_TEAM_MEMBER + "(investigationTeamUserID, investigationTeamID)" +
                 "VALUES " +
@@ -326,14 +334,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "('11', '3'), " +
                 "('12', '4'), " +
                 "('13', '4')");
-
-//        "investigationTeamUserID TEXT NOT NULL, " +
-//                "investigationTeamID TEXT NOT NULL, " +
-//
-//
-//        private static final String TABLE_INVESTIGATION_TEAM = "investigationTeam";
-//        private static final String TABLE_INVESTIGATION_TEAM_MEMBER = "investigationTeamMember";
-
     }
 
 
@@ -384,6 +384,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         conValOrg.put("orgCity", orgCity);
         conValOrg.put("orgState", orgState);
         conValOrg.put("orgReady", "0");
+        conValOrg.put("reportIsTaken", "0");
 
         return db.insert(TABLE_ORGANIZATION, null, conValOrg) != -1;
     }
@@ -394,6 +395,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues conValEmployeeOrg = new ContentValues();
         conValEmployeeOrg.put("orgID", orgID);
         conValEmployeeOrg.put("userID", userID);
+        conValEmployeeOrg.put("reportIsTaken", "0");
 
         return db.insert(TABLE_EMPLOYEE_ORGANIZATION, null, conValEmployeeOrg) != -1;
     }
@@ -470,6 +472,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues conValTeam = new ContentValues();
         conValTeam.put("investigationTeamName", investigationTeamName);
         conValTeam.put("investigationTeamOrgID", orgID);
+        conValTeam.put("reportIsTaken", "0");
 
         return db.insert(TABLE_INVESTIGATION_TEAM, null, conValTeam) != -1;
     }
@@ -963,17 +966,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean deleteUser(String ic) {
         //delete user by using NRIC (primary key)
         SQLiteDatabase db = getWritableDatabase();
-        return db.delete(TABLE_USER, COLUMN_IC + "=?", new String[]{ic}) == 1;
+        return db.delete(TABLE_USER,  "ic=?", new String[]{ic}) == 1;
     }
 
     public boolean deleteOrg(String orgID){
         SQLiteDatabase db = getWritableDatabase();
         return db.delete(TABLE_ORGANIZATION, "orgID=?", new String[]{orgID}) == 1;
-    }
-
-    public Cursor getAllUser() {
-        SQLiteDatabase db = getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " + COLUMN_isADMIN + " ='0' ORDER BY "+COLUMN_IC+" ASC", null);
     }
 
     public boolean updateOrgInfo(String orgID, String orgName, String orgAddressLine, String orgPostcode, String orgCity, String orgState, String orgReady) {

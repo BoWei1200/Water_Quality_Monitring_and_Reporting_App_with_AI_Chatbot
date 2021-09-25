@@ -95,7 +95,7 @@ public class AdminHome extends AppCompatActivity {
                 break;
 
             case R.id.adminHome_cv_newsManagement:
-                intent = new Intent(this, NewsManagement.class);
+                intent = new Intent(this, NewsList.class);
                 break;
         }
 

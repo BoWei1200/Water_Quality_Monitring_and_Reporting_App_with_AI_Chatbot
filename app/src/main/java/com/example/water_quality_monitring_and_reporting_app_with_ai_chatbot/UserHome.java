@@ -3,12 +3,7 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
@@ -272,6 +267,10 @@ public class UserHome extends AppCompatActivity{
                     intent = new Intent(this, UserUbidotsScanDevice.class);
                 }
                 break;
+
+            case R.id.userHome_cv_news:
+                intent = new Intent(this, NewsList.class);
+                break;
         }
 
         startActivity(intent);
@@ -323,11 +322,9 @@ public class UserHome extends AppCompatActivity{
     public class ApiUbidots extends AsyncTask<Integer, Void, Value[]> {
         private String API_KEY = ""; //BBFF-d0da8e6ab1cdee030aa24fe674d2a051330
 
-        TextView pollutionLevel;
         TextView userHome_txt_currentWQI;
         @Override
         protected void onPreExecute(){
-            pollutionLevel = findViewById(R.id.pollutionlevel);
             userHome_txt_currentWQI = findViewById(R.id.userHome_txt_currentWQI);
 
             String getuserIDPreference = mPreferences.getString(userIDPreference, null);

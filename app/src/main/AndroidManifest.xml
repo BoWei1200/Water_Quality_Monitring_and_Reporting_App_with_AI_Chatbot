@@ -16,14 +16,16 @@
 
     <application
         android:allowBackup="true"
-        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher_icon"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot">
-        <activity android:name=".InvestigatorInvestigation"></activity>
+        android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".NewsManagement"></activity>
+        <activity android:name=".NewsAdd" />
+        <activity android:name=".InvestigatorInvestigation" />
         <activity android:name=".EmployeeReportStatus" />
         <activity android:name=".UserReportStatus" />
         <activity android:name=".AdminManageInvestigationTeam" />
@@ -39,7 +41,6 @@
         <activity android:name=".SystemAdminAddAdmin" />
         <activity android:name=".SystemAdminManageOrg" />
         <activity android:name=".SystemAdminAddOrg" />
-        <activity android:name=".NewsManagement" />
         <activity android:name=".SystemAdminOrgManagement" />
         <activity android:name=".ExaminerHome" />
         <activity android:name=".ReportHandlerHome" />
