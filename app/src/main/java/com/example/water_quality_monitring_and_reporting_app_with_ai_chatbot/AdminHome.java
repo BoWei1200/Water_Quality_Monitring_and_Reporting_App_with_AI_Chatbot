@@ -17,6 +17,7 @@ public class AdminHome extends AppCompatActivity {
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp";
     private final String userIDPreference = "userID";
+    private final String orgIDPreference = "orgID";
 
     private String getUserIDPreference = "";
     private String teamID, teamName;
@@ -61,6 +62,11 @@ public class AdminHome extends AppCompatActivity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
 
         cursorGetOrgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+        cursorGetOrgInfo.moveToFirst();
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putString(orgIDPreference, cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgID")));
+        editor.commit();
+
 
         try {
             if(cursorGetOrgInfo.moveToFirst()){

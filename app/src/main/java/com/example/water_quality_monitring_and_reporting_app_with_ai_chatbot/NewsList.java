@@ -2,10 +2,12 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +22,11 @@ public class NewsList extends AppCompatActivity {
 
     private RecyclerView newsList_recycleV_newsList;
 
+    private String newsID[];
+    private String newsImageName[];
+    private String newsDate[];
+    private String newsTime[];
+    private String newsTitle[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +47,30 @@ public class NewsList extends AppCompatActivity {
 
         newsList_recycleV_newsList = findViewById(R.id.newsList_recycleV_newsList);
 
+        if((getUserTypePreference.equals("SAD")) || (getUserTypePreference.equals("AD"))){
+
+        }
+
+        //can be accessed by all kinds of user to view ALL news published.
+        //admin will be having two tabs: ALL news, MY news (can manage their news)
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        //get all report can be posted in organization
+//        Cursor cursorGetMyReport = dbHelper.getOrgReport(getOrgIDPreference);
+//        int countMyReport = (! (cursorGetMyReport==null)) ? cursorGetMyReport.getCount() : 0;
+//
+//        if(countMyReport != 0){
+//            newsID = new String[countMyReport];
+//            newsImageName = new String[countMyReport];
+//            newsDate = new String[countMyReport];
+//            newsTime = new String[countMyReport];
+//            newsTitle = new String[countMyReport];
+//
+//            loadMyReportFromDatabase();
+//
+//            NewsListRecycleVAdapter adapter = new NewsListRecycleVAdapter(this, newsID, newsImageName, newsDate, newsTime, newsTitle);
+//            newsList_recycleV_newsList.setAdapter(adapter);
+//            newsList_recycleV_newsList.setLayoutManager(new LinearLayoutManager(this));
+//        }
     }
 
     @Override //when back button clicked
@@ -59,10 +90,32 @@ public class NewsList extends AppCompatActivity {
 
         switch(view.getId()){
             case R.id.newsList_img_addPost:
-                intent = new Intent(this, NewsAdd.class);
+                intent = new Intent(this, AdminReportListToPost.class);
                 break;
         }
 
         startActivity(intent);
+    }
+
+    private void loadMyReportFromDatabase() {
+//        DatabaseHelper dbHelper = new DatabaseHelper(this);
+//        Cursor cursor = dbHelper.getMyReport(getOrgIDPreference);
+//
+//        returnRead(cursor);
+    }
+
+    private Cursor returnRead(Cursor cursor) {
+        int i = 0, j = 0;
+        if (cursor.moveToFirst()) {
+            do {
+                newsID[i] = cursor.getString(cursor.getColumnIndex("reportID"));
+                newsImageName[i] = cursor.getString(cursor.getColumnIndex("reportDate"));
+                newsDate[i] = cursor.getString(cursor.getColumnIndex("reportTime"));
+                newsTime[i] = cursor.getString(cursor.getColumnIndex("reportStatus"));
+
+                i++;
+            } while (cursor.moveToNext());
+        }
+        return cursor;
     }
 }

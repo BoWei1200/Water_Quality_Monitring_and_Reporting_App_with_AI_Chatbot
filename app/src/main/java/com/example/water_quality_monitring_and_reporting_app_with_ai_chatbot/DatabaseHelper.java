@@ -440,7 +440,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             }catch (Exception e){
                 insertedReportImage = false;
-
             }
 
             // insert report location
@@ -699,6 +698,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getMyReport(String userID) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REPORT_FROM_USER + " WHERE userID=?", new String[]{String.valueOf(userID)});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getReportByOrgID(String orgID) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REPORT_FROM_USER + " WHERE orgID=?", new String[]{String.valueOf(orgID)});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getPostableReportByOrgID(String orgID) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_REPORT_FROM_USER + " WHERE orgID=? AND (reportStatus='Resolving' OR reportStatus='Resolved')", new String[]{String.valueOf(orgID)});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }

@@ -23,4 +23,118 @@
         app:titleMargin="2dp"
         app:titleTextColor="#FFFFFF" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newsAdd_toolbar"
+        android:orientation="vertical"
+        android:padding="10dp">
+        
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Title"
+                    android:fontFamily="@font/nunito_sans"/>
+
+                <EditText
+                    android:id="@+id/newsAdd_eTxt_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/nunito_sans" />
+
+                <TextView
+                    android:id="@+id/newsAdd_txt_errorTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="@string/required"
+                    android:textColor="@color/WQIRed"
+                    android:visibility="visible" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Description"
+                    android:fontFamily="@font/nunito_sans"
+                    android:layout_marginTop="40dp"/>
+
+                <EditText
+                    android:id="@+id/newsAdd_eTxt_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/nunito_sans" />
+
+                <TextView
+                    android:id="@+id/newsAdd_txt_errorDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="@string/required"
+                    android:textColor="@color/WQIRed"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select image : "
+                    android:fontFamily="@font/nunito_sans"
+                    android:layout_marginTop="50dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/newsAdd_recycleV_imgGallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:scrollingCache="true"
+                    android:smoothScrollbar="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userMyReport_toolbar" />
+                <TextView
+                    android:id="@+id/newsAdd_txt_errorImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="Select at least one image"
+                    android:textColor="@color/WQIRed"
+                    android:visibility="visible" />
+
+                <Button
+                    android:layout_width="150dp"
+                    android:layout_height="60dp"
+                    android:text="Post"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="50dp"
+                    android:layout_gravity="center"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/nunito_sans"
+                    android:onClick="post"
+                    android:textSize="18dp"/>
+
+            </LinearLayout>
+
+
+            
+        </ScrollView>
+        
+        
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

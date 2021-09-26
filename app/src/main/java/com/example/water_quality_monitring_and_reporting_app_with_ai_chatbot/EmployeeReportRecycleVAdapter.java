@@ -44,7 +44,12 @@ public class EmployeeReportRecycleVAdapter extends RecyclerView.Adapter<Employee
                 TextView employeeReportRecycleVLayout_txt_reportID =  v.findViewById(R.id.employeeReportRecycleVLayout_txt_reportID);
                 String reportID = employeeReportRecycleVLayout_txt_reportID.getText().toString();
 
-                Intent intent = new Intent(context, EmployeeReportStatus.class);
+                Intent intent;
+                if(userType.equals("AD")){
+                    intent = new Intent(context, NewsAdd.class);
+                }else{
+                    intent = new Intent(context, EmployeeReportStatus.class);
+                }
                 intent.putExtra("reportID", reportID);
                 context.startActivity(intent);
             }
