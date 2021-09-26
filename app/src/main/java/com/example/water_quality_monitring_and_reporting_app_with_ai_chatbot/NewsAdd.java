@@ -32,7 +32,7 @@ public class NewsAdd extends AppCompatActivity {
     EditText newsAdd_eTxt_title, newsAdd_eTxt_desc;
     RecyclerView newsAdd_recycleV_imgGallery;
 
-    Boolean titleValid = false, descValid = false;
+    Boolean titleValid = false, descValid = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

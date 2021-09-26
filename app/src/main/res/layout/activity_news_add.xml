@@ -75,7 +75,8 @@
                     android:id="@+id/newsAdd_eTxt_desc"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:fontFamily="@font/nunito_sans" />
+                    android:fontFamily="@font/nunito_sans"
+                    android:inputType="textMultiLine"/>
 
                 <TextView
                     android:id="@+id/newsAdd_txt_errorDesc"
@@ -84,7 +85,7 @@
                     android:gravity="end"
                     android:text="@string/required"
                     android:textColor="@color/WQIRed"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -96,7 +97,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/newsAdd_recycleV_imgGallery"
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"

@@ -121,6 +121,7 @@ public class ImageGalleryRecycleVAdapter extends RecyclerView.Adapter<ImageGalle
                             imgView.setOnLongClickListener(v -> {
                                 selectMode = true;
                                 reportImageSelected.add(imgName);
+                                txtErrorImg.setVisibility(View.GONE);
                                 imgView.setImageDrawable(context.getResources().getDrawable(R.drawable.check_icon));
                                 imgView.setPadding(80, 80, 80, 80);
                                 return true;
