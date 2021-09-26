@@ -23,11 +23,48 @@
         app:titleMargin="2dp"
         app:titleTextColor="#FFFFFF" />
 
+    <LinearLayout
+        android:id="@+id/newsList_linearLayout_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/newsList_recycleV_newsList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newsList_toolbar">
+
+        <TextView
+            android:id="@+id/newsList_txt_tabPending"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:background="@color/tab_background"
+            android:fontFamily="@font/nunito_sans"
+            android:gravity="center"
+            android:onClick="toWhichTab"
+            android:padding="10dp"
+            android:text="All News"
+            android:textColor="@color/tab_text_color"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/newsList_txt_tabCompleted"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:fontFamily="@font/nunito_sans"
+            android:gravity="center"
+            android:onClick="toWhichTab"
+            android:padding="10dp"
+            android:text="My News"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/newsList_recycleV_newsList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:scrollingCache="true"
@@ -35,7 +72,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newsList_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/newsList_linearLayout_tab" />
 
     <ImageView
         android:id="@+id/newsList_img_addPost"

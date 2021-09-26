@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "hydromy.db";
@@ -486,6 +488,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(TABLE_INVESTIGATION_TEAM_MEMBER, null, conValTeamMem) != -1;
     }
 
+    public boolean addNews(String title, String desc, String newsDate, String newsTime, String userID, ArrayList<String> imgNameSelected) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Boolean insertedNews = false, insertedNewsImage = false;
+
+        ContentValues conValAddNews = new ContentValues();
+        conValAddNews.put("newsTitle", title);
+        conValAddNews.put("newsDesc", desc);
+        conValAddNews.put("newsDate", newsDate);
+        conValAddNews.put("newsTime", newsTime);
+        conValAddNews.put("userID", userID);
+
+        insertedNews = db.insert(TABLE_NEWS, null, conValAddNews) != -1;
+
+        if(insertedNews){
+            String newsID = getNewsID(newsDate, newsTime, userID);
+
+            for(int i = 0; i < imgNameSelected.size(); i++){
+                ContentValues conValAddNewsImg = new ContentValues();
+                conValAddNewsImg.put("newsImageName", imgNameSelected.get(i));
+                conValAddNewsImg.put("newsID", newsID);
+
+                insertedNewsImage = db.insert(TABLE_NEWS_IMAGE, null, conValAddNewsImg) != -1;
+            }
+
+        }
+
+        return insertedNews && insertedNewsImage;
+    }
+
     public boolean isEmail_Exist(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE userEmail=?", new String[]{email});
@@ -960,6 +992,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getPollutionResolvingDocByReportID(String reportID) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT clean.* FROM " + TABLE_REPORT_FROM_USER + " re, "+ TABLE_REPORT_CLEANING_PROCESS +" clean WHERE re.reportID=? AND re.reportID=clean.reportID", new String[]{String.valueOf(reportID)});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public String getNewsID(String newsDate, String newsTime, String userID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT newsID FROM " + TABLE_NEWS + " WHERE newsDate=? AND newsTime=? AND userID=?", new String[]{newsDate, newsTime, userID});
+
+        return (cursor.moveToFirst()) ? cursor.getString(cursor.getColumnIndex("newsID")) : "";
+    }
+
+    public Cursor getAllNews() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NEWS , new String[]{});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getNewsByUserID(String userID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NEWS +" WHERE user=?", new String[]{userID});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }

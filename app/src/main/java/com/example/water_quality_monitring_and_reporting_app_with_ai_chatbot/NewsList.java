@@ -16,7 +16,9 @@ import android.widget.Toast;
 public class NewsList extends AppCompatActivity {
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
+    private final String userIDPreference = "userType";
     private final String userTypePreference = "userType";
+    String getUserIDPreference = "";
     String getUserTypePreference = "";
     String orgID = "";
 
@@ -34,6 +36,7 @@ public class NewsList extends AppCompatActivity {
         setContentView(R.layout.activity_news_list);
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        getUserIDPreference = mPreferences.getString(userIDPreference, null);
         getUserTypePreference = mPreferences.getString(userTypePreference, null);
 
         Toolbar toolbar = findViewById(R.id.newsList_toolbar);
@@ -50,27 +53,26 @@ public class NewsList extends AppCompatActivity {
         if((getUserTypePreference.equals("SAD")) || (getUserTypePreference.equals("AD"))){
 
         }
+        else{
+
+        }
 
         //can be accessed by all kinds of user to view ALL news published.
         //admin will be having two tabs: ALL news, MY news (can manage their news)
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         //get all report can be posted in organization
-//        Cursor cursorGetMyReport = dbHelper.getOrgReport(getOrgIDPreference);
-//        int countMyReport = (! (cursorGetMyReport==null)) ? cursorGetMyReport.getCount() : 0;
-//
-//        if(countMyReport != 0){
-//            newsID = new String[countMyReport];
-//            newsImageName = new String[countMyReport];
-//            newsDate = new String[countMyReport];
-//            newsTime = new String[countMyReport];
-//            newsTitle = new String[countMyReport];
-//
-//            loadMyReportFromDatabase();
-//
-//            NewsListRecycleVAdapter adapter = new NewsListRecycleVAdapter(this, newsID, newsImageName, newsDate, newsTime, newsTitle);
-//            newsList_recycleV_newsList.setAdapter(adapter);
-//            newsList_recycleV_newsList.setLayoutManager(new LinearLayoutManager(this));
-//        }
+        Cursor cursorGetAllNews = dbHelper.getAllNews();
+        int countMyReport = (! (cursorGetAllNews==null)) ? cursorGetAllNews.getCount() : 0;
+
+        if(countMyReport != 0){
+            newsID = new String[countMyReport];
+            newsImageName = new String[countMyReport];
+            newsDate = new String[countMyReport];
+            newsTime = new String[countMyReport];
+            newsTitle = new String[countMyReport];
+
+            displayRecyclerView("All");
+        }
     }
 
     @Override //when back button clicked
@@ -97,14 +99,15 @@ public class NewsList extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void loadMyReportFromDatabase() {
-//        DatabaseHelper dbHelper = new DatabaseHelper(this);
-//        Cursor cursor = dbHelper.getMyReport(getOrgIDPreference);
-//
-//        returnRead(cursor);
-    }
+    private void displayRecyclerView(String tab) {
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        Cursor cursor;
+        if(tab.equals("All")){
+            cursor = dbHelper.getAllNews();
+        }else{
+            cursor = dbHelper.getNewsByUserID(getUserIDPreference);
+        }
 
-    private Cursor returnRead(Cursor cursor) {
         int i = 0, j = 0;
         if (cursor.moveToFirst()) {
             do {
@@ -115,7 +118,14 @@ public class NewsList extends AppCompatActivity {
 
                 i++;
             } while (cursor.moveToNext());
+
+            NewsListRecycleVAdapter adapter = new NewsListRecycleVAdapter(this, newsID, newsImageName, newsDate, newsTime, newsTitle);
+            newsList_recycleV_newsList.setAdapter(adapter);
+            newsList_recycleV_newsList.setLayoutManager(new LinearLayoutManager(this));
         }
-        return cursor;
+    }
+
+
+    public void toWhichTab(View view) {
     }
 }

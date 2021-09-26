@@ -1,12 +1,15 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,9 +23,17 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.w3c.dom.Text;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class NewsAdd extends AppCompatActivity {
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.example.android.fyp_hydroMyapp";
+    private final String userIDPreference = "userID";
+
+    private String getUserIDPreference = "";
+
     private TextView newsAdd_txt_errorTitle, newsAdd_txt_errorDesc, newsAdd_txt_errorImage;
     private String reportID;
 
@@ -33,10 +44,15 @@ public class NewsAdd extends AppCompatActivity {
     RecyclerView newsAdd_recycleV_imgGallery;
 
     Boolean titleValid = false, descValid = true;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_add);
+
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        getUserIDPreference = mPreferences.getString(userIDPreference, null);
 
         Toolbar toolbar = findViewById(R.id.newsAdd_toolbar);
         setSupportActionBar(toolbar);
@@ -138,14 +154,24 @@ public class NewsAdd extends AppCompatActivity {
         Toast.makeText(NewsAdd.this,message,Toast.LENGTH_SHORT).show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void post(View view) {
-        if(imgNameSelected.size() == 0){
-            displayToast("Make sure information required filled in properly");
-            return;
-        }
+        if(descValid && titleValid && imgNameSelected.size() != 0){
+            DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-        if(descValid && titleValid){
+            DateTimeFormatter currentDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDateTime nowDate = LocalDateTime.now();
+            String newsDate = currentDate.format(nowDate);
 
+            DateTimeFormatter currentTime = DateTimeFormatter.ofPattern("HH:mm:ss");
+            LocalDateTime nowTime = LocalDateTime.now();
+            String newsTime = currentTime.format(nowTime);
+
+            if(dbHelper.addNews(newsAdd_eTxt_title.getText().toString(), newsAdd_eTxt_desc.getText().toString(), newsDate, newsTime, getUserIDPreference,
+                    imgNameSelected)){
+                displayToast("News posted");
+                finish();
+            }
         }else{
             displayToast("Make sure information required filled in properly");
         }
