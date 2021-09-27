@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewsList extends AppCompatActivity {
@@ -23,6 +25,10 @@ public class NewsList extends AppCompatActivity {
     String orgID = "";
 
     private RecyclerView newsList_recycleV_newsList;
+
+    private TextView newsList_txt_tabAllNews, newsList_txt_tabMyNews;
+
+    private TextView currentlyActiveTab;
 
     private String newsID[];
     private String newsImageName[];
@@ -50,6 +56,9 @@ public class NewsList extends AppCompatActivity {
 
         newsList_recycleV_newsList = findViewById(R.id.newsList_recycleV_newsList);
 
+        newsList_txt_tabAllNews = findViewById(R.id.newsList_txt_tabAllNews);
+        newsList_txt_tabMyNews = findViewById(R.id.newsList_txt_tabMyNews);
+
         if((getUserTypePreference.equals("SAD")) || (getUserTypePreference.equals("AD"))){
 
         }
@@ -57,6 +66,7 @@ public class NewsList extends AppCompatActivity {
 
         }
 
+        currentlyActiveTab = newsList_txt_tabAllNews;
         //can be accessed by all kinds of user to view ALL news published.
         //admin will be having two tabs: ALL news, MY news (can manage their news)
         DatabaseHelper dbHelper = new DatabaseHelper(this);
@@ -71,7 +81,7 @@ public class NewsList extends AppCompatActivity {
             newsTime = new String[countMyReport];
             newsTitle = new String[countMyReport];
 
-            displayRecyclerView("All");
+            displayRecyclerView(currentlyActiveTab);
         }
     }
 
@@ -99,10 +109,11 @@ public class NewsList extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void displayRecyclerView(String tab) {
+    private void displayRecyclerView(TextView tab) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         Cursor cursor;
-        if(tab.equals("All")){
+        Cursor cursorImg;
+        if(tab.getText().toString().equals("All News")){
             cursor = dbHelper.getAllNews();
         }else{
             cursor = dbHelper.getNewsByUserID(getUserIDPreference);
@@ -111,10 +122,13 @@ public class NewsList extends AppCompatActivity {
         int i = 0, j = 0;
         if (cursor.moveToFirst()) {
             do {
-                newsID[i] = cursor.getString(cursor.getColumnIndex("reportID"));
-                newsImageName[i] = cursor.getString(cursor.getColumnIndex("reportDate"));
-                newsDate[i] = cursor.getString(cursor.getColumnIndex("reportTime"));
-                newsTime[i] = cursor.getString(cursor.getColumnIndex("reportStatus"));
+                newsID[i] = cursor.getString(cursor.getColumnIndex("newsID"));
+                cursorImg = dbHelper.getImageByNewsID(newsID[i]);
+
+                newsImageName[i] = cursorImg.getString(cursorImg.getColumnIndex("newsImageName"));
+                newsTitle[i] = cursor.getString(cursor.getColumnIndex("newsTitle"));
+                newsDate[i] = cursor.getString(cursor.getColumnIndex("newsDate"));
+                newsTime[i] = cursor.getString(cursor.getColumnIndex("newsTime"));
 
                 i++;
             } while (cursor.moveToNext());
@@ -127,5 +141,18 @@ public class NewsList extends AppCompatActivity {
 
 
     public void toWhichTab(View view) {
+        setCurrentlyActiveTab(view.getId());
+        displayRecyclerView(currentlyActiveTab);
+    }
+
+    public void setCurrentlyActiveTab(int txtID){
+        currentlyActiveTab.setTextColor(getResources().getColor(R.color.gray));
+        currentlyActiveTab.setBackgroundColor(Color.WHITE);
+
+        currentlyActiveTab = findViewById(txtID);
+        currentlyActiveTab.setTextColor(getResources().getColor(R.color.tab_text_color));
+        currentlyActiveTab.setBackground(getResources().getDrawable(R.color.tab_background));
+
+        //change the recycler view
     }
 }

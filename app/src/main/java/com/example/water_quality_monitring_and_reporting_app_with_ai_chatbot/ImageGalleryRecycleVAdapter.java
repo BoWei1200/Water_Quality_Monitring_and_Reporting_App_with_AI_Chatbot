@@ -81,7 +81,7 @@ public class ImageGalleryRecycleVAdapter extends RecyclerView.Adapter<ImageGalle
                             System.out.println("IMG URL " + userReportImage.getUrl());
                             Uri imageUri = Uri.parse(userReportImage.getUrl());
 
-                            Picasso.get().load(imageUri).resize(800,800).centerCrop().into(imgView);
+                            Picasso.get().load(imageUri).fit().centerCrop().into(imgView);
 
                             imgView.setOnClickListener(v -> {
                                 if(!selectMode){
@@ -93,7 +93,7 @@ public class ImageGalleryRecycleVAdapter extends RecyclerView.Adapter<ImageGalle
                                    for(int i = 0; i < reportImageSelected.size(); i++){
                                        if(imgName.equals(reportImageSelected.get(i))){
                                            reportImageSelected.remove(reportImageSelected.get(i));
-                                           Picasso.get().load(imageUri).resize(800,800).centerCrop().into(imgView);
+                                           Picasso.get().load(imageUri).fit().centerCrop().into(imgView);
                                            imgView.setPadding(0, 0, 0, 0);
 
                                            if(reportImageSelected.size() == 0){
