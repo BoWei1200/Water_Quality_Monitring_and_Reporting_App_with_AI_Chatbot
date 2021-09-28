@@ -12,13 +12,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewsList extends AppCompatActivity {
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
-    private final String userIDPreference = "userType";
+    private final String userIDPreference = "userID";
     private final String userTypePreference = "userType";
     String getUserIDPreference = "";
     String getUserTypePreference = "";
@@ -26,9 +28,12 @@ public class NewsList extends AppCompatActivity {
 
     private RecyclerView newsList_recycleV_newsList;
 
+    private LinearLayout newsList_linearLayout_tab;
     private TextView newsList_txt_tabAllNews, newsList_txt_tabMyNews;
 
     private TextView currentlyActiveTab;
+
+    private ImageView newsList_img_addPost;
 
     private String newsID[];
     private String newsImageName[];
@@ -52,42 +57,34 @@ public class NewsList extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         getSupportActionBar().setTitle(
-                (getUserTypePreference.equals("SAD")) || (getUserTypePreference.equals("AD")) ? "News Management" : "News on Water Pollution");
+                (getUserTypePreference.equals("SAD")) || (getUserTypePreference.equals("AD")) ? "News Management" : "HydroMy News");
 
         newsList_recycleV_newsList = findViewById(R.id.newsList_recycleV_newsList);
 
+        newsList_linearLayout_tab = findViewById(R.id.newsList_linearLayout_tab);
         newsList_txt_tabAllNews = findViewById(R.id.newsList_txt_tabAllNews);
         newsList_txt_tabMyNews = findViewById(R.id.newsList_txt_tabMyNews);
+        newsList_img_addPost = findViewById(R.id.newsList_img_addPost);
 
-        if((getUserTypePreference.equals("SAD")) || (getUserTypePreference.equals("AD"))){
-
-        }
-        else{
-
+        if(! ( (getUserTypePreference.equals("SAD")) || (getUserTypePreference.equals("AD")) )){
+            newsList_img_addPost.setVisibility(View.GONE);
+            newsList_linearLayout_tab.setVisibility(View.GONE);
         }
 
         currentlyActiveTab = newsList_txt_tabAllNews;
-        //can be accessed by all kinds of user to view ALL news published.
-        //admin will be having two tabs: ALL news, MY news (can manage their news)
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        //get all report can be posted in organization
-        Cursor cursorGetAllNews = dbHelper.getAllNews();
-        int countMyReport = (! (cursorGetAllNews==null)) ? cursorGetAllNews.getCount() : 0;
 
-        if(countMyReport != 0){
-            newsID = new String[countMyReport];
-            newsImageName = new String[countMyReport];
-            newsDate = new String[countMyReport];
-            newsTime = new String[countMyReport];
-            newsTitle = new String[countMyReport];
+        displayRecyclerView(currentlyActiveTab);
 
-            displayRecyclerView(currentlyActiveTab);
-        }
+    }
+    protected void onRestart(){
+        super.onRestart();
+
+        displayRecyclerView(currentlyActiveTab);
     }
 
     @Override //when back button clicked
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()== android.R.id.home){
+        if(item.getItemId() == android.R.id.home){
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -111,16 +108,30 @@ public class NewsList extends AppCompatActivity {
 
     private void displayRecyclerView(TextView tab) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        Cursor cursor;
+        Cursor cursor = null;
         Cursor cursorImg;
-        if(tab.getText().toString().equals("All News")){
-            cursor = dbHelper.getAllNews();
-        }else{
-            cursor = dbHelper.getNewsByUserID(getUserIDPreference);
+
+        switch (tab.getId()){
+            case R.id.newsList_txt_tabAllNews:
+                cursor = dbHelper.getAllNews();
+                break;
+
+            case R.id.newsList_txt_tabMyNews:
+                cursor = dbHelper.getNewsByUserID(getUserIDPreference);
+                break;
         }
 
         int i = 0, j = 0;
-        if (cursor.moveToFirst()) {
+
+        int countMyReport = (! (cursor == null)) ? cursor.getCount() : 0;
+
+        newsID = new String[countMyReport];
+        newsImageName = new String[countMyReport];
+        newsDate = new String[countMyReport];
+        newsTime = new String[countMyReport];
+        newsTitle = new String[countMyReport];
+
+        if (cursor!= null) {
             do {
                 newsID[i] = cursor.getString(cursor.getColumnIndex("newsID"));
                 cursorImg = dbHelper.getImageByNewsID(newsID[i]);
@@ -132,11 +143,11 @@ public class NewsList extends AppCompatActivity {
 
                 i++;
             } while (cursor.moveToNext());
-
-            NewsListRecycleVAdapter adapter = new NewsListRecycleVAdapter(this, newsID, newsImageName, newsDate, newsTime, newsTitle);
-            newsList_recycleV_newsList.setAdapter(adapter);
-            newsList_recycleV_newsList.setLayoutManager(new LinearLayoutManager(this));
         }
+
+        NewsListRecycleVAdapter adapter = new NewsListRecycleVAdapter(this, newsID, newsImageName, newsDate, newsTime, newsTitle);
+        newsList_recycleV_newsList.setAdapter(adapter);
+        newsList_recycleV_newsList.setLayoutManager(new LinearLayoutManager(this));
     }
 
 

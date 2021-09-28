@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewsDetail">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/newsDetail_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/mainTheme"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/Toolbar_back_button_style"
+        app:title="HydroMy News"
+        app:titleMargin="2dp"
+        app:titleTextColor="#FFFFFF" />
+
+    <LinearLayout
+        android:id="@+id/newsDetail_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/examinerExamination_toolbar">
+        
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/newsDetail_txt_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_sans"
+                    android:text="News Title News Title News Title News Title"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/newsDetail_txt_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Description Description Description Description Description Description"
+                    android:fontFamily="@font/nunito_sans"
+                    android:layout_marginBottom="30dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/newsDetail_constraintLayout_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:onClick="toImageViewer"
+                    android:visibility="visible"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight=".5">
+
+                    <LinearLayout
+                        android:id="@+id/newsDetail_linearLayout_previous"
+                        android:layout_width="50dp"
+                        android:layout_height="90dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:padding="10dp"
+                        android:onClick="viewPrevious"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/newsDetail_img_previous"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@drawable/arrowprevious" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/newsDetail_linearLayout_next"
+                        android:layout_width="50dp"
+                        android:layout_height="90dp"
+                        android:padding="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:onClick="viewNext"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/newsDetail_img_next"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@drawable/arrownext" />
+                    </LinearLayout>
+
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/newsDetail_img_pollutionPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/roundedCornersImg"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+            
+        </ScrollView>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

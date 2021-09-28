@@ -1012,7 +1012,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getNewsByUserID(String userID) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NEWS +" WHERE user=?", new String[]{userID});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NEWS +" WHERE userID=?", new String[]{userID});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
@@ -1020,6 +1020,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getImageByNewsID(String newsID) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NEWS_IMAGE +" WHERE newsID=?", new String[]{newsID});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getNewInfoByNewsID(String newsID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NEWS +" WHERE newsID=?", new String[]{newsID});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }

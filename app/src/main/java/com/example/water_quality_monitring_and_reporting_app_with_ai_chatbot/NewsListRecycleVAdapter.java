@@ -51,11 +51,10 @@ public class NewsListRecycleVAdapter extends RecyclerView.Adapter<NewsListRecycl
             public void onClick(View v){
                 TextView news_txt_newsID =  v.findViewById(R.id.news_txt_newsID);
                 String getNewsID = news_txt_newsID.getText().toString();
-//
-//                Intent intent = new Intent(context, UserDetailInfo.class);
-//                intent.putExtra("SelectedNRIC", getIC);
-//                context.startActivity(intent);
-                Toast.makeText(context, getNewsID,Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(context, NewsDetail.class);
+                intent.putExtra("newsID", getNewsID);
+                context.startActivity(intent);
             }
         });
 
@@ -73,7 +72,6 @@ public class NewsListRecycleVAdapter extends RecyclerView.Adapter<NewsListRecycl
             holder.news_txt_space.setHeight(200);
             holder.news_txt_space.requestLayout();
         }
-
     }
 
     public void displayImg(String imgName, ImageView imgView){
