@@ -150,7 +150,6 @@ public class NewsList extends AppCompatActivity {
         newsList_recycleV_newsList.setLayoutManager(new LinearLayoutManager(this));
     }
 
-
     public void toWhichTab(View view) {
         setCurrentlyActiveTab(view.getId());
         displayRecyclerView(currentlyActiveTab);
@@ -163,7 +162,5 @@ public class NewsList extends AppCompatActivity {
         currentlyActiveTab = findViewById(txtID);
         currentlyActiveTab.setTextColor(getResources().getColor(R.color.tab_text_color));
         currentlyActiveTab.setBackground(getResources().getDrawable(R.color.tab_background));
-
-        //change the recycler view
     }
 }
