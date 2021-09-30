@@ -81,6 +81,7 @@
     <string name="discard_org_desc">The organization must be created with an admin, by leaving this page, organization created just now will be removed.</string>
     <string name="assigned_organization">Assigned \nOrganization :</string>
     <string name="estimated_cleaning_duration">Estimated \nCleaning \nDuration : </string>
+    <string name="delete_selected_report">Delete selected report(s)?</string>
 
     <string-array name="state_array">
         <item>Johor</item>

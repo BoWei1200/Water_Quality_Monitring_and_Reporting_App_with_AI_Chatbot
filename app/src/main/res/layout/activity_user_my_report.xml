@@ -23,11 +23,32 @@
         app:titleMargin="2dp"
         app:titleTextColor="#FFFFFF" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/userMyReport_constraintLayout_longPressOperation"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+
+        app:layout_constraintTop_toBottomOf="@+id/userMyReport_toolbar"
+        android:background="@color/tab_background"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/userMyReport_img_deleteIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:onClick="deleteReport"
+            android:src="@drawable/ic_delete_icon_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userMyReport_recycleV_reportList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:scrollingCache="true"
@@ -35,6 +56,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userMyReport_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/userMyReport_constraintLayout_longPressOperation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

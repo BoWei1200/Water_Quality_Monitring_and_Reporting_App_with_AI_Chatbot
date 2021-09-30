@@ -101,7 +101,7 @@ public class UserWaterSensor implements Runnable{
                 Value[] valuesNH3N = NH3N.getValues();
                 double nh3nValRead = Double.parseDouble(String.valueOf(valuesNH3N[0].getValue()));
                 if(nh3nValRead > 3){
-                    int polluteForNTimes = (int)(Math.random() * (15-7)) + 7;
+                    int polluteForNTimes = (int)(Math.random() * (10-5)) + 5;
 
                     if(!countBlock){
                         polluteUntil = i + polluteForNTimes;

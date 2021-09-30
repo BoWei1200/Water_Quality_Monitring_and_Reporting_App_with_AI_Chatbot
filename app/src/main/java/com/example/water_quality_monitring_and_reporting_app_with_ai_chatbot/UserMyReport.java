@@ -1,14 +1,23 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class UserMyReport extends AppCompatActivity {
 
@@ -18,12 +27,15 @@ public class UserMyReport extends AppCompatActivity {
 
     private String getUserIDPreference = "";
 
+    private ConstraintLayout userMyReport_constraintLayout_longPressOperation;
     private RecyclerView userMyReport_recycleV_reportList;
 
     private String myReportIDs[];
     private String myReportDates[];
     private String myReportTimes[];
     private String myReportStatus[];
+
+    ArrayList<String> reportIDSelected = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,24 +51,10 @@ public class UserMyReport extends AppCompatActivity {
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         getUserIDPreference = mPreferences.getString(userIDPreference, null);
 
+        userMyReport_constraintLayout_longPressOperation = findViewById(R.id.userMyReport_constraintLayout_longPressOperation);
         userMyReport_recycleV_reportList = findViewById(R.id.userMyReport_recycleV_reportList);
 
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        Cursor cursorGetMyReport = dbHelper.getMyReport(getUserIDPreference);
-        int countMyReport = (! (cursorGetMyReport==null)) ? cursorGetMyReport.getCount() : 0;
-
-        if(countMyReport != 0){
-            myReportIDs = new String[countMyReport];
-            myReportDates = new String[countMyReport];
-            myReportTimes = new String[countMyReport];
-            myReportStatus = new String[countMyReport];
-
-            loadMyReportFromDatabase();
-
-            UserMyReportRecycleVAdapter adapter = new UserMyReportRecycleVAdapter(this, myReportIDs, myReportDates, myReportTimes, myReportStatus);
-            userMyReport_recycleV_reportList.setAdapter(adapter);
-            userMyReport_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
-        }
+        displayRecyclerView();
     }
 
     @Override //when back button clicked
@@ -67,14 +65,39 @@ public class UserMyReport extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        if(reportIDSelected.size() == 0){
+            super.onBackPressed();
+        }
+        else{
+            reportIDSelected.clear();
+            displayRecyclerView();
+            userMyReport_constraintLayout_longPressOperation.setVisibility(View.GONE);
+        }
+    }
+
+    private void displayRecyclerView(){
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        Cursor cursorGetMyReport = dbHelper.getMyReport(getUserIDPreference);
+        int countMyReport = (! (cursorGetMyReport == null)) ? cursorGetMyReport.getCount() : 0;
+
+        myReportIDs = new String[countMyReport];
+        myReportDates = new String[countMyReport];
+        myReportTimes = new String[countMyReport];
+        myReportStatus = new String[countMyReport];
+
+        loadMyReportFromDatabase();
+
+        UserMyReportRecycleVAdapter adapter = new UserMyReportRecycleVAdapter(this, myReportIDs, myReportDates, myReportTimes, myReportStatus, reportIDSelected);
+        userMyReport_recycleV_reportList.setAdapter(adapter);
+        userMyReport_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
+    }
+
     private void loadMyReportFromDatabase() {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         Cursor cursor = dbHelper.getMyReport(getUserIDPreference);
 
-        returnRead(cursor);
-    }
-
-    private Cursor returnRead(Cursor cursor) {
         int i = 0, j = 0;
         if (cursor.moveToFirst()) {
             do {
@@ -86,6 +109,42 @@ public class UserMyReport extends AppCompatActivity {
                 i++;
             } while (cursor.moveToNext());
         }
-        return cursor;
+    }
+
+    public void deleteReport(View view) {
+        for (String i:reportIDSelected) {
+            System.out.println("ID selected " + i +", ");
+        }
+
+        displayAlert(R.string.delete_selected_report, R.string.empty_string, R.drawable.warningiconedit);
+    }
+
+    public void displayAlert(int title, int msg, int drawable){
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch(title){
+                            case R.string.delete_selected_report:
+                                DatabaseHelper dbHelper = new DatabaseHelper(UserMyReport.this);
+                                if(dbHelper.deleteReport(reportIDSelected))
+                                    displayToast("Selected report(s) deleted");
+
+                                reportIDSelected.clear();
+                                userMyReport_constraintLayout_longPressOperation.setVisibility(View.GONE);
+                                displayRecyclerView();
+                                break;
+                        }
+                    }
+                })
+
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(drawable)
+                .show();
+    }
+
+    public void displayToast(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 }

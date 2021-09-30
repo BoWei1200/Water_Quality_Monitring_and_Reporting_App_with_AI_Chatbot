@@ -1054,6 +1054,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_ORGANIZATION, "orgID=?", new String[]{orgID}) == 1;
     }
 
+    public boolean deleteReport(ArrayList reportIDSelected) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        try{
+            for(int i = 0 ; i < reportIDSelected.size();i++)
+            {
+                db.delete(TABLE_REPORT_CLEANING_PROCESS,"reportID=?",new String[]{reportIDSelected.get(i).toString()});
+                db.delete(TABLE_REPORT_FROM_USER_IMAGE,"reportID=?",new String[]{reportIDSelected.get(i).toString()});
+                db.delete(TABLE_REPORT_INVESTIGATION,"reportID=?",new String[]{reportIDSelected.get(i).toString()});
+                db.delete(TABLE_REPORT_LOCATION,"reportID=?",new String[]{reportIDSelected.get(i).toString()});
+                db.delete(TABLE_REPORT_FROM_USER,"reportID=?",new String[]{reportIDSelected.get(i).toString()});
+            }
+            return true;
+        }catch(Exception e){
+            System.out.println("ERROR IN DELETING REPORT: " + e.toString());
+            return false;
+        }
+    }
+
     public boolean updateOrgInfo(String orgID, String orgName, String orgAddressLine, String orgPostcode, String orgCity, String orgState, String orgReady) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues conVal = new ContentValues();

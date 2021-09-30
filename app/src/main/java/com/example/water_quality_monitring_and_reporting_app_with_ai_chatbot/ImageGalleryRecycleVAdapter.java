@@ -101,10 +101,8 @@ public class ImageGalleryRecycleVAdapter extends RecyclerView.Adapter<ImageGalle
                                                txtErrorImg.setVisibility(View.VISIBLE);
                                            }
 
-
                                            return;
                                        }
-
                                    }
                                    reportImageSelected.add(imgName);
                                     imgView.setImageDrawable(context.getResources().getDrawable(R.drawable.check_icon));
@@ -119,11 +117,14 @@ public class ImageGalleryRecycleVAdapter extends RecyclerView.Adapter<ImageGalle
                             });
 
                             imgView.setOnLongClickListener(v -> {
-                                selectMode = true;
-                                reportImageSelected.add(imgName);
-                                txtErrorImg.setVisibility(View.GONE);
-                                imgView.setImageDrawable(context.getResources().getDrawable(R.drawable.check_icon));
-                                imgView.setPadding(80, 80, 80, 80);
+                                if(!selectMode){
+                                    selectMode = true;
+                                    reportImageSelected.add(imgName);
+                                    txtErrorImg.setVisibility(View.GONE);
+                                    imgView.setImageDrawable(context.getResources().getDrawable(R.drawable.check_icon));
+                                    imgView.setPadding(100, 100, 100, 100);
+
+                                }
                                 return true;
                             });
                             break;
@@ -139,8 +140,6 @@ public class ImageGalleryRecycleVAdapter extends RecyclerView.Adapter<ImageGalle
 
             }
         });
-
-
     }
 
     @Override
