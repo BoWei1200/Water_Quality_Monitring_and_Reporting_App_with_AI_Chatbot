@@ -2,11 +2,13 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.Image;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +35,7 @@ import com.google.firebase.storage.StorageReference;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 
 import com.squareup.picasso.Picasso;
@@ -391,10 +395,42 @@ public class UserReportStatus extends AppCompatActivity{
 
     public void viewNext(View view) {
         Picasso.get().load(imageUri[++currentDisplayingPhotoIndex]).resize(400,400).centerCrop().into(userReportStatus_img_pollutionPhoto);
-        //Picasso.get().load(imageUri[++currentDisplayingPhotoIndex]).into(userReportStatus_img_pollutionPhoto);
-        //userReportStatus_img_pollutionPhoto.setImageURI(Uri.parse(imageUri[++currentDisplayingPhotoIndex].toString()));
 
         //Glide.with(this).load(userReportImage[++currentDisplayingPhotoIndex].getUrl()).into(userReportStatus_img_pollutionPhoto);
         prevNextandOtherBtnsDisplay();
+    }
+
+    public void deleteReport(View view) {
+        displayAlert(R.string.delete_selected_report, R.string.empty_string, R.drawable.warningiconedit);
+    }
+
+    public void displayAlert(int title, int msg, int drawable){
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch(title){
+                            case R.string.delete_selected_report:
+                                DatabaseHelper dbHelper = new DatabaseHelper(UserReportStatus.this);
+                                ArrayList<String> reportIDSelected = new ArrayList<>();
+                                reportIDSelected.add(reportID);
+
+                                if(dbHelper.deleteReport(reportIDSelected))
+                                    displayToast("Selected report(s) deleted");
+
+                                finish();
+                                break;
+                        }
+                    }
+                })
+
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(drawable)
+                .show();
+    }
+
+    public void displayToast(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
 }
