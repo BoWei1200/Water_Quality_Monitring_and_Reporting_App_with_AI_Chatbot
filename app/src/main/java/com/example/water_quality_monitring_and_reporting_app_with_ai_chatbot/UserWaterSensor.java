@@ -160,7 +160,7 @@ public class UserWaterSensor implements Runnable{
                     }
                     int drawable = R.drawable.appicon;
                     String notificationTitle = "Water from your faucet is " + status + "!";
-                    String notificationText = "Detected WQI: " + calculatedWQI;
+                    String notificationText = "Detected WQI: " + String.format("%.2f", calculatedWQI);
                     NotificationSender notificationSender = new NotificationSender(context, drawable, notificationTitle, notificationText, "WQI");
                     notificationSender.start();
                 }

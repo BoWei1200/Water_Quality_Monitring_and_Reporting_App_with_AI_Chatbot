@@ -83,7 +83,7 @@ public class SystemAdminHome extends AppCompatActivity {
                 break;
 
             case R.id.systemAdminHome_btn_manageNews:
-                intent = new Intent(this, NewsManagement.class);
+                intent = new Intent(this, NewsList.class);
                 break;
 
             case R.id.systemAdminHome_btn_manageUser:

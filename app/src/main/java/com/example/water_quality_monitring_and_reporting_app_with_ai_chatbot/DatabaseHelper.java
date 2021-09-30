@@ -1030,6 +1030,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
+    public Cursor getAllUser() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE userType='NA' OR userType='SAD'", null);
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getEmployeesByOrgID(String orgID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT user.*, em.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " em WHERE em.userID=user.userID AND em.orgID=?", new String[]{orgID});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
 
     // Registered user info
     public Cursor readInfo(String userEmail) {
@@ -1152,4 +1166,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION, null);
         return cursor.getCount();
     }
+
+
 }
