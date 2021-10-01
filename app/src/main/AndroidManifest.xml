@@ -23,7 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Water_Quality_Monitring_and_Reporting_App_with_AI_Chatbot"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UserOrEmployeeDetail"></activity>
+        <activity android:name=".SystemAdminAddSystemAdmin"></activity>
+        <activity android:name=".SystemAdminUserManagement" />
+        <activity android:name=".UserOrEmployeeDetail" />
         <activity android:name=".NewsDetail" />
         <activity android:name=".AdminReportListToPost" />
         <activity android:name=".NewsManagement" />

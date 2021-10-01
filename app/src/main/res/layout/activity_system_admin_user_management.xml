@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SystemAdminUserManagement">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/systemAdminUserManagement_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/mainTheme"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/Toolbar_back_button_style"
+        app:title="User Management"
+        app:titleMargin="2dp"
+        app:titleTextColor="#FFFFFF" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/systemAdminUserManagement_toolbar">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:id="@+id/systemAdminUserManagement_tableRow_addSystemAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:onClick="toOtherPages"
+                android:weightSum="10">
+
+                <ImageView
+                    android:id="@+id/systemAdminUserManagement_img_addSystemAdmin"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_column="1"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/createusericonedit" />
+
+                <TextView
+                    android:id="@+id/systemAdminUserManagement_txt_addSystemAdmin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_weight="7"
+                    android:fontFamily="@font/nunito_sans"
+                    android:gravity="center_vertical"
+                    android:text="  Add System Admin"
+                    android:textSize="18sp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp">
+            </TableRow>
+
+            <View
+                android:layout_height="1dip"
+                android:background="#FF909090" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp">
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/systemAdminUserManagement_tableRow_manageUser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:onClick="toOtherPages"
+                android:weightSum="10">
+
+                <ImageView
+                    android:id="@+id/systemAdminUserManagement_img_manageUser"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_column="1"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/manageusericonedit" />
+
+                <TextView
+                    android:id="@+id/systemAdminUserManagement_txt_manageUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_weight="7"
+                    android:fontFamily="@font/nunito_sans"
+                    android:gravity="center_vertical"
+                    android:text="  Manage User"
+                    android:textSize="18sp" />
+            </TableRow>
+
+        </TableLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

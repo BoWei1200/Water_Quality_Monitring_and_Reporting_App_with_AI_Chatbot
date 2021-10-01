@@ -87,7 +87,7 @@ public class SystemAdminHome extends AppCompatActivity {
                 break;
 
             case R.id.systemAdminHome_btn_manageUser:
-                intent = new Intent(this, ManageUserOrEmployee.class);
+                intent = new Intent(this, SystemAdminUserManagement.class);
                 break;
         }
 
