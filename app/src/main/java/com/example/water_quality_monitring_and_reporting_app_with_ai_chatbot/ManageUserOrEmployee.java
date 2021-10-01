@@ -8,9 +8,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 
-public class ManageUserOrEmployee extends AppCompatActivity {
+public class ManageUserOrEmployee extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
@@ -19,6 +27,10 @@ public class ManageUserOrEmployee extends AppCompatActivity {
 
     private String getUserTypePreference = "";
     private String getUserIDPreference = "";
+
+    LinearLayout manageUserOrEmployee_linearLayout_searchEngine;
+    EditText manageUserOrEmployee_eTxt_searchBar;
+    Spinner manageUserOrEmployee_spinner_filter;
 
     RecyclerView manageUserOrEmployee_recycleV_userEmployeeList;
 
@@ -40,15 +52,59 @@ public class ManageUserOrEmployee extends AppCompatActivity {
         getUserTypePreference = mPreferences.getString(userTypePreference, null);
         getUserIDPreference = mPreferences.getString(userIDPreference, null);
 
+        manageUserOrEmployee_linearLayout_searchEngine = findViewById(R.id.manageUserOrEmployee_linearLayout_searchEngine);
+
+        manageUserOrEmployee_eTxt_searchBar = findViewById(R.id.manageUserOrEmployee_eTxt_searchBar);
+        manageUserOrEmployee_spinner_filter = findViewById(R.id.manageUserOrEmployee_spinner_filter);
+
         manageUserOrEmployee_recycleV_userEmployeeList = findViewById(R.id.manageUserOrEmployee_recycleV_userEmployeeList);
 
         System.out.println("usertype" + getUserTypePreference);
 
         String toolbarTitle = (getUserTypePreference.equals("SAD")) ? "Manage User" :
                                 (getUserTypePreference.equals("AD")) ? "Manage Employee" : "null";
+
+        manageUserOrEmployee_spinner_filter.setVisibility(getUserTypePreference.equals("SAD") ? View.VISIBLE : View.GONE);
+
         getSupportActionBar().setTitle(toolbarTitle);
 
+        manageUserOrEmployee_eTxt_searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                displayRecyclerView();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        if (manageUserOrEmployee_spinner_filter != null) {
+            manageUserOrEmployee_spinner_filter.setOnItemSelectedListener(this);
+
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                    R.array.filter_user, android.R.layout.simple_spinner_item);
+
+            // Specify the layout to use when the list of choices appears.
+            adapter.setDropDownViewResource
+                    (android.R.layout.simple_spinner_dropdown_item);
+            // Apply the adapter to the spinner.
+            if (manageUserOrEmployee_spinner_filter != null) {
+                manageUserOrEmployee_spinner_filter.setAdapter(adapter);
+            }
+        }
+
+        displayRecyclerView();
+    }
+
+    protected void onRestart(){
+        super.onRestart();
         displayRecyclerView();
     }
 
@@ -59,13 +115,16 @@ public class ManageUserOrEmployee extends AppCompatActivity {
 
         switch (getUserTypePreference){
             case "SAD":
-                cursor = dbHelper.getAllUser();
+                cursor = dbHelper.getAllUser(
+                        manageUserOrEmployee_eTxt_searchBar.getText().toString(),
+                        manageUserOrEmployee_spinner_filter.getSelectedItem().toString()
+                );
                 break;
 
             case "AD":
                 Cursor orgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
                 String orgID = orgInfo.getString(orgInfo.getColumnIndex("orgID"));
-                cursor = dbHelper.getEmployeesByOrgID(orgID);
+                cursor = dbHelper.getEmployeesByOrgID(orgID, manageUserOrEmployee_eTxt_searchBar.getText().toString());
                 break;
         }
 
@@ -89,6 +148,15 @@ public class ManageUserOrEmployee extends AppCompatActivity {
         manageUserOrEmployee_recycleV_userEmployeeList.setAdapter(adapter);
         manageUserOrEmployee_recycleV_userEmployeeList.setLayoutManager(new LinearLayoutManager(this));
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+        manageUserOrEmployee_eTxt_searchBar.setText("");
+        displayRecyclerView();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {}
 
     @Override //when back button clicked
     public boolean onOptionsItemSelected(MenuItem item) {

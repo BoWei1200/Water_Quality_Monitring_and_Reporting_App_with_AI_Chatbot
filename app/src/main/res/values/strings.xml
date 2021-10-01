@@ -82,6 +82,7 @@
     <string name="assigned_organization">Assigned \nOrganization :</string>
     <string name="estimated_cleaning_duration">Estimated \nCleaning \nDuration : </string>
     <string name="delete_selected_report">Delete selected report(s)?</string>
+    <string name="delete_user_title">Delete user ?</string>
 
     <string-array name="state_array">
         <item>Johor</item>
@@ -104,6 +105,12 @@
         <item>Validity of Report</item>
         <item>1st Investigation</item>
         <item>2nd Investigation &amp; Report on Cleaning Process</item>
+    </string-array>
+
+    <string-array name="filter_user">
+        <item>All</item>
+        <item>Home User</item>
+        <item>System Admin</item>
     </string-array>
 
 </resources>

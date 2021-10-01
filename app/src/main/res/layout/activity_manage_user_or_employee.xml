@@ -23,6 +23,61 @@
         app:titleMargin="2dp"
         app:titleTextColor="#FFFFFF" />
 
+    <LinearLayout
+        android:id="@+id/manageUserOrEmployee_linearLayout_searchEngine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manageUserOrEmployee_toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/manageUserOrEmployee_eTxt_searchBar"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight=".75"
+                android:fontFamily="@font/nunito_sans"
+                android:hint="Search by user ID"
+                android:inputType="text"
+                android:textSize="16dp" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight=".25"
+                android:background="@drawable/rounded_corners"
+                android:backgroundTint="#4EBEDA"
+                android:src="@drawable/ic_search_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/editText" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/manageUserOrEmployee_spinner_filter"
+                style="@style/spinner_style"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/manageUserOrEmployee_recycleV_userEmployeeList"
         android:layout_width="match_parent"
@@ -34,6 +89,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/manageUserOrEmployee_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/manageUserOrEmployee_linearLayout_searchEngine" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

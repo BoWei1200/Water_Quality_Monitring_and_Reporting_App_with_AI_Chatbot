@@ -577,7 +577,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getOrgInfoByUserID(String userID){
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT org.orgID, org.orgName FROM " + TABLE_ORGANIZATION + " org, "+ TABLE_EMPLOYEE_ORGANIZATION +" employOrg WHERE employOrg.userID=? AND org.orgID = employOrg.orgID", new String[]{userID});
+
+        Cursor cursor = db.rawQuery("SELECT org.orgID, org.orgName FROM " + TABLE_ORGANIZATION + " org, "+ TABLE_EMPLOYEE_ORGANIZATION +" employOrg WHERE employOrg.userID=? AND org.orgID = employOrg.orgID", new String[]{userID});
+        return cursor.moveToFirst() ? cursor : null;
     }
 
     public Cursor getOrgEmployeeByOrgIDAndUserType(String orgID, String userType) {
@@ -1030,16 +1032,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
-    public Cursor getAllUser() {
+
+    public Cursor getAllUser(String searchUserID, String filter) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE userType='NA' OR userType='SAD'", null);
+
+        String whereClause = "";
+        if(filter.equals("Home User")){
+            whereClause = " userType='NA'";
+        }
+        else if(filter.equals("System Admin")){
+            whereClause = " userType='SAD'";
+        }
+        else{
+            whereClause = " userType='NA' OR userType='SAD'";
+        }
+
+        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + whereClause + " LIKE '%"+ searchUserID +"%'";
+        System.out.println(query);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE (" + whereClause + ") AND userID LIKE '%"+ searchUserID +"%'", null);
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
-    public Cursor getEmployeesByOrgID(String orgID) {
+    public Cursor getEmployeesByOrgID(String orgID, String searchUserID) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT user.*, em.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " em WHERE em.userID=user.userID AND em.orgID=?", new String[]{orgID});
+        Cursor cursor = db.rawQuery("SELECT user.*, em.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " em WHERE em.userID=user.userID AND em.orgID=? AND em.userID LIKE '%" + searchUserID + "%'", new String[]{orgID});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getUserAddress(String userID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER_ADDRESS +" WHERE addressUserID=?", new String[]{userID});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
@@ -1057,10 +1081,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.getCount() < 1);
     }
 
-    public boolean deleteUser(String ic) {
-        //delete user by using NRIC (primary key)
+    public boolean deleteUser(String userID) {
         SQLiteDatabase db = getWritableDatabase();
-        return db.delete(TABLE_USER,  "ic=?", new String[]{ic}) == 1;
+        Boolean deleted = false;
+        try{
+            db.delete(TABLE_USER_ADDRESS,  "addressUserID=?", new String[]{userID});
+            db.delete(TABLE_USER_UBIDOTS_CREDENTIALS,  "ubidotsUserID=?", new String[]{userID});
+            db.delete(TABLE_USER,  "userID=?", new String[]{userID});
+
+            deleted = true;
+        }catch(Exception e){
+            deleted = false;
+        }
+
+        return  deleted;
     }
 
     public boolean deleteOrg(String orgID){
@@ -1166,6 +1200,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION, null);
         return cursor.getCount();
     }
-
-
 }
