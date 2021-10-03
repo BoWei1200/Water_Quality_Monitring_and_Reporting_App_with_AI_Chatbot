@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -38,6 +39,8 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
 
     private String getUserTypePreference = "";
     private String getUserIDPreference = "";
+
+    ImageView userEmployeeDetail_img_deleteUser;
 
     TextView userEmployeeDetail_txt_userID;
     TextInputEditText userEmployeeDetail_txtInputET_fName, userEmployeeDetail_txtInputET_lName, userEmployeeDetail_txtInputET_email,
@@ -82,6 +85,8 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
         getSupportActionBar().setTitle((getUserTypePreference.equals("SAD")) ? "User Information" :
                                         (getUserTypePreference.equals("AD")) ? "Employee Information" : "Personal Information");
 
+        userEmployeeDetail_img_deleteUser = findViewById(R.id.userEmployeeDetail_img_deleteUser);
+
         userEmployeeDetail_txt_userID = findViewById(R.id.userEmployeeDetail_txt_userID);
         userEmployeeDetail_txtInputET_fName = findViewById(R.id.userEmployeeDetail_txtInputET_fName);
         userEmployeeDetail_txtInputET_lName = findViewById(R.id.userEmployeeDetail_txtInputET_lName);
@@ -112,10 +117,17 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
 
         if(getUserTypePreference.equals("SAD"))
             cursorUserInfo = dbHelper.getAllUser(userID, "All");
-        else if (getUserTypePreference.equals("AD")){
-            Cursor cursorOrgID = dbHelper.getOrgInfoByUserID(getUserIDPreference);
-            String orgID = cursorOrgID.getString(cursorOrgID.getColumnIndex("orgID"));
-            cursorUserInfo = dbHelper.getEmployeesByOrgID(orgID, userID);
+        else if (getUserTypePreference.equals("AD") || getUserTypePreference.equals("NA")){
+            if(getUserTypePreference.equals("AD")){
+                Cursor cursorOrgID = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+                String orgID = cursorOrgID.getString(cursorOrgID.getColumnIndex("orgID"));
+                cursorUserInfo = dbHelper.getEmployeesByOrgID(orgID, userID);
+            }else{
+                cursorUserInfo = dbHelper.getAllUser(getUserIDPreference, "All");
+                userID = getUserIDPreference;
+                userEmployeeDetail_img_deleteUser.setVisibility(View.GONE);
+            }
+
 
             nameValidation(userEmployeeDetail_txtInputET_fName);
             nameValidation(userEmployeeDetail_txtInputET_lName);
@@ -174,6 +186,7 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
             addressValidation(userEmployeeDetail_txtInputET_postcode);
             addressValidation(userEmployeeDetail_txtInputET_city);
         }
+
 
         if(cursorUserInfo == null)
             return;
@@ -260,7 +273,7 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
             rBtn.setChecked(true);
 
         }else{
-
+            userEmployeeDetail_linearLayout_userType.setVisibility(View.GONE);
         }
 
 
@@ -378,9 +391,16 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                     Boolean emailExist = dbHelper.isEmail_Exist(userEmployeeDetail_txtInputET_email.getText().toString());
                     Boolean phoneExist = dbHelper.isPhone_Exist(userEmployeeDetail_txtInputET_phone.getText().toString());
 
-                    Cursor cursorOrgID = dbHelper.getOrgInfoByUserID(getUserIDPreference);
-                    String orgID = cursorOrgID.getString(cursorOrgID.getColumnIndex("orgID"));
-                    Cursor cursorGetUserInfo = dbHelper.getEmployeesByOrgID(orgID, userID);
+                    Cursor cursorGetUserInfo;
+                    if(getUserTypePreference.equals("AD")){
+                        Cursor cursorOrgID = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+                        String orgID = cursorOrgID.getString(cursorOrgID.getColumnIndex("orgID"));
+                        cursorGetUserInfo = dbHelper.getEmployeesByOrgID(orgID, userID);
+                    }
+                    else{
+                        cursorGetUserInfo = dbHelper.getAllUser(userID, "All");
+                    }
+
 
                     if(emailExist)
                         emailExist = !(cursorGetUserInfo.getString(cursorGetUserInfo.getColumnIndex("userEmail"))).equals(userEmployeeDetail_txtInputET_email.getText().toString());
@@ -400,7 +420,7 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                             userEmployeeDetail_spinner_state.getSelectedItem().toString(),
                             userID
                         )){
-                            displayToast("Employee updated successfully!");
+                            displayToast((getUserTypePreference.equals("AD")) ? "Employee updated successfully!" : "Personal Information updated!");
                         }
                         else{
                             displayToast("Something wrong in updating");

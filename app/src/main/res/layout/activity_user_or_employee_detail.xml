@@ -348,8 +348,7 @@
                             android:textSize="16dp"
                             android:fontFamily="@font/nunito_sans"
                             android:enabled="false"
-                            android:textColor="@color/gray"
-                            android:onClick="selectUserType"/>
+                            android:textColor="@color/gray" />
 
                         <RadioButton
                             android:id="@+id/userEmployeeDetail_rBtn_EX"
@@ -360,8 +359,7 @@
                             android:textSize="16dp"
                             android:fontFamily="@font/nunito_sans"
                             android:enabled="false"
-                            android:textColor="@color/gray"
-                            android:onClick="selectUserType"/>
+                            android:textColor="@color/gray" />
 
                         <RadioButton
                             android:id="@+id/userEmployeeDetail_rBtn_IN"
@@ -372,8 +370,7 @@
                             android:textSize="16dp"
                             android:fontFamily="@font/nunito_sans"
                             android:enabled="false"
-                            android:textColor="@color/gray"
-                            android:onClick="selectUserType"/>
+                            android:textColor="@color/gray" />
 
                         <LinearLayout
                             android:id="@+id/userEmployeeDetail_linearLayout_investigationTeam"
@@ -401,8 +398,7 @@
                             android:textSize="16dp"
                             android:fontFamily="@font/nunito_sans"
                             android:enabled="false"
-                            android:textColor="@color/gray"
-                            android:onClick="selectUserType"/>
+                            android:textColor="@color/gray" />
                     </RadioGroup>
 
                 </LinearLayout>

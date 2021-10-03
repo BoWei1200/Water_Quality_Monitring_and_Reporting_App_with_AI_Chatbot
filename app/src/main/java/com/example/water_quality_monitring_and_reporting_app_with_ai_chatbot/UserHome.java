@@ -112,11 +112,17 @@ public class UserHome extends AppCompatActivity{
         WQIcalc = new UserIoTWQICalculation();
 
         userHome_popupMenu_setting = new PopupMenu(this, userHome_img_setting);
-        userHome_popupMenu_setting.getMenuInflater().inflate(R.menu.user_setting_menu, userHome_popupMenu_setting.getMenu());
+        userHome_popupMenu_setting.getMenuInflater().inflate(R.menu.home_user_setting_menu, userHome_popupMenu_setting.getMenu());
         userHome_popupMenu_setting.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
+                Intent i;
                 switch(item.getItemId()){
-                    case R.id.userSettingMenu_logout:
+                    case R.id.homeUserSettingMenu_account:
+                        i = new Intent(UserHome.this, UserOrEmployeeDetail.class);
+                        startActivity(i);
+                        break;
+
+                    case R.id.homeUserSettingMenu_logout:
                         SharedPreferences.Editor editor = mPreferences.edit();
 
                         editor.putString(stopSensorPreference, "1");
@@ -125,11 +131,13 @@ public class UserHome extends AppCompatActivity{
 
                         runApiUbidots(false);
 
-                        Intent i = new Intent(UserHome.this, Login.class);
+                        i = new Intent(UserHome.this, Login.class);
                         startActivity(i);
                         finish();
                         break;
                 }
+
+
                 return true;
             }
         });
