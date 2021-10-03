@@ -1075,6 +1075,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
+    public Cursor getInvestigatorTeamInfoByOrgID(String orgID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_INVESTIGATION_TEAM + " WHERE investigationTeamOrgID=? ", new String[]{orgID});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
 
     // Registered user info
     public Cursor readInfo(String userEmail) {

@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
-public class InvestigationTeamDetailMemberRecycleVAdapter extends RecyclerView.Adapter<InvestigationTeamDetailMemberRecycleVAdapter.InvestigationTeamDetailMemberRecycleViewHolder>{
+public class InvestigatorTeamDetailMemberRecycleVAdapter extends RecyclerView.Adapter<InvestigatorTeamDetailMemberRecycleVAdapter.InvestigationTeamDetailMemberRecycleViewHolder>{
     Context context;
     String[] teamMemNames;
 
-    public InvestigationTeamDetailMemberRecycleVAdapter(Context context, String[] names) {
+    public InvestigatorTeamDetailMemberRecycleVAdapter(Context context, String[] names) {
         this.context = context;
         this.teamMemNames = names;
     }
@@ -44,7 +44,7 @@ public class InvestigationTeamDetailMemberRecycleVAdapter extends RecyclerView.A
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull InvestigationTeamDetailMemberRecycleVAdapter.InvestigationTeamDetailMemberRecycleViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull InvestigatorTeamDetailMemberRecycleVAdapter.InvestigationTeamDetailMemberRecycleViewHolder holder, int position) {
         holder.teamMemDetailRecycleVLayout_txt_teamMemName.setText(teamMemNames[position]);
     }
 

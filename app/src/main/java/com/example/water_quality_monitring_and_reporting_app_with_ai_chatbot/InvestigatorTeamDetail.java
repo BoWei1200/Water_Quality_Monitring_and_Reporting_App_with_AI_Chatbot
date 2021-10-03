@@ -6,12 +6,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 public class InvestigatorTeamDetail extends AppCompatActivity {
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.example.android.fyp_hydroMyapp";
+    private final String userIDPreference = "userID";
+    private final String userTypePreference = "userType";
+
+    private String getUserTypePreference = "";
 
     private TextView investigatorTeamDetail_txt_teamID, investigatorTeamDetail_txt_teamName;
 
@@ -25,11 +32,16 @@ public class InvestigatorTeamDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_investigator_team_detail);
 
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        getUserTypePreference = mPreferences.getString(userTypePreference, null);
+
         Toolbar toolbar = findViewById(R.id.investigatorTeamDetail_toolbar);
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        getSupportActionBar().setTitle((getUserTypePreference.equals("AD")) ? "Investigator Team Detail" : "My Investigator Team");
 
         investigatorTeamDetail_txt_teamID = findViewById(R.id.investigatorTeamDetail_txt_teamID);
         investigatorTeamDetail_txt_teamName = findViewById(R.id.investigatorTeamDetail_txt_teamName);
@@ -48,7 +60,7 @@ public class InvestigatorTeamDetail extends AppCompatActivity {
         teamMemberNames = new String[countTeamMember];
         loadTeamMemberFromDatabase();
 
-        InvestigationTeamDetailMemberRecycleVAdapter adapter = new InvestigationTeamDetailMemberRecycleVAdapter(this, teamMemberNames);
+        InvestigatorTeamDetailMemberRecycleVAdapter adapter = new InvestigatorTeamDetailMemberRecycleVAdapter(this, teamMemberNames);
         investigatorTeamDetail_recycleV_teamMemberList.setAdapter(adapter);
         investigatorTeamDetail_recycleV_teamMemberList.setLayoutManager(new LinearLayoutManager(this));
     }
