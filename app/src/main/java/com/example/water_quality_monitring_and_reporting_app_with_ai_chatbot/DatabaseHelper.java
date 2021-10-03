@@ -578,7 +578,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getOrgInfoByUserID(String userID){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT org.orgID, org.orgName FROM " + TABLE_ORGANIZATION + " org, "+ TABLE_EMPLOYEE_ORGANIZATION +" employOrg WHERE employOrg.userID=? AND org.orgID = employOrg.orgID", new String[]{userID});
+        Cursor cursor = db.rawQuery("SELECT org.* FROM " + TABLE_ORGANIZATION + " org, "+ TABLE_EMPLOYEE_ORGANIZATION +" employOrg WHERE employOrg.userID=? AND org.orgID = employOrg.orgID", new String[]{userID});
         return cursor.moveToFirst() ? cursor : null;
     }
 
@@ -1068,6 +1068,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
+    public Cursor getEmployeesByOrgIDAndUserType(String orgID, String userType) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT em.* FROM " + TABLE_USER + " user, "+ TABLE_EMPLOYEE_ORGANIZATION + " em WHERE user.userID=em.userID AND em.orgID=? AND user.userType=?", new String[]{orgID, userType});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
 
     // Registered user info
     public Cursor readInfo(String userEmail) {
@@ -1133,6 +1140,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         conVal.put("orgReady", orgReady);
 
         return db.update(TABLE_ORGANIZATION, conVal, "orgID=?", new String[]{orgID}) == 1;
+    }
+
+    public boolean updateUserInfo(String fName, String lName, String userEmail, String phoneNo, String addressLine, String postcode, String city, String state, String userID) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("userEmail", userEmail);
+        conVal.put("fName", fName);
+        conVal.put("lName", lName);
+        conVal.put("phoneNo", phoneNo);
+
+        ContentValues conValAddress = new ContentValues();
+
+        conValAddress.put("addressLine", addressLine);
+        conValAddress.put("postcode", postcode);
+        conValAddress.put("city", city);
+        conValAddress.put("state", state);
+
+        try{
+            db.update(TABLE_USER, conVal, "userID=?", new String[]{userID});
+            db.update(TABLE_USER_ADDRESS, conValAddress, "addressUserID=?", new String[]{userID});
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
 
     public boolean updateReportStatusByReportID(String reportID, String updatedStatus) {

@@ -319,84 +319,94 @@
                         android:textColor="@color/WQIRed"
                         android:visibility="gone" />
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/userEmployeeDetail_linearLayout_userType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:fontFamily="@font/roboto"
-                    android:text="Type of Employee"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:orientation="vertical">
 
-                <RadioGroup
-                    android:id="@+id/userEmployeeDetail_rGroup_employeeType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <RadioButton
-                        android:id="@+id/userEmployeeDetail_rBtn_AD"
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Admin"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="16dp"
-                        android:fontFamily="@font/nunito_sans"
-                        android:onClick="selectUserType"/>
+                        android:layout_marginTop="25dp"
+                        android:fontFamily="@font/roboto"
+                        android:text="Type of Employee"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
 
-                    <RadioButton
-                        android:id="@+id/userEmployeeDetail_rBtn_EX"
+                    <RadioGroup
+                        android:id="@+id/userEmployeeDetail_rGroup_employeeType"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Examiner"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="16dp"
-                        android:fontFamily="@font/nunito_sans"
-                        android:onClick="selectUserType"/>
+                        android:layout_height="wrap_content">
 
-                    <RadioButton
-                        android:id="@+id/userEmployeeDetail_rBtn_IN"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Investigator"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="16dp"
-                        android:fontFamily="@font/nunito_sans"
-                        android:onClick="selectUserType"/>
-
-                    <LinearLayout
-                        android:id="@+id/userEmployeeDetail_linearLayout_investigationTeam"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:visibility="gone">
-
-                        <Spinner
-                            android:id="@+id/userEmployeeDetail_spinner_investigationTeamList"
+                        <RadioButton
+                            android:id="@+id/userEmployeeDetail_rBtn_AD"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            style="@style/spinner_style"/>
+                            android:layout_height="wrap_content"
+                            android:text="Admin"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="16dp"
+                            android:fontFamily="@font/nunito_sans"
+                            android:enabled="false"
+                            android:textColor="@color/gray"
+                            android:onClick="selectUserType"/>
 
-                    </LinearLayout>
+                        <RadioButton
+                            android:id="@+id/userEmployeeDetail_rBtn_EX"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Examiner"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="16dp"
+                            android:fontFamily="@font/nunito_sans"
+                            android:enabled="false"
+                            android:textColor="@color/gray"
+                            android:onClick="selectUserType"/>
 
-                    <RadioButton
-                        android:id="@+id/userEmployeeDetail_rBtn_RH"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Report Handler"
-                        android:layout_gravity="center_horizontal"
-                        android:textSize="16dp"
-                        android:fontFamily="@font/nunito_sans"
-                        android:onClick="selectUserType"/>
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/userEmployeeDetail_rBtn_IN"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Investigator"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="16dp"
+                            android:fontFamily="@font/nunito_sans"
+                            android:enabled="false"
+                            android:textColor="@color/gray"
+                            android:onClick="selectUserType"/>
 
-                <TextView
-                    android:id="@+id/userEmployeeDetail_txt_errorUserType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:text="@string/required"
-                    android:textColor="@color/WQIRed"
-                    android:visibility="gone" />
+                        <LinearLayout
+                            android:id="@+id/userEmployeeDetail_linearLayout_investigationTeam"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:visibility="gone">
+
+                            <Spinner
+                                android:id="@+id/userEmployeeDetail_spinner_investigationTeamList"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                style="@style/spinner_style"
+                                android:enabled="false"
+                                android:textColor="@color/gray"/>
+
+                        </LinearLayout>
+
+                        <RadioButton
+                            android:id="@+id/userEmployeeDetail_rBtn_RH"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Report Handler"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="16dp"
+                            android:fontFamily="@font/nunito_sans"
+                            android:enabled="false"
+                            android:textColor="@color/gray"
+                            android:onClick="selectUserType"/>
+                    </RadioGroup>
+
+                </LinearLayout>
+
 
                     <Button
                         android:id="@+id/userEmployeeDetail_btn_update"

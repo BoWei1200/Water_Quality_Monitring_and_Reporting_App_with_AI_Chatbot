@@ -49,15 +49,18 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
 
     Spinner userEmployeeDetail_spinner_state, userEmployeeDetail_spinner_investigationTeamList;
 
+    LinearLayout userEmployeeDetail_linearLayout_userType;
     RadioGroup userEmployeeDetail_rGroup_employeeType;
 
     LinearLayout userEmployeeDetail_linearLayout_investigationTeam;
 
     Button userEmployeeDetail_btn_update;
 
-    String userID = "", userType = "";
+    String userID = "", selectedUserType = "";
 
-    Boolean nameValid = false, emailValid = false, phoneValid = false, addressValid = false, userTypeValid = false;
+    Cursor cursorUserInfo;
+
+    Boolean nameValid = false, emailValid = false, phoneValid = false, addressValid = false;
 
     private static final Pattern phone_pattern = Pattern.compile("^(01)[0-46-9][0-9]{7,8}$");
 
@@ -90,6 +93,7 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
 
         userEmployeeDetail_spinner_state = findViewById(R.id.userEmployeeDetail_spinner_state);
 
+        userEmployeeDetail_linearLayout_userType = findViewById(R.id.userEmployeeDetail_linearLayout_userType);
         userEmployeeDetail_rGroup_employeeType = findViewById(R.id.userEmployeeDetail_rGroup_employeeType);
         userEmployeeDetail_linearLayout_investigationTeam = findViewById(R.id.userEmployeeDetail_linearLayout_investigationTeam);
         userEmployeeDetail_spinner_investigationTeamList = findViewById(R.id.userEmployeeDetail_spinner_investigationTeamList);
@@ -98,14 +102,13 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
         userEmployeeDetail_txt_errorEmail = findViewById(R.id.userEmployeeDetail_txt_errorEmail);
         userEmployeeDetail_txt_errorPhone = findViewById(R.id.userEmployeeDetail_txt_errorPhone);
         userEmployeeDetail_txt_errorAddress = findViewById(R.id.userEmployeeDetail_txt_errorAddress);
-        userEmployeeDetail_txt_errorUserType = findViewById(R.id.userEmployeeDetail_txt_errorUserType);
 
         userEmployeeDetail_btn_update = findViewById(R.id.userEmployeeDetail_btn_update);
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("userID");
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        Cursor cursorUserInfo = null;
+        cursorUserInfo = null;
 
         if(getUserTypePreference.equals("SAD"))
             cursorUserInfo = dbHelper.getAllUser(userID, "All");
@@ -211,34 +214,56 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
 
             userEmployeeDetail_spinner_state.setEnabled(false);
 
+            userEmployeeDetail_linearLayout_userType.setVisibility(View.GONE);
             userEmployeeDetail_btn_update.setVisibility(View.GONE);
-        }
-
-        if (userEmployeeDetail_spinner_investigationTeamList != null) {
-            userEmployeeDetail_spinner_investigationTeamList.setOnItemSelectedListener(this);
-
-            Cursor getOrgID = dbHelper.getOrgInfoByUserID(getUserIDPreference);
-            getOrgID.moveToFirst();
-
-            Cursor cursorGetInvestigationTeam = dbHelper.getInvestigationTeamByOrgID(getOrgID.getString(getOrgID.getColumnIndex("orgID")));
-
-            String arrayInvestigatorTeam[] = new String[cursorGetInvestigationTeam.getCount()];
-
-            int i = 0;
-            for(cursorGetInvestigationTeam.moveToFirst(); !cursorGetInvestigationTeam.isAfterLast(); cursorGetInvestigationTeam.moveToNext()){
-                arrayInvestigatorTeam[i++] = cursorGetInvestigationTeam.getString(cursorGetInvestigationTeam.getColumnIndex("investigationTeamName"));
-            }
-
-            ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayInvestigatorTeam);
-
-            // Specify the layout to use when the list of choices appears.
-            adapter.setDropDownViewResource
-                    (android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner.
+        }else if (getUserTypePreference.equals("AD")){
             if (userEmployeeDetail_spinner_investigationTeamList != null) {
-                userEmployeeDetail_spinner_investigationTeamList.setAdapter(adapter);
+                userEmployeeDetail_spinner_investigationTeamList.setOnItemSelectedListener(this);
+
+                Cursor getOrgID = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+                getOrgID.moveToFirst();
+
+                Cursor cursorGetInvestigationTeam = dbHelper.getInvestigationTeamByOrgID(getOrgID.getString(getOrgID.getColumnIndex("orgID")));
+
+                String arrayInvestigatorTeam[] = new String[cursorGetInvestigationTeam.getCount()];
+
+                int i = 0;
+                for(cursorGetInvestigationTeam.moveToFirst(); !cursorGetInvestigationTeam.isAfterLast(); cursorGetInvestigationTeam.moveToNext()){
+                    arrayInvestigatorTeam[i++] = cursorGetInvestigationTeam.getString(cursorGetInvestigationTeam.getColumnIndex("investigationTeamName"));
+                }
+
+                ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayInvestigatorTeam);
+
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+                if (userEmployeeDetail_spinner_investigationTeamList != null) {
+                    userEmployeeDetail_spinner_investigationTeamList.setAdapter(adapter);
+                }
             }
+
+            String userType = cursorUserInfo.getString(cursorUserInfo.getColumnIndex("userType"));
+
+            RadioButton rBtn;
+            if(userType.equals("AD")){
+                rBtn = findViewById(R.id.userEmployeeDetail_rBtn_AD);
+            }
+            else if(userType.equals("EX")){
+                rBtn = findViewById(R.id.userEmployeeDetail_rBtn_EX);
+            }
+            else if(userType.equals("IN")){
+                rBtn = findViewById(R.id.userEmployeeDetail_rBtn_IN);
+            }
+            else{
+                rBtn = findViewById(R.id.userEmployeeDetail_rBtn_RH);
+            }
+
+            rBtn.setChecked(true);
+
+        }else{
+
         }
+
+
     }
 
     public void setETxtDisabled(TextInputEditText txt){
@@ -345,42 +370,65 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
     public void onNothingSelected(AdapterView<?> parent) {}
 
     public void update(View view) {
-        if(nameValid && emailValid && phoneValid && addressValid){
-            try{
-                DatabaseHelper dbHelper = new DatabaseHelper(this);
+        if(getUserTypePreference.equals("AD") || getUserTypePreference.equals("NA")){
+            if(nameValid && emailValid && phoneValid && addressValid){
+                try{
+                    DatabaseHelper dbHelper = new DatabaseHelper(this);
 
-                Boolean emailExist = dbHelper.isEmail_Exist(userEmployeeDetail_txtInputET_email.getText().toString());
-                Boolean phoneExist = dbHelper.isPhone_Exist(userEmployeeDetail_txtInputET_phone.getText().toString());
+                    Boolean emailExist = dbHelper.isEmail_Exist(userEmployeeDetail_txtInputET_email.getText().toString());
+                    Boolean phoneExist = dbHelper.isPhone_Exist(userEmployeeDetail_txtInputET_phone.getText().toString());
 
-                Cursor cursorOrgID = dbHelper.getOrgInfoByUserID(getUserIDPreference);
-                String orgID = cursorOrgID.getString(cursorOrgID.getColumnIndex("orgID"));
-                Cursor cursorGetUserInfo = dbHelper.getEmployeesByOrgID(orgID, userID);
+                    Cursor cursorOrgID = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+                    String orgID = cursorOrgID.getString(cursorOrgID.getColumnIndex("orgID"));
+                    Cursor cursorGetUserInfo = dbHelper.getEmployeesByOrgID(orgID, userID);
 
-                if(emailExist)
-                    emailExist = !(cursorGetUserInfo.getString(cursorGetUserInfo.getColumnIndex("userEmail"))).equals(userEmployeeDetail_txtInputET_email.getText().toString());
+                    if(emailExist)
+                        emailExist = !(cursorGetUserInfo.getString(cursorGetUserInfo.getColumnIndex("userEmail"))).equals(userEmployeeDetail_txtInputET_email.getText().toString());
 
-                if(phoneExist)
-                    phoneExist = !(cursorGetUserInfo.getString(cursorGetUserInfo.getColumnIndex("phoneNo"))).equals(userEmployeeDetail_txtInputET_phone.getText().toString());
+                    if(phoneExist)
+                        phoneExist = !(cursorGetUserInfo.getString(cursorGetUserInfo.getColumnIndex("phoneNo"))).equals(userEmployeeDetail_txtInputET_phone.getText().toString());
 
-                if(!(emailExist || phoneExist)){
-                    //dbHelper.updateEmployee()
-                    displayToast("Ready!");
-                }else{
-                    if(emailExist){
-                        userEmployeeDetail_txt_errorEmail.setVisibility(View.VISIBLE);
-                        userEmployeeDetail_txt_errorEmail.setText("This email is alredy registered");
+                    if(!(emailExist || phoneExist)){
+                        if(dbHelper.updateUserInfo(
+                            userEmployeeDetail_txtInputET_fName.getText().toString(),
+                            userEmployeeDetail_txtInputET_lName.getText().toString(),
+                            userEmployeeDetail_txtInputET_email.getText().toString(),
+                            userEmployeeDetail_txtInputET_phone.getText().toString(),
+                            userEmployeeDetail_txtInputET_addressLine.getText().toString(),
+                            userEmployeeDetail_txtInputET_postcode.getText().toString(),
+                            userEmployeeDetail_txtInputET_city.getText().toString(),
+                            userEmployeeDetail_spinner_state.getSelectedItem().toString(),
+                            userID
+                        )){
+                            displayToast("Employee updated successfully!");
+                        }
+                        else{
+                            displayToast("Something wrong in updating");
+                        }
+
+                        finish();
+
+                    }else{
+                        if(emailExist){
+                            userEmployeeDetail_txt_errorEmail.setVisibility(View.VISIBLE);
+                            userEmployeeDetail_txt_errorEmail.setText("This email is alredy registered");
+                        }
+
+                        if(phoneExist){
+                            userEmployeeDetail_txt_errorPhone.setVisibility(View.VISIBLE);
+                            userEmployeeDetail_txt_errorPhone.setText("This phone no. is already registered");
+                        }
                     }
 
-                    if(phoneExist){
-                        userEmployeeDetail_txt_errorPhone.setVisibility(View.VISIBLE);
-                        userEmployeeDetail_txt_errorPhone.setText("This phone no. is already registered");
-                    }
+                }catch(Exception e){
+                    System.out.println("\t" + e.toString());
                 }
-
-            }catch(Exception e){
-                System.out.println("\t" + e.toString());
+            }else{
+                displayToast("Please make sure every credential is filled in correctly");
             }
         }
+
+
     }
 
     public void deleteUser(View view) {
@@ -397,8 +445,8 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                             case R.string.delete_user_title:
                                 DatabaseHelper dbHelper = new DatabaseHelper(UserOrEmployeeDetail.this);
 
-                                if(dbHelper.deleteUser(userID))
-                                    displayToast("user" + userID + " deleted");
+//                                if(dbHelper.deleteUser(userID))
+//                                    displayToast("user" + userID + " deleted");
 
                                 finish();
                                 break;
@@ -409,53 +457,5 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                 .setNegativeButton(android.R.string.no, null)
                 .setIcon(drawable)
                 .show();
-    }
-
-    public void selectUserType(View view) {
-        switch (view.getId()){
-            case R.id.adminAddEmployee_rBtn_AD:
-                userType = "AD";
-                break;
-
-            case R.id.adminAddEmployee_rBtn_EX:
-                userType = "EX";
-                break;
-
-            case R.id.adminAddEmployee_rBtn_IN:
-                userType = "IN";
-                break;
-
-            case R.id.adminAddEmployee_rBtn_RH:
-                userType = "RH";
-                break;
-        }
-
-        userTypeValid = true;
-        userEmployeeDetail_txt_errorUserType.setVisibility(View.GONE);
-
-        if(view.getId() == R.id.userEmployeeDetail_rBtn_IN){
-            DatabaseHelper dbHelper = new DatabaseHelper(this);
-
-            Cursor getOrgID = dbHelper.getOrgInfoByUserID(getUserIDPreference);
-            getOrgID.moveToFirst();
-
-            Cursor cursorGetInvestigatorTeam = dbHelper.getInvestigationTeamByOrgID(getOrgID.getString(getOrgID.getColumnIndex("orgID")));
-
-            if(cursorGetInvestigatorTeam.getCount() == 0){
-                RadioButton rtnIN = findViewById(R.id.userEmployeeDetail_rBtn_IN);
-                rtnIN.setChecked(false);
-                userTypeValid = false;
-                userEmployeeDetail_txt_errorUserType.setVisibility(View.VISIBLE);
-
-                displayToast("Investigation Team should be created first");
-
-                userEmployeeDetail_linearLayout_investigationTeam.setVisibility(View.GONE);
-            }else{
-                userEmployeeDetail_linearLayout_investigationTeam.setVisibility(View.VISIBLE);
-            }
-
-        }else{
-            userEmployeeDetail_linearLayout_investigationTeam.setVisibility(View.GONE);
-        }
     }
 }
