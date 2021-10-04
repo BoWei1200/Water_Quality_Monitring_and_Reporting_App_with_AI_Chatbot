@@ -23,4 +23,49 @@
         app:titleMargin="2dp"
         app:titleTextColor="#FFFFFF" />
 
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/systemAdminManageOrg_toolbar"
+        tools:layout_editor_absoluteX="10dp">
+
+        <EditText
+            android:id="@+id/systemAdminManageOrg_eTxt_searchBar"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight=".75"
+            android:fontFamily="@font/nunito_sans"
+            android:hint="Search by org. ID or name"
+            android:inputType="text"
+            android:textSize="16dp" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight=".25"
+            android:background="@drawable/rounded_corners"
+            android:backgroundTint="#4EBEDA"
+            android:src="@drawable/ic_search_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/editText" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/systemAdminManageOrg_recycleV_orgList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:scrollingCache="true"
+        android:smoothScrollbar="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1007,14 +1007,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAllNews() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NEWS , new String[]{});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NEWS + " ORDER BY newsDate DESC, newsTime DESC", new String[]{});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
     public Cursor getNewsByUserID(String userID) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NEWS +" WHERE userID=?", new String[]{userID});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NEWS +" WHERE userID=? ORDER BY newsDate DESC, newsTime DESC", new String[]{userID});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
@@ -1033,7 +1033,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
-    public Cursor getAllUser(String searchUserID, String filter) {
+    public Cursor getAllUser(String searchUserKey, String filter) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String whereClause = "";
@@ -1047,16 +1047,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             whereClause = " userType='NA' OR userType='SAD'";
         }
 
-        String query = "SELECT * FROM " + TABLE_USER + " WHERE " + whereClause + " LIKE '%"+ searchUserID +"%'";
-        System.out.println(query);
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE (" + whereClause + ") AND userID LIKE '%"+ searchUserID +"%'", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " " +
+                "WHERE (" + whereClause + ") AND (userID LIKE '%"+ searchUserKey +"%' OR fName LIKE '%"+ searchUserKey + "%' OR lName LIKE '%"+ searchUserKey + "%')", null);
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
-    public Cursor getEmployeesByOrgID(String orgID, String searchUserID) {
+    public Cursor getEmployeesByOrgID(String orgID, String searchUserKey) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT user.*, em.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " em WHERE em.userID=user.userID AND em.orgID=? AND em.userID LIKE '%" + searchUserID + "%'", new String[]{orgID});
+        Cursor cursor = db.rawQuery("SELECT user.*, em.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " em " +
+                "WHERE em.userID=user.userID AND em.orgID=? AND (em.userID LIKE '%" + searchUserKey + "%' OR em.fName LIKE '%" + searchUserKey + "%' OR em.lName LIKE '%" + searchUserKey + "%')", new String[]{orgID});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
@@ -1078,6 +1078,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getInvestigatorTeamInfoByOrgID(String orgID) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_INVESTIGATION_TEAM + " WHERE investigationTeamOrgID=? ", new String[]{orgID});
+
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getAllOrg(String searchOrgKey) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_ORGANIZATION + " WHERE orgID LIKE '%" + searchOrgKey + "%' OR orgName LIKE '%" + searchOrgKey + "%'", null);
 
         return (cursor.moveToFirst()) ? cursor : null;
     }

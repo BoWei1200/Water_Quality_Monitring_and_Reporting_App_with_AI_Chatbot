@@ -48,7 +48,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight=".75"
                 android:fontFamily="@font/nunito_sans"
-                android:hint="Search by user ID"
+                android:hint="Search by user ID or name"
                 android:inputType="text"
                 android:textSize="16dp" />
 

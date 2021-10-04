@@ -59,8 +59,6 @@ public class ManageUserOrEmployee extends AppCompatActivity implements AdapterVi
 
         manageUserOrEmployee_recycleV_userEmployeeList = findViewById(R.id.manageUserOrEmployee_recycleV_userEmployeeList);
 
-        System.out.println("usertype" + getUserTypePreference);
-
         String toolbarTitle = (getUserTypePreference.equals("SAD")) ? "Manage User" :
                                 (getUserTypePreference.equals("AD")) ? "Manage Employee" : "null";
 

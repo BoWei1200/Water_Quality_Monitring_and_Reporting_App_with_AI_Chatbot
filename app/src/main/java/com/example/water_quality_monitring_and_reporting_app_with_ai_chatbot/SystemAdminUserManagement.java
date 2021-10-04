@@ -27,7 +27,8 @@ public class SystemAdminUserManagement extends AppCompatActivity {
 
         switch(view.getId()){
             case R.id.systemAdminUserManagement_tableRow_addSystemAdmin:
-                intent = new Intent(this, SystemAdminAddSystemAdmin.class);
+                intent = new Intent(this, SystemAdminAddAdmin.class);
+                intent.putExtra("addWhichAdmin", "SAD");
                 break;
 
             case R.id.systemAdminUserManagement_tableRow_manageUser:

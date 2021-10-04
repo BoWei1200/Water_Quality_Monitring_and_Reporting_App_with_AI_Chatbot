@@ -38,6 +38,7 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
 
     private static final Pattern phone_pattern = Pattern.compile("^(01)[0-46-9][0-9]{7,8}$");
 
+    private String addWhichAdmin = "";
     private String passedOrgID = "";
 
     private Boolean discardOrNot = false;
@@ -48,7 +49,10 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
         setContentView(R.layout.activity_system_admin_add_admin);
 
         Intent intent = getIntent();
-        passedOrgID = intent.getStringExtra("orgID");
+        addWhichAdmin = intent.getStringExtra("addWhichAdmin");
+
+        if(addWhichAdmin.equals("AD"))
+            passedOrgID = intent.getStringExtra("orgID");
 
         systemAdminAddAdmin_txtInputET_fName = findViewById(R.id.systemAdminAddAdmin_txtInputET_fName);
         systemAdminAddAdmin_txtInputET_lName = findViewById(R.id.systemAdminAddAdmin_txtInputET_lName);
@@ -235,27 +239,31 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
                             systemAdminAddAdmin_txtInputET_fName.getText().toString(),
                             systemAdminAddAdmin_txtInputET_lName.getText().toString(),
                             systemAdminAddAdmin_txtInputET_phone.getText().toString(),
-                            "AD",
+                            (addWhichAdmin.equals("AD")) ? "AD" : "SAD",
                             randomizedPassword,
                             systemAdminAddAdmin_txtInputET_addressLine.getText().toString(),
                             systemAdminAddAdmin_txtInputET_postcode.getText().toString(),
                             systemAdminAddAdmin_txtInputET_city.getText().toString(),
                             systemAdminAddAdmin_spinner_state.getSelectedItem().toString()
                     )){
-                        if(dbHelper.addEmployeeOrg(passedOrgID, dbHelper.getUserID(systemAdminAddAdmin_txtInputET_email.getText().toString()))){
-                            displayToast("Organization admin added successfully!");
-
-                            String name = systemAdminAddAdmin_txtInputET_fName.getText().toString() + " " +systemAdminAddAdmin_txtInputET_lName.getText().toString();
-                            String message = name + ", your HydroMy password is " + randomizedPassword;
-
-                            Intent intent = new Intent(this, SystemAdminAddOrg.class);
-                            startActivity(intent);
-                            finish();
-
-                            sendEmail(systemAdminAddAdmin_txtInputET_email.getText().toString(), message);
-                        }else{
-                            displayToast("Failed to add organization admin");
+                        if(addWhichAdmin.equals("AD")){
+                            if(dbHelper.addEmployeeOrg(passedOrgID, dbHelper.getUserID(systemAdminAddAdmin_txtInputET_email.getText().toString()))){
+                                displayToast("Organization admin added successfully!");
+                            }else{
+                                displayToast("Failed to add organization admin");
+                            }
                         }
+
+                        String name = systemAdminAddAdmin_txtInputET_fName.getText().toString() + " " +systemAdminAddAdmin_txtInputET_lName.getText().toString();
+                        String message = name + ", your HydroMy password is " + randomizedPassword;
+
+                        Intent intent = new Intent(this, SystemAdminAddOrg.class);
+                        startActivity(intent);
+                        finish();
+
+                        sendEmail(systemAdminAddAdmin_txtInputET_email.getText().toString(), message);
+                    }else{
+                        displayToast("Failed to add admin");
                     }
 
                 }else{
@@ -310,7 +318,12 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onBackPressed() {
-        displayAlert(R.string.discard_org, R.string.discard_org_desc, R.drawable.warningiconedit);
+        if(addWhichAdmin.equals("AD")){
+            displayAlert(R.string.discard_org, R.string.discard_org_desc, R.drawable.warningiconedit);
+        }else{
+            discardOrNot = true;
+        }
+
         if(discardOrNot){
             super.onBackPressed();
         }

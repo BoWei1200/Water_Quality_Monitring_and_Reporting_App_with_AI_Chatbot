@@ -165,6 +165,7 @@ public class SystemAdminAddOrg extends AppCompatActivity implements AdapterView.
                     String orgID = dbHelper.getorgID(systemAdminAddOrg_txtInputET_orgName.getText().toString());
                     Intent intent = new Intent(this, SystemAdminAddAdmin.class);
                     intent.putExtra("orgID", orgID);
+                    intent.putExtra("addWhichAdmin", "AD");
                     startActivity(intent);
                     finish();
                 }
