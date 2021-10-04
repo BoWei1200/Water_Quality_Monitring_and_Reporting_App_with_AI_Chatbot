@@ -83,6 +83,7 @@
     <string name="estimated_cleaning_duration">Estimated \nCleaning \nDuration : </string>
     <string name="delete_selected_report">Delete selected report(s)?</string>
     <string name="delete_user_title">Delete user ?</string>
+    <string name="delete_news_title">Delete this news?</string>
 
     <string-array name="state_array">
         <item>Johor</item>

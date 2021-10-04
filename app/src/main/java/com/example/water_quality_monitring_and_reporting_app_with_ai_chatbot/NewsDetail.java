@@ -2,15 +2,19 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.view.MenuItem;
@@ -31,15 +35,22 @@ import com.squareup.picasso.Picasso;
 import org.jetbrains.annotations.NotNull;
 
 public class NewsDetail extends AppCompatActivity {
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
+    private final String userIDPreference = "userID";
+    private final String userTypePreference = "userType";
+    String getUserIDPreference = "";
+    String getUserTypePreference = "";
+
     private TextView newsDetail_txt_title, newsDetail_txt_desc;
 
     private ConstraintLayout newsDetail_constraintLayout_images;
-    private ImageView newsDetail_img_pollutionPhoto;
+    private ImageView newsDetai_img_deleteNews, newsDetail_img_pollutionPhoto;
     private LinearLayout newsDetail_linearLayout_previous, newsDetail_linearLayout_next;
 
     private Uri[] imageUri;  private int photoIndex = 0; private int currentDisplayingPhotoIndex = 0;
 
-    private String reportID = "";
+    private String newsID = "";
 
     private UserReportImage[] userReportImage;
 
@@ -48,8 +59,12 @@ public class NewsDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
 
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        getUserIDPreference = mPreferences.getString(userIDPreference, null);
+        getUserTypePreference = mPreferences.getString(userTypePreference, null);
+
         Intent intent = getIntent();
-        String newsID = intent.getStringExtra("newsID");
+        newsID = intent.getStringExtra("newsID");
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         Cursor cursorNewsInfo = dbHelper.getNewInfoByNewsID(newsID);
@@ -61,6 +76,8 @@ public class NewsDetail extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        newsDetai_img_deleteNews = findViewById(R.id.newsDetai_img_deleteNews);
+
         newsDetail_txt_title = findViewById(R.id.newsDetail_txt_title);
         newsDetail_txt_desc = findViewById(R.id.newsDetail_txt_desc);
 
@@ -69,11 +86,16 @@ public class NewsDetail extends AppCompatActivity {
         newsDetail_linearLayout_previous = findViewById(R.id.newsDetail_linearLayout_previous);
         newsDetail_linearLayout_next = findViewById(R.id.newsDetail_linearLayout_next);
 
-
         newsDetail_txt_title.setText(cursorNewsInfo.getString(cursorNewsInfo.getColumnIndex("newsTitle")));
         newsDetail_txt_desc.setText(cursorNewsInfo.getString(cursorNewsInfo.getColumnIndex("newsDesc")));
 
+        if(getUserIDPreference.equals(cursorNewsInfo.getString(cursorNewsInfo.getColumnIndex("userID"))) || getUserTypePreference.equals("SAD")){
+            newsDetai_img_deleteNews.setVisibility(View.VISIBLE);
+        }
+
         displayUploadedImageFromFirebase(newsID);
+
+
     }
 
     public void displayUploadedImageFromFirebase(String newsID) {
@@ -182,5 +204,33 @@ public class NewsDetail extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void deleteNews(View view) {
+        displayAlert(R.string.delete_news_title, R.string.empty_string, R.drawable.warningiconedit);
+    }
+
+    public void displayAlert(int title, int msg, int drawable){
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch(title){
+                            case R.string.delete_news_title:
+                                DatabaseHelper dbHelper = new DatabaseHelper(NewsDetail.this);
+
+                                if(dbHelper.deleteNews(newsID))
+                                    displayToast("News deleted");
+
+                                finish();
+                                break;
+                        }
+                    }
+                })
+
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(drawable)
+                .show();
     }
 }

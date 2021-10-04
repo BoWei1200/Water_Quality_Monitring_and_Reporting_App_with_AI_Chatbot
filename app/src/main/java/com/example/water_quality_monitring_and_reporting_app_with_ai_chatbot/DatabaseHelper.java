@@ -1142,6 +1142,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean deleteNews(String newsID) {
+        SQLiteDatabase db = getWritableDatabase();
+        Boolean deleted = false;
+
+        try{
+            db.delete(TABLE_NEWS, "newsID=?", new String[]{newsID});
+            db.delete(TABLE_NEWS_IMAGE, "newsID=?", new String[]{newsID});
+            deleted = true;
+        }catch(Exception e){
+
+        }
+
+        return deleted;
+    }
+
     public boolean updateOrgInfo(String orgID, String orgName, String orgAddressLine, String orgPostcode, String orgCity, String orgState, String orgReady) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues conVal = new ContentValues();
@@ -1246,4 +1261,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION, null);
         return cursor.getCount();
     }
+
+
 }
