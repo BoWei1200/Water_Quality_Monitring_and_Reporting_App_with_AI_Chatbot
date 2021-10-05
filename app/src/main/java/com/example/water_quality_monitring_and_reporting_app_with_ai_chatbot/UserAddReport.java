@@ -26,6 +26,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
@@ -62,27 +65,33 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp";
     private final String userIDPreference = "userID";
+    private final String currentWQIPreference = "currentWQI";
 
     private String getUserIDPreference = "";
+    private String getCurrentWQIPreference = "";
 
     private StorageReference storageReference;
     private DatabaseReference databaseReferece;
+
+    private CardView userAddReport_cv_reportForBadWQI, userAddReport_cv_reportForBadWQI_checkForReport;
 
     private LinearLayout userAddReport_linearLayout_previous, userAddReport_linearLayout_next;
 
     private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude,
             userAddReport_txt_photoAmount, userAddReport_txt_errorMsgDesc,
-            userAddReport_txt_errorMsgLaLongitude, userAddReport_txt_errorMsgAddress;
+            userAddReport_txt_errorMsgLaLongitude, userAddReport_txt_errorMsgAddress, userAddReport_txt_badWQI;
 
     private TextInputEditText userAddReport_etxtInput_pollutionDesc;
 
     private ImageView userAddReport_img_pollutionPhoto, userAddReport_img_previous, userAddReport_img_next, userAddReport_img_addIcon, userAddReport_img_deleteIcon;
 
+    private CheckBox userAddReport_cbx_reportForBadWQI;
+
     private Uri[] imageUri; Uri currentTakenImage; private int photoIndex = 0; private int currentDisplayingPhotoIndex = 0;
 
     private int getLocation = 0;
 
-    Boolean discardOrNot = false, deleteOrNot = false;
+    Boolean discardOrNot = false, deleteOrNot = false, reportBadWQI = false;
 
     LocationManager locationManager;
     String[] addressSplitList = null;
@@ -96,6 +105,9 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
     private static final int IMAGE_PICK_CAMERA_CODE = 1001;
     Uri image_uri;
 
+    double currentWQI;
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,9 +121,13 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         getUserIDPreference = mPreferences.getString(userIDPreference, null);
+        getCurrentWQIPreference = mPreferences.getString(currentWQIPreference, null);
 
         storageReference = FirebaseStorage.getInstance().getReference();
         databaseReferece = FirebaseDatabase.getInstance().getReference("reportFromUserImage");
+
+        userAddReport_cv_reportForBadWQI = findViewById(R.id.userAddReport_cv_reportForBadWQI);
+        userAddReport_cv_reportForBadWQI_checkForReport = findViewById(R.id.userAddReport_cv_reportForBadWQI_checkForReport);
 
         userAddReport_linearLayout_previous = findViewById(R.id.userAddReport_linearLayout_previous);
         userAddReport_linearLayout_next = findViewById(R.id.userAddReport_linearLayout_next);
@@ -122,6 +138,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         userAddReport_txt_errorMsgDesc = findViewById(R.id.userAddReport_txt_errorMsgDesc);
         userAddReport_txt_errorMsgLaLongitude = findViewById(R.id.userAddReport_txt_errorMsgLaLongitude);
         userAddReport_txt_errorMsgAddress = findViewById(R.id.userAddReport_txt_errorMsgAddress);
+        userAddReport_txt_badWQI = findViewById(R.id.userAddReport_txt_badWQI);
 
         userAddReport_etxtInput_pollutionDesc = findViewById(R.id.userAddReport_etxtInput_pollutionDesc);
 
@@ -130,6 +147,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
         userAddReport_img_next = findViewById(R.id.userAddReport_img_next);
         userAddReport_img_addIcon = findViewById(R.id.userAddReport_img_addIcon);
         userAddReport_img_deleteIcon = findViewById(R.id.userAddReport_img_deleteIcon);
+
+        userAddReport_cbx_reportForBadWQI = findViewById(R.id.userAddReport_cbx_reportForBadWQI);
 
         imageUri = new Uri[5];
 
@@ -161,6 +180,36 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
             }
         });
+
+        if(getCurrentWQIPreference != null){
+            currentWQI = Double.parseDouble(getCurrentWQIPreference);
+            userAddReport_cv_reportForBadWQI.setVisibility((currentWQI < 51.9) ? View.VISIBLE : View.GONE);
+
+            userAddReport_txt_badWQI.setText(String.format("%.2f", currentWQI));
+            userAddReport_txt_badWQI.setTextColor(getResources().getColor(
+                    (currentWQI < 31.0) ? R.color.WQIRed : R.color.WQIOrange));
+
+            userAddReport_cbx_reportForBadWQI.setTextColor(getResources().getColor(
+                    (currentWQI < 31.0) ? R.color.WQIRed : R.color.WQIOrange));
+
+            userAddReport_cbx_reportForBadWQI.setButtonTintList(this.getResources().getColorStateList(
+                    (currentWQI < 31.0) ? R.color.add_report_cbx_color_red_state : R.color.add_report_cbx_color_orange_state));
+
+            double finalCurrentWQI = currentWQI;
+            userAddReport_cbx_reportForBadWQI.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    reportBadWQI = isChecked;
+                    userAddReport_cv_reportForBadWQI_checkForReport
+                            .setBackgroundColor(getResources().getColor(
+                                    (isChecked) ?
+                                            ((finalCurrentWQI < 31.0) ? R.color.rejected_background : R.color.investigating_background) :
+                                            R.color.white
+                            ));
+                }
+            });
+        }
+
     }
 
     @Override //when back button clicked
@@ -366,9 +415,10 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
             reportImageFilePaths = new String[photoIndex];
             //store image to file
-            saveImage(imageUri);
 
+            saveImage(imageUri);
             //store to db
+
             String reportDesc = userAddReport_etxtInput_pollutionDesc.getText().toString();
 
             DateTimeFormatter currentDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -456,7 +506,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             selectedExaminerID = dbHelper.getExaminerIDWithLeastReports(cursorAvailableExaminerID);
 
             if(dbHelper.addReport(reportDesc, reportDate, reportTime, "Pending", selectedExaminerID, selectedOrgID, getUserIDPreference,
-                    reportImageFilePaths, reportaddressLine, reportPostcode, reportCity, reportState, Double.toString(latitude), Double.toString(longitude))){
+                    reportImageFilePaths, reportaddressLine, reportPostcode, reportCity, reportState, Double.toString(latitude), Double.toString(longitude),
+                    reportBadWQI, currentWQI)){
 
                 displayToast("Reported Successfully!");
                 finish();

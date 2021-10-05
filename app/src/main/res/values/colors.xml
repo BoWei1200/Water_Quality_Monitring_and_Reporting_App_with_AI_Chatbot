@@ -16,6 +16,7 @@
     <color name="WQIYellow">#ffd760</color>
     <color name="WQIGreen">#7ee76b</color>
     <color name="WQIBlue">#64baf0</color>
+
     <color name="tab_background">#E8F8FF</color>
     <color name="tab_text_color">#73A0B3</color>
     <color name="resolving_icon_color">#FAECBA</color>
@@ -27,4 +28,8 @@
     <color name="circle_img_resolved">#E622D38D</color>
     <color name="circle_img_rejected">#FFEF6B61</color>
     <color name="circle_img_not_ready">#E1E1E1</color>
+
+    <color name="rejected_background">#FFE9E7</color>
+    <color name="investigating_background">#FDE0B6</color>
+    <color name="pending_background">#E6FAF8CE</color>
 </resources>

@@ -404,7 +404,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Boolean addReport(String reportDesc, String reportDate, String reportTime, String reportStatus, String examiner, String orgID, String userID,
                              String reportImageFilePaths[],
-                             String reportaddressLine, String reportPostcode, String reportCity, String reportState, String reportLatitude, String reportLongitude){
+                             String reportaddressLine, String reportPostcode, String reportCity, String reportState, String reportLatitude, String reportLongitude,
+                             Boolean reportBadWQI, Double currentWQI){
 
         Boolean insertedReportFromUser = false, insertedReportImage = false, insertedReportLocation = false,
                 insertedReportInvestigation = false, insertedReportCleaningProcess = false ;
@@ -423,6 +424,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //conValReportFromUser.put("reportHandler", reportHandler);
         conValReportFromUser.put("orgID", orgID);
         conValReportFromUser.put("userID", userID);
+
+        if(reportBadWQI)
+            conValReportFromUser.put("reportWQI", currentWQI);
 
         insertedReportFromUser = db.insert(TABLE_REPORT_FROM_USER, null, conValReportFromUser) != -1;
 
