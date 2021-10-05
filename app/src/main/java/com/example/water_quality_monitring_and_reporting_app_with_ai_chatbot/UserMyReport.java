@@ -105,7 +105,7 @@ public class UserMyReport extends AppCompatActivity {
         Cursor cursor = dbHelper.getMyReport(getUserIDPreference);
 
         int i = 0, j = 0;
-        if (cursor.moveToFirst()) {
+        if (cursor != null) {
             do {
                 myReportIDs[i] = cursor.getString(cursor.getColumnIndex("reportID"));
                 myReportDates[i] = cursor.getString(cursor.getColumnIndex("reportDate"));

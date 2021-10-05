@@ -183,31 +183,34 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
         if(getCurrentWQIPreference != null){
             currentWQI = Double.parseDouble(getCurrentWQIPreference);
-            userAddReport_cv_reportForBadWQI.setVisibility((currentWQI < 51.9) ? View.VISIBLE : View.GONE);
+            if(currentWQI < 51.9){
+                userAddReport_cv_reportForBadWQI.setVisibility(View.VISIBLE);
 
-            userAddReport_txt_badWQI.setText(String.format("%.2f", currentWQI));
-            userAddReport_txt_badWQI.setTextColor(getResources().getColor(
-                    (currentWQI < 31.0) ? R.color.WQIRed : R.color.WQIOrange));
+                userAddReport_txt_badWQI.setText(String.format("%.2f", currentWQI));
+                userAddReport_txt_badWQI.setTextColor(getResources().getColor(
+                        (currentWQI < 31.0) ? R.color.WQIRed : R.color.WQIOrange));
 
-            userAddReport_cbx_reportForBadWQI.setTextColor(getResources().getColor(
-                    (currentWQI < 31.0) ? R.color.WQIRed : R.color.WQIOrange));
+                userAddReport_cbx_reportForBadWQI.setTextColor(getResources().getColor(
+                        (currentWQI < 31.0) ? R.color.WQIRed : R.color.WQIOrange));
 
-            userAddReport_cbx_reportForBadWQI.setButtonTintList(this.getResources().getColorStateList(
-                    (currentWQI < 31.0) ? R.color.add_report_cbx_color_red_state : R.color.add_report_cbx_color_orange_state));
+                userAddReport_cbx_reportForBadWQI.setButtonTintList(this.getResources().getColorStateList(
+                        (currentWQI < 31.0) ? R.color.add_report_cbx_color_red_state : R.color.add_report_cbx_color_orange_state));
 
-            double finalCurrentWQI = currentWQI;
-            userAddReport_cbx_reportForBadWQI.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    reportBadWQI = isChecked;
-                    userAddReport_cv_reportForBadWQI_checkForReport
-                            .setBackgroundColor(getResources().getColor(
-                                    (isChecked) ?
-                                            ((finalCurrentWQI < 31.0) ? R.color.rejected_background : R.color.investigating_background) :
-                                            R.color.white
-                            ));
-                }
-            });
+                double finalCurrentWQI = currentWQI;
+                userAddReport_cbx_reportForBadWQI.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        reportBadWQI = isChecked;
+                        userAddReport_cv_reportForBadWQI_checkForReport
+                                .setBackgroundColor(getResources().getColor(
+                                        (isChecked) ?
+                                                ((finalCurrentWQI < 31.0) ? R.color.rejected_background : R.color.investigating_background) :
+                                                R.color.white
+                                ));
+                    }
+                });
+            }
+
         }
 
     }

@@ -16,6 +16,8 @@ public class UserWaterSensor implements Runnable{
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "com.example.android.fyp_hydroMyapp"; //any name
     private final String stopSensorPreference = "stopSensor";
+    private final String currentWQIPreference = "currentWQI";
+
     private final String finishDetectingPreference = "finishDetecting";
     private final String completeGetDataFromUbidotsPreference = "completeGetDataFromUbidots";
     private Context context;
@@ -152,7 +154,12 @@ public class UserWaterSensor implements Runnable{
 
                 String status = "";
 
-                if(calculatedWQI < 51.8){
+                if(calculatedWQI < 51.9){
+
+                    SharedPreferences.Editor editor = mPreferences.edit();
+                    editor.putString(currentWQIPreference, Double.toString(calculatedWQI));
+                    editor.commit();
+                    
                     if(calculatedWQI < 31.0){
                         status = "heavily polluted";
                     }else{

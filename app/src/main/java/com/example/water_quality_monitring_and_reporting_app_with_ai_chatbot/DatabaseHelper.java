@@ -141,6 +141,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "reportDesc TEXT NOT NULL, " +
                 "reportDate DATE NOT NULL, " +
                 "reportTime TEXT NOT NULL, " +
+                "reportBadWQI TEXT, " +
                 "reportStatus TEXT NOT NULL, " +
                 "reportPollutionCause TEXT, " +
                 "reportEstimatedSolveDuration TEXT, " +
@@ -426,7 +427,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         conValReportFromUser.put("userID", userID);
 
         if(reportBadWQI)
-            conValReportFromUser.put("reportWQI", currentWQI);
+            conValReportFromUser.put("reportBadWQI", currentWQI);
 
         insertedReportFromUser = db.insert(TABLE_REPORT_FROM_USER, null, conValReportFromUser) != -1;
 
@@ -1060,7 +1061,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getEmployeesByOrgID(String orgID, String searchUserKey) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT user.*, em.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " em " +
-                "WHERE em.userID=user.userID AND em.orgID=? AND (em.userID LIKE '%" + searchUserKey + "%' OR em.fName LIKE '%" + searchUserKey + "%' OR em.lName LIKE '%" + searchUserKey + "%')", new String[]{orgID});
+                "WHERE em.userID=user.userID AND em.orgID=? AND (em.userID LIKE '%" + searchUserKey + "%' OR user.fName LIKE '%" + searchUserKey + "%' OR user.lName LIKE '%" + searchUserKey + "%')", new String[]{orgID});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
