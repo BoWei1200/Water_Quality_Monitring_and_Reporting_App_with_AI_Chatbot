@@ -529,24 +529,17 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             String selectedExaminerID = "";
 
             Cursor cursorAvailableExaminerID = dbHelper.getAvailableExaminerByOrgID(selectedOrgID);
-
             cursorAvailableExaminerID.moveToFirst();
 
             Boolean examinerIDFound = false;
 
-            if(cursorAvailableExaminerID.getCount() != 0){
-                for (int i = 0; i < cursorAvailableExaminerID.getCount(); i++){
-                    if(cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("reportIsTaken")).equals("0")){
-                        selectedExaminerID = cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID"));
-                        examinerIDFound = true;
-                        break;
-                    }
-                    cursorAvailableExaminerID.moveToNext();
+            for (int i = 0; i < cursorAvailableExaminerID.getCount(); i++){
+                if(cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("reportIsTaken")).equals("0")){
+                    selectedExaminerID = cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID"));
+                    examinerIDFound = true;
+                    break;
                 }
-            }
-            else{
-                selectedExaminerID = "2";
-                examinerIDFound = true;
+                cursorAvailableExaminerID.moveToNext();
             }
 
             if(!examinerIDFound){

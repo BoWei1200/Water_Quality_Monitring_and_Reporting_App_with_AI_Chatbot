@@ -648,7 +648,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAvailableExaminerByOrgID(String selectedOrgID) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT user.userID, employOrg.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " employOrg WHERE user.userType='EX' AND employOrg.orgID=? AND employOrg.userID=user.userID", new String[]{selectedOrgID});
+        return db.rawQuery("SELECT user.userID, employOrg.* FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " employOrg WHERE user.userType='EX' AND employOrg.orgID=? AND employOrg.userID=user.userID", new String[]{selectedOrgID});
     }
 
     public Boolean resetAllAvailableEmployeeReportIsTakenByOrgIDAndUsertype(String selectedOrgID, String userType) {
