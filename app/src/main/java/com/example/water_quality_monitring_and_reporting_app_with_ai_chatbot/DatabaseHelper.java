@@ -555,7 +555,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public String getUserID(String userEmail){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT userID FROM " + TABLE_USER + " WHERE userEmail=? ", new String[]{userEmail});;
+        Cursor cursor = db.rawQuery("SELECT userID FROM " + TABLE_USER + " WHERE userEmail=? ", new String[]{userEmail});
 
         return (cursor.moveToFirst()) ? cursor.getString(cursor.getColumnIndex("userID")) : "";
     }
@@ -598,62 +598,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT DISTINCT orgPostCode FROM " + TABLE_ORGANIZATION + " WHERE orgState=? AND orgReady='1' ORDER BY orgPostCode ASC", new String[]{reportState});
     }
 
-    public Cursor getAvailableOrgIDBySelectedPostcode(String selectedPostcode){
+    public Cursor getAvailableOrgBySelectedPostcode(String selectedPostcode){
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION + " WHERE orgPostCode=? AND orgReady='1' ORDER BY orgPostCode ASC", new String[]{selectedPostcode});
+        return db.rawQuery("SELECT * FROM " + TABLE_ORGANIZATION + " WHERE orgPostCode=? AND orgReady='1' ORDER BY orgPostCode ASC", new String[]{selectedPostcode});
+    }
+
+    public Boolean resetAllAvailableOrgReportIsTakenByPostcode(String orgPostCode) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("reportIsTaken", "0");
+
+        return db.update(TABLE_ORGANIZATION, conVal, "orgPostCode=?", new String[]{orgPostCode}) == 1;
+    }
+
+    public Boolean resetSelectedOrgReportIsTaken(String selectedOrgID){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("reportIsTaken", "1");
+
+        return db.update(TABLE_ORGANIZATION, conVal, "orgID=?", new String[]{selectedOrgID}) == 1;
     }
 
     public Cursor getOrgReportNumByOrgID(String orgID){
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT org.orgID, COUNT(report.reportID) FROM " + TABLE_REPORT_FROM_USER +" report, "+ TABLE_ORGANIZATION +" org WHERE org.orgID=?  AND report.orgID = org.orgID GROUP BY org.orgID ORDER BY COUNT(report.reportID)", new String[]{orgID});
-    }
-
-    public Cursor getExaminerReportNumByExaminerID(String examinerID){
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT user.userID, COUNT(report.reportID) FROM " + TABLE_REPORT_FROM_USER +" report, "+ TABLE_USER +" user WHERE user.userID=?  AND report.examiner = user.userID GROUP BY user.userID ORDER BY COUNT(report.reportID)", new String[]{examinerID});
-    }
-
-    public String getOrgIDWithLeastReports(Cursor cursorAvailableOrgID) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        String WHERE_clause = "";
-        for (int i = 0; i < cursorAvailableOrgID.getCount(); i++){
-            if(i == 0){
-                WHERE_clause += "orgID=" + cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("orgID")) + " ";
-            }else{
-                WHERE_clause += "OR orgID=" + cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("orgID")) + " ";
-            }
-
-            cursorAvailableOrgID.moveToNext();
-        }
-
-        String query = "SELECT orgID, COUNT(reportID) FROM reportFromUser WHERE " + WHERE_clause + " GROUP BY orgID ORDER BY COUNT(reportID)";
-
-        System.out.println("QUERY CHECK: " + query);
-
-        Cursor getOrgID = db.rawQuery(query, null);
-
-        Cursor cursorOrgWithNoReport = null;
-
-        System.out.println("TWO CURSOR: " + Boolean.toString(cursorAvailableOrgID.getCount() != getOrgID.getCount()) );
-
-        if(cursorAvailableOrgID.getCount() != getOrgID.getCount()){
-            System.out.println("move to first? : " + cursorAvailableOrgID.moveToFirst());
-
-            for(int i = 0; i < cursorAvailableOrgID.getCount(); i++){
-                cursorOrgWithNoReport = getOrgReportNumByOrgID(cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("orgID")));
-                cursorOrgWithNoReport.moveToFirst();
-
-                System.out.println("cursorOrgWithNoReport == null?: " + cursorOrgWithNoReport == null);
-
-                if(cursorOrgWithNoReport.getCount() == 0){
-                    return cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("orgID"));
-                }
-                cursorAvailableOrgID.moveToNext();
-            }
-        }
-
-        return (getOrgID.moveToFirst()) ? getOrgID.getString(getOrgID.getColumnIndex("orgID")) : "";
     }
 
     public Cursor getInvestigatorTeamInfoByUserID(String userID){
@@ -681,50 +651,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT user.userID, employOrg.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " employOrg WHERE user.userType='EX' AND employOrg.orgID=? AND employOrg.userID=user.userID", new String[]{selectedOrgID});
     }
 
-    public String getExaminerIDWithLeastReports(Cursor cursorAvailableExaminerID) {
-        SQLiteDatabase db = this.getReadableDatabase();
+    public Boolean resetAllAvailableEmployeeReportIsTakenByOrgIDAndUsertype(String selectedOrgID, String userType) {
+        SQLiteDatabase db = getWritableDatabase();
 
-        String WHERE_clause = "";
+        try{
+            db.execSQL("UPDATE employeeOrganization SET reportIsTaken = '0' " +
+                    "WHERE userID = ( " +
+                    "SELECT employeeOrganization.userID FROM user " +
+                    "WHERE userID=employeeOrganization.userID AND userType=? AND employeeOrganization.orgID=? " +
+                    ")", new String[]{userType, selectedOrgID});
 
-        for (int i = 0; i < cursorAvailableExaminerID.getCount(); i++){
-            if(i == 0){
-                WHERE_clause += "examiner=" + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")) + " ";
-            }else{
-                WHERE_clause += "OR examiner=" + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")) + " ";
-            }
-
-            cursorAvailableExaminerID.moveToNext();
+            return true;
         }
-
-        String query = "SELECT examiner, COUNT(reportID) FROM reportFromUser WHERE " + WHERE_clause + " GROUP BY examiner ORDER BY COUNT(reportID)";
-
-        System.out.println("QUERY CHECK: " + query);
-
-        Cursor getExaminerID = db.rawQuery(query, null);
-
-        Cursor cursorExaminerWithNoReport = null;
-
-        System.out.println("TWO CURSOR not equal: " + Boolean.toString(cursorAvailableExaminerID.getCount() != getExaminerID.getCount()) );
-
-        if(cursorAvailableExaminerID.getCount() != getExaminerID.getCount()){
-            System.out.println("move to first? : " + cursorAvailableExaminerID.moveToFirst());
-
-            for(int i = 0; i < cursorAvailableExaminerID.getCount(); i++){
-                cursorExaminerWithNoReport = getExaminerReportNumByExaminerID(cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")));
-                cursorExaminerWithNoReport.moveToFirst();
-
-                System.out.println("cursorExaminerWithNoReport == null?: " + cursorExaminerWithNoReport == null);
-
-                System.out.println("examiner getCount = " + (cursorExaminerWithNoReport.getCount() == 0));
-                if(cursorExaminerWithNoReport.getCount() == 0){
-                    System.out.println("examiner with 0 to assign : " + cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID")));
-                    return cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID"));
-                }
-                cursorAvailableExaminerID.moveToNext();
-            }
+        catch(Exception e) {
+            return false;
         }
+    }
 
-        return (getExaminerID.moveToFirst()) ? getExaminerID.getString(getExaminerID.getColumnIndex("examiner")) : "";
+    public boolean resetSelectedExaminerReportIsTaken(String selectedExaminerID) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("reportIsTaken", "1");
+
+        return db.update(TABLE_EMPLOYEE_ORGANIZATION, conVal, "userID=?", new String[]{selectedExaminerID}) == 1;
     }
 
     public String getReportID(String reportDate, String reportTime, String userID){

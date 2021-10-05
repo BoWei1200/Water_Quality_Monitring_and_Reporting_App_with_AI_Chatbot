@@ -494,19 +494,70 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             }
 
             String selectedOrgID = "";
-            Cursor cursorAvailableOrgID = dbHelper.getAvailableOrgIDBySelectedPostcode(selectedOrgPostcode);
+            Cursor cursorAvailableOrgID = dbHelper.getAvailableOrgBySelectedPostcode(selectedOrgPostcode);
             cursorAvailableOrgID.moveToFirst();
 
-            selectedOrgID = (cursorAvailableOrgID.getCount() != 0) ? dbHelper.getOrgIDWithLeastReports(cursorAvailableOrgID) :  dbHelper.getorgID("Department of Environment (DOE) Kuala Lumpur");
+            Boolean orgIDFound = false;
 
-            //sequentially get examiner.
-            System.out.println("Selected OrgID: " +selectedOrgID);
+            if(cursorAvailableOrgID.getCount() != 0){
+                for (int i = 0; i < cursorAvailableOrgID.getCount(); i++){
+                    if(cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("reportIsTaken")).equals("0")){
+                        selectedOrgID = cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("orgID"));
+                        orgIDFound = true;
+                        break;
+                    }
+                    cursorAvailableOrgID.moveToNext();
+                }
+            }
+            else{
+                selectedOrgID = "2";
+                orgIDFound = true;
+            }
+
+            if(!orgIDFound){
+                dbHelper.resetAllAvailableOrgReportIsTakenByPostcode(selectedOrgPostcode);
+                cursorAvailableOrgID.moveToFirst();
+                selectedOrgID = cursorAvailableOrgID.getString(cursorAvailableOrgID.getColumnIndex("orgID"));
+            }
+
+            System.out.println("Selected OrgID: " + selectedOrgID);
+
+            dbHelper.resetSelectedOrgReportIsTaken(selectedOrgID);
+            //update that org's reportIsTaken to 1
+
+
             String selectedExaminerID = "";
 
             Cursor cursorAvailableExaminerID = dbHelper.getAvailableExaminerByOrgID(selectedOrgID);
+
             cursorAvailableExaminerID.moveToFirst();
 
-            selectedExaminerID = dbHelper.getExaminerIDWithLeastReports(cursorAvailableExaminerID);
+            Boolean examinerIDFound = false;
+
+            if(cursorAvailableExaminerID.getCount() != 0){
+                for (int i = 0; i < cursorAvailableExaminerID.getCount(); i++){
+                    if(cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("reportIsTaken")).equals("0")){
+                        selectedExaminerID = cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID"));
+                        examinerIDFound = true;
+                        break;
+                    }
+                    cursorAvailableExaminerID.moveToNext();
+                }
+            }
+            else{
+                selectedExaminerID = "2";
+                examinerIDFound = true;
+            }
+
+            if(!examinerIDFound){
+                dbHelper.resetAllAvailableEmployeeReportIsTakenByOrgIDAndUsertype(selectedOrgID, "EX");
+                cursorAvailableExaminerID.moveToFirst();
+                selectedExaminerID = cursorAvailableExaminerID.getString(cursorAvailableExaminerID.getColumnIndex("userID"));
+            }
+
+            System.out.println("Selected Examiner: " + selectedExaminerID);
+
+            dbHelper.resetSelectedExaminerReportIsTaken(selectedExaminerID);
 
             if(dbHelper.addReport(reportDesc, reportDate, reportTime, "Pending", selectedExaminerID, selectedOrgID, getUserIDPreference,
                     reportImageFilePaths, reportaddressLine, reportPostcode, reportCity, reportState, Double.toString(latitude), Double.toString(longitude),
