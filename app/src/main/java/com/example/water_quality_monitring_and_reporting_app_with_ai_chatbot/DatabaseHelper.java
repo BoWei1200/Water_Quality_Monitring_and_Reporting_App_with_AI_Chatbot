@@ -668,6 +668,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public Boolean resetAllAvailableINTeamReportIsTakenByOrgID(String reportOrgID) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues conVal = new ContentValues();
+        conVal.put("reportIsTaken", "0");
+
+        return db.update(TABLE_INVESTIGATION_TEAM, conVal, "investigationTeamOrgID=?", new String[]{reportOrgID}) == 1;
+    }
+
     public boolean resetSelectedExaminerReportIsTaken(String selectedExaminerID) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues conVal = new ContentValues();
@@ -675,6 +684,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         conVal.put("reportIsTaken", "1");
 
         return db.update(TABLE_EMPLOYEE_ORGANIZATION, conVal, "userID=?", new String[]{selectedExaminerID}) == 1;
+    }
+
+    public boolean resetSelectedINTeamReportIsTaken(String selectedINTeamID) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("reportIsTaken", "1");
+
+        return db.update(TABLE_INVESTIGATION_TEAM, conVal, "investigationTeamID=?", new String[]{selectedINTeamID}) == 1;
+    }
+
+    public Boolean resetSelectedReportHandlerReportIsTaken(String selectedReportHandlerID) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("reportIsTaken", "1");
+
+        return db.update(TABLE_EMPLOYEE_ORGANIZATION, conVal, "userID=?", new String[]{selectedReportHandlerID}) == 1;
     }
 
     public String getReportID(String reportDate, String reportTime, String userID){
@@ -757,59 +784,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAvailableInvestigationTeamByOrgID(String orgID) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT investigationTeamID FROM " + TABLE_INVESTIGATION_TEAM + " WHERE investigationTeamOrgID=?", new String[]{orgID});
+        Cursor cursor = db.rawQuery("SELECT DISTINCT inTeam.* FROM " + TABLE_INVESTIGATION_TEAM + " inTeam, " + TABLE_INVESTIGATION_TEAM_MEMBER + " inTeamMem WHERE inTeam.investigationTeamOrgID=? AND inTeam.investigationTeamID = inTeamMem.investigationTeamID", new String[]{orgID});
         return (cursor.moveToFirst()) ? cursor : null;
-    }
-
-    public Cursor getInvestigationTeamReportNumByTeamID(String investigationTeamID){
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT inv.investigationTeamID, COUNT(report.reportID) FROM " + TABLE_REPORT_FROM_USER+ " report, "+ TABLE_INVESTIGATION_TEAM +" inv WHERE inv.investigationTeamID=?  AND report.reportInvestigationTeam = inv.investigationTeamID GROUP BY inv.investigationTeamID ORDER BY COUNT(report.reportID)", new String[]{investigationTeamID});
-    }
-
-    public String getInvestigationTeamIDWithLeastReports(Cursor cursorAvailableINTeamInOrg) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        String WHERE_clause = "";
-
-        for (int i = 0; i < cursorAvailableINTeamInOrg.getCount(); i++){
-            if(i == 0){
-                WHERE_clause += "reportInvestigationTeam=" + cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID")) + " ";
-            }else{
-                WHERE_clause += "OR reportInvestigationTeam=" + cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID")) + " ";
-            }
-
-            cursorAvailableINTeamInOrg.moveToNext();
-        }
-
-        String query = "SELECT reportInvestigationTeam, COUNT(reportID) FROM reportFromUser WHERE " + WHERE_clause + " GROUP BY reportInvestigationTeam ORDER BY COUNT(reportID)";
-
-        System.out.println("QUERY CHECK: " + query);
-
-        Cursor getInvestigationTeamID = db.rawQuery(query, null);
-
-        Cursor cursorInvestigationTeamWithNoReport = null;
-
-        System.out.println("TWO CURSOR not equal: " + Boolean.toString(cursorAvailableINTeamInOrg.getCount() != getInvestigationTeamID.getCount()) );
-
-        if(cursorAvailableINTeamInOrg.getCount() != getInvestigationTeamID.getCount()){
-            System.out.println("move to first? : " + cursorAvailableINTeamInOrg.moveToFirst());
-
-            for(int i = 0; i < cursorAvailableINTeamInOrg.getCount(); i++){
-                cursorInvestigationTeamWithNoReport = getInvestigationTeamReportNumByTeamID(cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID")));
-                cursorInvestigationTeamWithNoReport.moveToFirst();
-
-                System.out.println("cursorExaminerWithNoReport == null?: " + cursorInvestigationTeamWithNoReport == null);
-
-                System.out.println("IN Team getCount = " + (cursorInvestigationTeamWithNoReport.getCount() == 0));
-                if(cursorInvestigationTeamWithNoReport.getCount() == 0){
-                    System.out.println("IN Team with 0 to assign : " + cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID")));
-                    return cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID"));
-                }
-                cursorAvailableINTeamInOrg.moveToNext();
-            }
-        }
-
-        return (getInvestigationTeamID.moveToFirst()) ? getInvestigationTeamID.getString(getInvestigationTeamID.getColumnIndex("reportInvestigationTeam")) : "";
     }
 
     public Cursor getReportByInvestigationTeam(String investigationTeamID, String pendingOrCompleted, String searchReportID) {
@@ -893,57 +869,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT user.userID, employOrg.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " employOrg WHERE user.userType='RH' AND employOrg.orgID=? AND employOrg.userID=user.userID", new String[]{orgID});
         return (cursor.moveToFirst()) ? cursor : null;
-    }
-
-    public Cursor getReportHandlerReportNumByReportHandlerID(String reportHandler){
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT user.userID, COUNT(report.reportID) FROM " + TABLE_REPORT_FROM_USER +" report, "+ TABLE_USER +" user WHERE user.userID=?  AND report.reportHandler = user.userID GROUP BY user.userID ORDER BY COUNT(report.reportID)", new String[]{reportHandler});
-    }
-
-    public String getReportHandlerWithLeastReports(Cursor cursorAvailableReportHandlerInOrg) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        String WHERE_clause = "";
-
-        for (int i = 0; i < cursorAvailableReportHandlerInOrg.getCount(); i++){
-            if(i == 0){
-                WHERE_clause += "reportHandler=" + cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID")) + " ";
-            }else{
-                WHERE_clause += "OR reportHandler=" + cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID")) + " ";
-            }
-
-            cursorAvailableReportHandlerInOrg.moveToNext();
-        }
-
-        String query = "SELECT reportHandler, COUNT(reportID) FROM reportFromUser WHERE " + WHERE_clause + " GROUP BY reportHandler ORDER BY COUNT(reportID)";
-
-        System.out.println("QUERY CHECK: " + query);
-
-        Cursor getReportHandlerID = db.rawQuery(query, null);
-
-        Cursor cursorReportHandlerWithNoReport = null;
-
-        System.out.println("TWO CURSOR not equal: " + Boolean.toString(cursorAvailableReportHandlerInOrg.getCount() != getReportHandlerID.getCount()) );
-
-        if(cursorAvailableReportHandlerInOrg.getCount() != getReportHandlerID.getCount()){
-            System.out.println("move to first? : " + cursorAvailableReportHandlerInOrg.moveToFirst());
-
-            for(int i = 0; i < cursorAvailableReportHandlerInOrg.getCount(); i++){
-                cursorReportHandlerWithNoReport = getReportHandlerReportNumByReportHandlerID(cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID")));
-                cursorReportHandlerWithNoReport.moveToFirst();
-
-                System.out.println("cursorReportHandlerWithNoReport == null?: " + cursorReportHandlerWithNoReport == null);
-
-                System.out.println("reportHandler getCount = " + (cursorReportHandlerWithNoReport.getCount() == 0));
-                if(cursorReportHandlerWithNoReport.getCount() == 0){
-                    System.out.println("RH with 0 to assign : " + cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID")));
-                    return cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID"));
-                }
-                cursorAvailableReportHandlerInOrg.moveToNext();
-            }
-        }
-
-        return (getReportHandlerID.moveToFirst()) ? getReportHandlerID.getString(getReportHandlerID.getColumnIndex("reportHandler")) : "";
     }
 
     public Cursor getPollutionResolvingDocByReportID(String reportID) {

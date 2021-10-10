@@ -521,9 +521,31 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
                     String selectedInvestigationTeamID = "";
                     Cursor cursorAvailableINTeamInOrg = dbHelper.getAvailableInvestigationTeamByOrgID(reportOrgID);
-                    if(cursorAvailableINTeamInOrg != null){
-                        selectedInvestigationTeamID = dbHelper.getInvestigationTeamIDWithLeastReports(cursorAvailableINTeamInOrg);
+
+                    cursorAvailableINTeamInOrg.moveToFirst();
+
+                    Boolean INTeamIDFound = false;
+
+                    for (int i = 0; i < cursorAvailableINTeamInOrg.getCount(); i++){
+                        if(cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("reportIsTaken")).equals("0")){
+                            selectedInvestigationTeamID = cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID"));
+                            INTeamIDFound = true;
+                            break;
+                        }
+                        cursorAvailableINTeamInOrg.moveToNext();
                     }
+
+                    if(!INTeamIDFound){
+                        dbHelper.resetAllAvailableINTeamReportIsTakenByOrgID(reportOrgID);
+                        cursorAvailableINTeamInOrg.moveToFirst();
+                        selectedInvestigationTeamID = cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID"));
+                    }
+
+                    System.out.println("Selected IN TEAM: " + selectedInvestigationTeamID);
+
+                    dbHelper.resetSelectedINTeamReportIsTaken(selectedInvestigationTeamID);
+
+
                     if(dbHelper.updateReportInvestigationTeamByReportID(reportID, selectedInvestigationTeamID))
                         System.out.println("Team ID assigned: " + selectedInvestigationTeamID);
                     else
@@ -536,15 +558,35 @@ public class EmployeeReportStatus extends AppCompatActivity {
                 if(cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("reportHandler")) == null){
                     String reportOrgID = cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("orgID"));
 
-                    String selectedReportHandler = "";
+
+                    String selectedReportHandlerID = "";
                     Cursor cursorAvailableReportHandlerInOrg = dbHelper.getAvailableReportHandlerByOrgID(reportOrgID);
 
-                    if(cursorAvailableReportHandlerInOrg != null){
-                        selectedReportHandler = dbHelper.getReportHandlerWithLeastReports(cursorAvailableReportHandlerInOrg);
+                    cursorAvailableReportHandlerInOrg.moveToFirst();
+
+                    Boolean ReportHandlerIDFound = false;
+
+                    for (int i = 0; i < cursorAvailableReportHandlerInOrg.getCount(); i++){
+                        if(cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("reportIsTaken")).equals("0")){
+                            selectedReportHandlerID = cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID"));
+                            ReportHandlerIDFound = true;
+                            break;
+                        }
+                        cursorAvailableReportHandlerInOrg.moveToNext();
                     }
 
-                    if(dbHelper.updateReportHandlerByReportID(reportID, selectedReportHandler))
-                        System.out.println("Report Handler ID assigned: " + selectedReportHandler);
+                    if(!ReportHandlerIDFound){
+                        dbHelper.resetAllAvailableEmployeeReportIsTakenByOrgIDAndUsertype(reportOrgID, "RH");
+                        cursorAvailableReportHandlerInOrg.moveToFirst();
+                        selectedReportHandlerID = cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID"));
+                    }
+
+                    System.out.println("Selected report handler: " + selectedReportHandlerID);
+
+                    dbHelper.resetSelectedReportHandlerReportIsTaken(selectedReportHandlerID);
+
+                    if(dbHelper.updateReportHandlerByReportID(reportID, selectedReportHandlerID))
+                        System.out.println("Report Handler ID assigned: " + selectedReportHandlerID);
                     else
                         System.out.println("Assigned failed");
                 }
