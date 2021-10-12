@@ -314,7 +314,7 @@
                                     android:layout_column="2"
                                     android:layout_weight="6"
                                     android:textSize="16dp"
-                                    android:inputType="number"
+                                    android:inputType="textMultiLine"
                                     android:textStyle="bold"
                                     android:visibility="gone"/>
                             </TableRow>

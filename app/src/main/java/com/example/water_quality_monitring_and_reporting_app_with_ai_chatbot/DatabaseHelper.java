@@ -1130,6 +1130,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.update(TABLE_REPORT_CLEANING_PROCESS, conVal, "reportID=?", new String[]{reportID}) == 1;
     }
 
+    public boolean updateReportDurationAndCauseByReportID(String reportEstimatedSolveDuration, String reportPollutionCause, String reportID) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("reportEstimatedSolveDuration", reportEstimatedSolveDuration);
+        conVal.put("reportPollutionCause", reportPollutionCause);
+
+        return db.update(TABLE_REPORT_FROM_USER, conVal, "reportID=?", new String[]{reportID}) == 1;
+    }
+
     public int getTeamMemberNum(String teamID) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_INVESTIGATION_TEAM_MEMBER + " WHERE investigationTeamID=?", new String[]{String.valueOf(teamID)});
@@ -1141,6 +1151,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT orgID FROM " + TABLE_ORGANIZATION, null);
         return cursor.getCount();
     }
-
-
 }

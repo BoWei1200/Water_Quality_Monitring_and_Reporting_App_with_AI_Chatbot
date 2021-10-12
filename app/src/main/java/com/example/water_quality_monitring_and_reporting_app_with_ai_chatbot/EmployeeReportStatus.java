@@ -176,7 +176,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
         employeeReportStatus_txt_reportOrg.setText(cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgName")));
 
         String reportEstimatedSolveDuration = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportEstimatedSolveDuration"));
-        employeeReportStatus_txt_reportDuration.setText(!(reportEstimatedSolveDuration==null) ? reportEstimatedSolveDuration : " - ");
+        employeeReportStatus_txt_reportDuration.setText(!(reportEstimatedSolveDuration==null) ? reportEstimatedSolveDuration + " day(s)" : " - ");
 
         String reportPollutionCause = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportPollutionCause"));
         employeeReportStatus_txt_reportCause.setText(!(reportPollutionCause==null) ? reportPollutionCause : " - ");
@@ -203,8 +203,15 @@ public class EmployeeReportStatus extends AppCompatActivity {
                 String firstDoc = cursorGetFirstInvestigationDocByReportID.getString(cursorGetFirstInvestigationDocByReportID.getColumnIndex("firstInvestigationDocPath"));
 
                 if(firstDoc == null){
+
                     employeeReportStatus_linearLayout_btnUpdate.setVisibility(View.VISIBLE);
                 }else{
+                    employeeReportStatus_txt_reportDuration.setVisibility(View.GONE);
+                    employeeReportStatus_eTxt_reportDuration.setVisibility(View.VISIBLE);
+
+                    employeeReportStatus_txt_reportCause.setVisibility(View.GONE);
+                    employeeReportStatus_eTxt_reportCause.setVisibility(View.VISIBLE);
+
                     investigationDocDisplay("First Investigation Doc", "IN1");
                     employeeReportStatus_linearLayout_btnApproveReject.setVisibility(View.VISIBLE);
                 }
@@ -493,6 +500,12 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
                         if(firstDoc == null)
                             updatedStatus = "Investigating1";
+                        else{
+                            if(employeeReportStatus_eTxt_reportDuration.getText().toString().isEmpty() || employeeReportStatus_eTxt_reportCause.getText().toString().isEmpty()){
+                                displayToast("Please fill in required information");
+                                return;
+                            }
+                        }
                     }
                 }
 
@@ -568,7 +581,6 @@ public class EmployeeReportStatus extends AppCompatActivity {
                 if(cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("reportHandler")) == null){
                     String reportOrgID = cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("orgID"));
 
-
                     String selectedReportHandlerID = "";
                     Cursor cursorAvailableReportHandlerInOrg = dbHelper.getAvailableReportHandlerByOrgID(reportOrgID);
 
@@ -600,11 +612,15 @@ public class EmployeeReportStatus extends AppCompatActivity {
                     else
                         System.out.println("Assigned failed");
                 }
+
+                dbHelper.updateReportDurationAndCauseByReportID(
+                        employeeReportStatus_eTxt_reportDuration.getText().toString(),
+                        employeeReportStatus_eTxt_reportCause.getText().toString(), reportID);
             }
         }
 
         finish();
-        displayToast(updatedStatus);
+        //displayToast(updatedStatus);
     }
 
     public void update(View view) {
