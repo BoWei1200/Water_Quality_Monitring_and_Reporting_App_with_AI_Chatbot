@@ -59,7 +59,8 @@ public class UserReportStatus extends AppCompatActivity{
 
 
     private TextView userReportStatus_txt_reportID, userReportStatus_txt_reportDate, userReportStatus_txt_reportTime, userReportStatus_txt_reportAddress,
-            userReportStatus_txt_reportLaLongitude, userReportStatus_txt_reportOrg, userReportStatus_txt_reportDuration, userReportStatus_txt_reportCause, userReportStatus_txt_reportDesc,
+            userReportStatus_txt_reportLaLongitude, userReportStatus_txt_reportOrg, userReportStatus_txt_reportDuration, userReportStatus_txt_reportCause,
+            userReportStatus_txt_reportDesc, userReportStatus_txt_reportBadWQI,
 
             userReportStatus_txt_pendingHeader, userReportStatus_txt_investigatingHeader, userReportStatus_txt_resolvingHeader,
             userReportStatus_txt_secondInvestigatingHeader, userReportStatus_txt_examiningHeader, userReportStatus_txt_resolvedHeader,
@@ -125,6 +126,7 @@ public class UserReportStatus extends AppCompatActivity{
         userReportStatus_txt_reportDuration = findViewById(R.id.userReportStatus_txt_reportDuration);
         userReportStatus_txt_reportCause = findViewById(R.id.userReportStatus_txt_reportCause);
         userReportStatus_txt_reportDesc = findViewById(R.id.userReportStatus_txt_reportDesc);
+        userReportStatus_txt_reportBadWQI = findViewById(R.id.userReportStatus_txt_reportBadWQI);
 
         userReportStatus_txt_pendingHeader = findViewById(R.id.userReportStatus_txt_pendingHeader);
         userReportStatus_txt_investigatingHeader = findViewById(R.id.userReportStatus_txt_investigatingHeader);
@@ -183,6 +185,8 @@ public class UserReportStatus extends AppCompatActivity{
 
         userReportStatus_txt_reportDesc.setText(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportDesc")));
 
+        String reportBadWQI = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportBadWQI"));
+        userReportStatus_txt_reportBadWQI.setText(!(reportBadWQI==null) ? String.format("%.2f", Double.parseDouble(reportBadWQI)) : "-");
 
         displayUploadedImageFromFirebase();
 

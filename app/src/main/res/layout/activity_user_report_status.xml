@@ -336,6 +336,37 @@
                                     android:textStyle="bold"/>
                             </TableRow>
 
+                            <TableRow
+                                android:id="@+id/userReportStatus_tableRow_reportBadWQI"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:weightSum="10"
+                                android:paddingBottom="20dp">
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportBadWQIHeader"
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_column="1"
+                                    android:text="Reported WQI :"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:textColor="#9A9A9A"
+                                    android:layout_weight="4"
+                                    android:textSize="16dp"/>
+
+                                <TextView
+                                    android:id="@+id/userReportStatus_txt_reportBadWQI"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_column="2"
+                                    android:layout_weight="6"
+                                    android:fontFamily="@font/nunito_sans"
+                                    android:gravity="center_vertical"
+                                    android:text=" - "
+                                    android:textSize="16dp"
+                                    android:textStyle="bold"/>
+                            </TableRow>
+
                         </TableLayout>
 
                         <View

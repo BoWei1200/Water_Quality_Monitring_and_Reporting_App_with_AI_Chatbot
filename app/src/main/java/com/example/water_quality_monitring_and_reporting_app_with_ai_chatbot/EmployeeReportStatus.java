@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,10 +57,12 @@ public class EmployeeReportStatus extends AppCompatActivity {
     private TextView employeeReportStatus_txt_reportID, employeeReportStatus_txt_reportDate, employeeReportStatus_txt_reportTime,
             employeeReportStatus_txt_reportAddress, employeeReportStatus_txt_reportLaLongitude, employeeReportStatus_txt_reportOrg,
             employeeReportStatus_txt_reportDuration, employeeReportStatus_txt_reportCause, employeeReportStatus_txt_reportDesc,
-            employeeReportStatus_txt_reportStatus,
+            employeeReportStatus_txt_reportBadWQI, employeeReportStatus_txt_reportStatus,
 
             employeeReportStatus_txt_InvDocHeader, employeeReportStatus_txt_INDocURL,
             employeeReportStatus_txt_uploadedURL, employeeReportStatus_txt_resolvingDocURL, employeeReportStatus_txt_uploadedResolvingDocURL;
+
+    private EditText employeeReportStatus_eTxt_reportDuration, employeeReportStatus_eTxt_reportCause;
 
     private ConstraintLayout employeeReportStatus_constraintLayout_images;
 
@@ -111,12 +114,16 @@ public class EmployeeReportStatus extends AppCompatActivity {
         employeeReportStatus_txt_reportDuration = findViewById(R.id.employeeReportStatus_txt_reportDuration);
         employeeReportStatus_txt_reportCause = findViewById(R.id.employeeReportStatus_txt_reportCause);
         employeeReportStatus_txt_reportDesc = findViewById(R.id.employeeReportStatus_txt_reportDesc);
+        employeeReportStatus_txt_reportBadWQI = findViewById(R.id.employeeReportStatus_txt_reportBadWQI);
         employeeReportStatus_txt_reportStatus = findViewById(R.id.employeeReportStatus_txt_reportStatus);
         employeeReportStatus_txt_InvDocHeader = findViewById(R.id.employeeReportStatus_txt_InvDocHeader);
         employeeReportStatus_txt_INDocURL = findViewById(R.id.employeeReportStatus_txt_INDocURL);
         employeeReportStatus_txt_uploadedURL = findViewById(R.id.employeeReportStatus_txt_uploadedURL);
         employeeReportStatus_txt_resolvingDocURL = findViewById(R.id.employeeReportStatus_txt_resolvingDocURL);
         employeeReportStatus_txt_uploadedResolvingDocURL = findViewById(R.id.employeeReportStatus_txt_uploadedResolvingDocURL);
+
+        employeeReportStatus_eTxt_reportDuration = findViewById(R.id.employeeReportStatus_eTxt_reportDuration);
+        employeeReportStatus_eTxt_reportCause = findViewById(R.id.employeeReportStatus_eTxt_reportCause);
 
         employeeReportStatus_constraintLayout_images = findViewById(R.id.employeeReportStatus_constraintLayout_images);
 
@@ -175,6 +182,9 @@ public class EmployeeReportStatus extends AppCompatActivity {
         employeeReportStatus_txt_reportCause.setText(!(reportPollutionCause==null) ? reportPollutionCause : " - ");
 
         employeeReportStatus_txt_reportDesc.setText(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportDesc")));
+
+        String reportBadWQI = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportBadWQI"));
+        employeeReportStatus_txt_reportBadWQI.setText(!(reportBadWQI==null) ? String.format("%.2f", Double.parseDouble(reportBadWQI)) : "-");
 
         reportStatus = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportStatus"));
         employeeReportStatus_txt_reportStatus.setText(reportStatus);
