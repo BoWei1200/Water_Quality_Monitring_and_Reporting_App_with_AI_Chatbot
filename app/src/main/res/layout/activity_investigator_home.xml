@@ -174,7 +174,7 @@
                                 android:id="@+id/investigatorHome_txt_investigationTeamName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Investigation Team Name"
+                                android:text="Investigator Team Name"
                                 android:textSize="16dp"
                                 android:fontFamily="@font/nunito_sans"
                                 android:gravity="center_vertical"/>

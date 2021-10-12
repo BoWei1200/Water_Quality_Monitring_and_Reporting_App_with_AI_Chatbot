@@ -867,7 +867,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAvailableReportHandlerByOrgID(String orgID) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT user.userID, employOrg.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " employOrg WHERE user.userType='RH' AND employOrg.orgID=? AND employOrg.userID=user.userID", new String[]{orgID});
+        Cursor cursor = db.rawQuery("SELECT user.userID, employOrg.* FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " employOrg WHERE user.userType='RH' AND employOrg.orgID=? AND employOrg.userID=user.userID", new String[]{orgID});
         return (cursor.moveToFirst()) ? cursor : null;
     }
 

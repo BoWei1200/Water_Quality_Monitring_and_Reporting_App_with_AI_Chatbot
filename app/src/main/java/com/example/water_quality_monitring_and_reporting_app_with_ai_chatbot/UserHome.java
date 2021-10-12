@@ -70,6 +70,7 @@ public class UserHome extends AppCompatActivity{
     private PopupMenu userHome_popupMenu_setting;
     private Button userHome_btn_setUpNow;
 
+    private String getUserIDPreference = "";
     private String getAPIPreference = "";
     private String getScannedDeviceExistPreference = "";
     private String getStopSensorPreference = "";
@@ -89,8 +90,8 @@ public class UserHome extends AppCompatActivity{
         apiUbidots = new ApiUbidots();
 
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-        String currentUserID = mPreferences.getString(userIDPreference, null);
 
+        getUserIDPreference = mPreferences.getString(userIDPreference, null);
         getAPIPreference = mPreferences.getString(apiPreference, "");
         getScannedDeviceExistPreference = mPreferences.getString(scannedDeviceExistPreference, "");
         getStopSensorPreference = mPreferences.getString(stopSensorPreference, "");
@@ -119,6 +120,7 @@ public class UserHome extends AppCompatActivity{
                 switch(item.getItemId()){
                     case R.id.homeUserSettingMenu_account:
                         i = new Intent(UserHome.this, UserOrEmployeeDetail.class);
+                        i.putExtra("userID", getUserIDPreference);
                         startActivity(i);
                         break;
 
@@ -161,20 +163,20 @@ public class UserHome extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
         runApiUbidots(true);
-        Toast.makeText(this,"Start!",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"Start!",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onRestart(){
         super.onRestart();
         runApiUbidots(true);
-        Toast.makeText(this,"Restart!",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"Restart!",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this,"Resume!",Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this,"Resume!",Toast.LENGTH_SHORT).show();
 
         new Thread(new Runnable() {
 

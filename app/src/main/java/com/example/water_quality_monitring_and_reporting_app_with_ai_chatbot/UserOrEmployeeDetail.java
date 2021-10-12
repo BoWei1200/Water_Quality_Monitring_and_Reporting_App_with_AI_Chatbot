@@ -124,10 +124,7 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                 cursorUserInfo = dbHelper.getEmployeesByOrgID(orgID, userID);
             }else{
                 cursorUserInfo = dbHelper.getAllUser(getUserIDPreference, "All");
-                userID = getUserIDPreference;
-                userEmployeeDetail_img_deleteUser.setVisibility(View.GONE);
             }
-
 
             nameValidation(userEmployeeDetail_txtInputET_fName);
             nameValidation(userEmployeeDetail_txtInputET_lName);
@@ -187,6 +184,9 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
             addressValidation(userEmployeeDetail_txtInputET_city);
         }
 
+        if(userID.equals(getUserIDPreference))
+            userEmployeeDetail_img_deleteUser.setVisibility(View.GONE);
+
 
         if(cursorUserInfo == null)
             return;
@@ -229,7 +229,8 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
 
             userEmployeeDetail_linearLayout_userType.setVisibility(View.GONE);
             userEmployeeDetail_btn_update.setVisibility(View.GONE);
-        }else if (getUserTypePreference.equals("AD")){
+        }
+        else if (getUserTypePreference.equals("AD")){
             if (userEmployeeDetail_spinner_investigationTeamList != null) {
                 userEmployeeDetail_spinner_investigationTeamList.setOnItemSelectedListener(this);
 
