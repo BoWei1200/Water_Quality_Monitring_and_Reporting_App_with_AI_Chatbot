@@ -47,24 +47,7 @@ public class Login extends AppCompatActivity {
         String getPasswordPreference = mPreferences.getString(passwordPreference, null);
 
         if(getuserIDPreference != null && getEmailPreference != null && getPasswordPreference != null && getUserTypePreference != null){
-            if(getUserTypePreference.equals("NA")){ //normal user
-                startActivity(new Intent(this,UserHome.class));
-            }
-            else if (getUserTypePreference.equals("SAD")){
-                startActivity(new Intent(this,SystemAdminHome.class));
-            }
-            else if (getUserTypePreference.equals("AD")){
-                startActivity(new Intent(this,AdminHome.class));
-            }
-            else if(getUserTypePreference.equals("IN")){
-                startActivity(new Intent(this,InvestigatorHome.class));
-            }
-            else if(getUserTypePreference.equals("EX")){
-                startActivity(new Intent(this,ExaminerHome.class));
-            }
-            else if(getUserTypePreference.equals("RH")){
-                startActivity(new Intent(this,ReportHandlerHome.class));
-            }
+            toWhichPageByUserType(getUserTypePreference);
         }
 
         login_eTxt_email.addTextChangedListener(new TextWatcher() {
@@ -152,29 +135,12 @@ public class Login extends AppCompatActivity {
                         //To show the account holder name that the user logged in
                         displayToast("Welcome, "+name+" !");
 
-                        if(userType.equals("SAD")){
-                            startActivity(new Intent (this, SystemAdminHome.class));
-                        }
-                        else if(userType.equals("AD")){
-                            startActivity(new Intent (this, AdminHome.class));
-                        }
-                        else if(userType.equals("IN")){
-                            startActivity(new Intent (this, InvestigatorHome.class));
-                        }
-                        else if(userType.equals("EX")){
-                            startActivity(new Intent (this, ExaminerHome.class));
-                        }
-                        else if(userType.equals("RH")){
-                            startActivity(new Intent (this, ReportHandlerHome.class));
-                        }
-                        else if(userType.equals("NA")){
-                            startActivity(new Intent (this, UserHome.class));
-                        }
+                        toWhichPageByUserType(userType);
 
                         finish();
                     }
                 }else{
-                    displayToast("Invalid NRIC or password!");
+                    displayToast("Invalid email or password!");
                 }
 
             }catch(Exception e){
@@ -188,6 +154,27 @@ public class Login extends AppCompatActivity {
         //shortcut to app
 //        startActivity(new Intent (this, UserHome.class));
 //        finish();
+    }
+
+    public void toWhichPageByUserType(String userType){
+        if(userType.equals("NA")){ //normal user
+            startActivity(new Intent(this,UserHome.class));
+        }
+        else if (userType.equals("SAD")){
+            startActivity(new Intent(this,SystemAdminHome.class));
+        }
+        else if (userType.equals("AD")){
+            startActivity(new Intent(this,AdminHome.class));
+        }
+        else if(userType.equals("IN")){
+            startActivity(new Intent(this,InvestigatorHome.class));
+        }
+        else if(userType.equals("EX")){
+            startActivity(new Intent(this,ExaminerHome.class));
+        }
+        else if(userType.equals("RH")){
+            startActivity(new Intent(this,ReportHandlerHome.class));
+        }
     }
 
     public void toUserRegister(View view) {
