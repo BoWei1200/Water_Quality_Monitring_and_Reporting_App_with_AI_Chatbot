@@ -359,7 +359,6 @@ public class UserReportStatus extends AppCompatActivity{
         icon.setBackground(getResources().getDrawable(background));
         txtHeader.setTextColor(getResources().getColor(R.color.gray));
         txt.setTextColor(getResources().getColor(R.color.gray));
-
     }
 
     public void toImageViewer(View view) {

@@ -152,14 +152,13 @@ public class UserWaterSensor implements Runnable{
                 WQIcalc.calculateWQI();
                 double calculatedWQI = WQIcalc.getWQI();
 
+                SharedPreferences.Editor editor = mPreferences.edit();
+                editor.putString(currentWQIPreference, Double.toString(calculatedWQI));
+                editor.commit();
+
                 String status = "";
 
                 if(calculatedWQI < 51.9){
-
-                    SharedPreferences.Editor editor = mPreferences.edit();
-                    editor.putString(currentWQIPreference, Double.toString(calculatedWQI));
-                    editor.commit();
-                    
                     if(calculatedWQI < 31.0){
                         status = "heavily polluted";
                     }else{

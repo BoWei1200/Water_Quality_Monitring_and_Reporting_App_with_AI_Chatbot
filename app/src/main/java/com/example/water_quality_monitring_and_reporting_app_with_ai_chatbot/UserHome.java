@@ -139,7 +139,6 @@ public class UserHome extends AppCompatActivity{
                         break;
                 }
 
-
                 return true;
             }
         });
@@ -241,7 +240,6 @@ public class UserHome extends AppCompatActivity{
                     graphWQI.setVisibility(View.GONE);
                     userHome_btn_setUpNow.setVisibility(View.GONE);
                 }
-
             }
         }
     }
@@ -414,7 +412,6 @@ public class UserHome extends AppCompatActivity{
             return valuesDO;
         }
 
-
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected void onPostExecute(Value[] variableValues) {
@@ -474,7 +471,6 @@ public class UserHome extends AppCompatActivity{
             }catch(Exception e){
                 System.out.println("ERROR IN POSTEXEC: " + e.toString());
             }
-
         }
     }
 }

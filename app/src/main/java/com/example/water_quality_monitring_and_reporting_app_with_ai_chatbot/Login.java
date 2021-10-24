@@ -120,7 +120,7 @@ public class Login extends AppCompatActivity {
                     String name = cursor.getString(cursor.getColumnIndex("fName")) +  " " +cursor.getString(cursor.getColumnIndex("lName"));
 
                     if(!edPassword.equals(passwordDb)){
-                        Toast.makeText(Login.this, "Invalid NRIC or password!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login.this, "Invalid email or password!",Toast.LENGTH_SHORT).show();
                     }else{
                         SharedPreferences.Editor editor = mPreferences.edit();
 
