@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.regex.Pattern;
@@ -145,7 +146,7 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
         String spinnerLabel = adapterView.getItemAtPosition(position).toString();
-        //displayToast(spinnerLabel);
+
     }
 
     @Override
@@ -300,15 +301,22 @@ public class Registration extends AppCompatActivity implements AdapterView.OnIte
                     }
 
                 }else{
+                    String snackBarMsg = "";
                     if(emailExist){
-                        registration_txt_errorEmail.setText("This email is alredy registered");
-                        displayToast("This email has been registered");
+                        registration_txt_errorEmail.setText("This email is already registered");
+                        snackBarMsg += "The email is already registered\n";
                     }
 
                     if(phoneExist){
                         registration_txt_errorPhone.setText("This phone no. is already registered");
-                        displayToast("This phone no. is already registered");
+                        snackBarMsg += "The phone no. is already registered";
                     }
+
+                    Snackbar snackbar = Snackbar.make(findViewById(R.id.registration_linearLayout_main), snackBarMsg, 5000);
+                    Snackbar finalSnackbar = snackbar;
+                    snackbar.setAction("OK", view1 -> finalSnackbar.dismiss());
+
+                    snackbar.show();
                 }
 
             }catch(Exception e){

@@ -40,6 +40,8 @@ public class NewsAdd extends AppCompatActivity {
     private String reportImgName[];
     ArrayList<String> imgNameSelected = new ArrayList<String>();
 
+    TextView newsAdd_txt_spottedLocation;
+
     EditText newsAdd_eTxt_title, newsAdd_eTxt_desc;
     RecyclerView newsAdd_recycleV_imgGallery;
 
@@ -60,6 +62,8 @@ public class NewsAdd extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        newsAdd_txt_spottedLocation = findViewById(R.id.newsAdd_txt_spottedLocation);
+
         newsAdd_txt_errorTitle = findViewById(R.id.newsAdd_txt_errorTitle);
         newsAdd_txt_errorDesc = findViewById(R.id.newsAdd_txt_errorDesc);
         newsAdd_txt_errorImage = findViewById(R.id.newsAdd_txt_errorImage);
@@ -73,6 +77,16 @@ public class NewsAdd extends AppCompatActivity {
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         Cursor cursorReportInfo = dbHelper.getReportInfoByReportID(reportID);
+
+        Cursor cursorReportLocation = dbHelper.getReportLocationByReportID(reportID);
+
+        String reportAddress =  cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportaddressLine")) + ", "+
+                                cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportPostcode")) + ", "+
+                                cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportCity")) + ", "+
+                                cursorReportLocation.getString(cursorReportLocation.getColumnIndex("reportState"));
+
+        newsAdd_txt_spottedLocation.setText(reportAddress);
+
         newsAdd_eTxt_desc.setText(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportDesc")));
 
         Cursor cursorGetImg = dbHelper.getImageByReportID(reportID);

@@ -84,6 +84,7 @@
     <string name="delete_selected_report">Delete selected report(s)?</string>
     <string name="delete_user_title">Delete user ?</string>
     <string name="delete_news_title">Delete this news?</string>
+    <string name="delete_em_title">Delete employee ?</string>
 
     <string-array name="state_array">
         <item>Johor</item>
@@ -112,6 +113,14 @@
         <item>All</item>
         <item>Home User</item>
         <item>System Admin</item>
+    </string-array>
+
+    <string-array name="filter_employee">
+        <item>All</item>
+        <item>Organization Admin</item>
+        <item>Examiner</item>
+        <item>Investigator</item>
+        <item>Report Handler</item>
     </string-array>
 
 </resources>

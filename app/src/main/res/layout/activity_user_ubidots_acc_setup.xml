@@ -24,7 +24,7 @@
         app:titleTextColor="#FFFFFF" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/userUbidotsAccSetup_linearLayout_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -253,7 +253,7 @@
         android:layout_height="0dp"
         android:background="@color/white"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/userUbidotsAccSetup_linearLayout_main"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout

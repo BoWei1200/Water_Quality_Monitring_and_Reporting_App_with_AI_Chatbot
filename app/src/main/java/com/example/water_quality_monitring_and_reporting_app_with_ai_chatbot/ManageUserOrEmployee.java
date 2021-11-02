@@ -62,7 +62,7 @@ public class ManageUserOrEmployee extends AppCompatActivity implements AdapterVi
         String toolbarTitle = (getUserTypePreference.equals("SAD")) ? "Manage User" :
                                 (getUserTypePreference.equals("AD")) ? "Manage Employee" : "null";
 
-        manageUserOrEmployee_spinner_filter.setVisibility(getUserTypePreference.equals("SAD") ? View.VISIBLE : View.GONE);
+       // manageUserOrEmployee_spinner_filter.setVisibility(getUserTypePreference.equals("SAD") ? View.VISIBLE : View.GONE);
 
         getSupportActionBar().setTitle(toolbarTitle);
 
@@ -87,7 +87,7 @@ public class ManageUserOrEmployee extends AppCompatActivity implements AdapterVi
             manageUserOrEmployee_spinner_filter.setOnItemSelectedListener(this);
 
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                    R.array.filter_user, android.R.layout.simple_spinner_item);
+                    (getUserTypePreference.equals("SAD")) ? R.array.filter_user : R.array.filter_employee, android.R.layout.simple_spinner_item);
 
             // Specify the layout to use when the list of choices appears.
             adapter.setDropDownViewResource
@@ -122,7 +122,9 @@ public class ManageUserOrEmployee extends AppCompatActivity implements AdapterVi
             case "AD":
                 Cursor orgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
                 String orgID = orgInfo.getString(orgInfo.getColumnIndex("orgID"));
-                cursor = dbHelper.getEmployeesByOrgID(orgID, manageUserOrEmployee_eTxt_searchBar.getText().toString());
+                cursor = dbHelper.getEmployeesByOrgID(
+                        orgID, manageUserOrEmployee_eTxt_searchBar.getText().toString(),
+                        manageUserOrEmployee_spinner_filter.getSelectedItem().toString());
                 break;
         }
 

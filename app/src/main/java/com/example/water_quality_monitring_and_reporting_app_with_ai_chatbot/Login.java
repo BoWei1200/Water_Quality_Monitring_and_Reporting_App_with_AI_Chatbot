@@ -150,10 +150,6 @@ public class Login extends AppCompatActivity {
         else{
             displayToast("Please make sure every credential is filled in correctly");
         }
-
-        //shortcut to app
-//        startActivity(new Intent (this, UserHome.class));
-//        finish();
     }
 
     public void toWhichPageByUserType(String userType){

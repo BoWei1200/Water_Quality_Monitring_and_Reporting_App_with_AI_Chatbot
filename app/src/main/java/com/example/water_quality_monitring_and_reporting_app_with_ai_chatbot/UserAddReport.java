@@ -75,7 +75,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
     private CardView userAddReport_cv_reportForBadWQI, userAddReport_cv_reportForBadWQI_checkForReport;
 
-    private LinearLayout userAddReport_linearLayout_previous, userAddReport_linearLayout_next;
+    private LinearLayout userAddReport_linearLayout_previous, userAddReport_linearLayout_next, userAddReport_linearLayout_imgUploading;
 
     private TextView userAddReport_txt_Address, userAddReport_txt_LongLatitude,
             userAddReport_txt_photoAmount, userAddReport_txt_errorMsgDesc,
@@ -131,6 +131,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
         userAddReport_linearLayout_previous = findViewById(R.id.userAddReport_linearLayout_previous);
         userAddReport_linearLayout_next = findViewById(R.id.userAddReport_linearLayout_next);
+        userAddReport_linearLayout_imgUploading = findViewById(R.id.userAddReport_linearLayout_imgUploading);
 
         userAddReport_txt_Address = findViewById(R.id.userAddReport_txt_Address);
         userAddReport_txt_LongLatitude = findViewById(R.id.userAddReport_txt_LaLongtitude);
@@ -416,6 +417,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                 && !userAddReport_txt_LongLatitude.getText().equals("")
                 && !userAddReport_txt_Address.getText().equals("")){
 
+            view.setEnabled(false);
+
             reportImageFilePaths = new String[photoIndex];
             //store image to file
 
@@ -556,8 +559,8 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
                     reportImageFilePaths, reportaddressLine, reportPostcode, reportCity, reportState, Double.toString(latitude), Double.toString(longitude),
                     reportBadWQI, currentWQI)){
 
-                displayToast("Reported Successfully!");
-                finish();
+            }else{
+                displayToast("Something wrong in reporting process");
             }
         }else{
             displayToast("Please make sure every requirement is completed");
@@ -582,6 +585,7 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveImage(Uri[] imageUri) {
+        userAddReport_linearLayout_imgUploading.setVisibility(View.VISIBLE);
 
         DateTimeFormatter currentDate = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
         LocalDateTime nowDate = LocalDateTime.now();
@@ -593,10 +597,12 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
             String imageNameConcat = "Image-" + imageName + i + ".jpg";
             reportImageFilePaths[i] = imageNameConcat;
             StorageReference reference = storageReference.child(imageNameConcat);
+            int finalI = i;
             reference.putFile(imageUri[i]).addOnSuccessListener(
                 new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
                         Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
                         while(!uriTask.isComplete()) ;
                         Uri uri = uriTask.getResult();
@@ -604,7 +610,10 @@ public class UserAddReport extends AppCompatActivity implements LocationListener
 
                         databaseReferece.child(databaseReferece.push().getKey()).setValue(reportImage);
 
-                        displayToast("Image uploaded");
+                        if(finalI == photoIndex -1){
+                            displayToast("Reported successfully!");
+                            finish();
+                        }
                     }
                 }
             );

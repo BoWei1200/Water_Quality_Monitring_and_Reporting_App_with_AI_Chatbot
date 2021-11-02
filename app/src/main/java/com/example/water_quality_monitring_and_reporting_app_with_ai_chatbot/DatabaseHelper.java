@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -782,6 +783,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
+    public Cursor getAllProcessingReportByExaminerID(String examinerID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM reportFromUser WHERE examiner=? AND reportStatus != 'Resolved' AND reportStatus != 'Rejected'", new String[]{examinerID});
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
     public Cursor getAvailableInvestigationTeamByOrgID(String orgID) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT DISTINCT inTeam.* FROM " + TABLE_INVESTIGATION_TEAM + " inTeam, " + TABLE_INVESTIGATION_TEAM_MEMBER + " inTeamMem WHERE inTeam.investigationTeamOrgID=? AND inTeam.investigationTeamID = inTeamMem.investigationTeamID", new String[]{orgID});
@@ -933,10 +940,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
-    public Cursor getEmployeesByOrgID(String orgID, String searchUserKey) {
+    public Cursor getEmployeesByOrgID(String orgID, String searchUserKey, String filter) {
         SQLiteDatabase db = this.getReadableDatabase();
+
+        String whereClause = "";
+        if(filter.equals("Organization Admin")){
+            whereClause = " userType='AD'";
+        }
+        else if(filter.equals("Examiner")){
+            whereClause = " userType='EX'";
+        }
+        else if(filter.equals("Investigator")){
+            whereClause = " userType='IN'";
+        }
+        else if(filter.equals("Report Handler")){
+            whereClause = " userType='RH'";
+        }
+        else{
+            whereClause = " userType='AD' OR userType='EX' OR userType='IN' OR userType='RH'";
+        }
+
         Cursor cursor = db.rawQuery("SELECT user.*, em.orgID FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " em " +
-                "WHERE em.userID=user.userID AND em.orgID=? AND (em.userID LIKE '%" + searchUserKey + "%' OR user.fName LIKE '%" + searchUserKey + "%' OR user.lName LIKE '%" + searchUserKey + "%')", new String[]{orgID});
+                "WHERE em.userID=user.userID " +
+                "AND em.orgID=? " +
+                "AND (em.userID LIKE '%" + searchUserKey + "%' OR user.fName LIKE '%" + searchUserKey + "%' OR user.lName LIKE '%" + searchUserKey + "%') " +
+                "AND (" + whereClause + ")", new String[]{orgID});
 
         return (cursor.moveToFirst()) ? cursor : null;
     }
@@ -984,18 +1012,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean deleteUser(String userID) {
         SQLiteDatabase db = getWritableDatabase();
-        Boolean deleted = false;
+
         try{
             db.delete(TABLE_USER_ADDRESS,  "addressUserID=?", new String[]{userID});
             db.delete(TABLE_USER_UBIDOTS_CREDENTIALS,  "ubidotsUserID=?", new String[]{userID});
+
+            Cursor cursorUserReport = getMyReport(userID);
+            if (cursorUserReport != null){
+                ArrayList<String> userReport = new ArrayList<>();
+                for (int i = 0; i < cursorUserReport.getCount(); i++){
+                    userReport.add(cursorUserReport.getString(cursorUserReport.getColumnIndex("reportID")));
+                    cursorUserReport.moveToNext();
+                }
+                deleteReport(userReport);
+            }
+
             db.delete(TABLE_USER,  "userID=?", new String[]{userID});
 
-            deleted = true;
+            return true;
         }catch(Exception e){
-            deleted = false;
+            return false;
         }
+    }
 
-        return  deleted;
+    public boolean deleteEmployee(String userID){
+        SQLiteDatabase db = getWritableDatabase();
+
+        try{
+            db.delete(TABLE_USER_ADDRESS,  "addressUserID=?", new String[]{userID});
+            db.delete(TABLE_EMPLOYEE_ORGANIZATION, "userID=?", new String[]{userID});
+            db.delete(TABLE_USER,  "userID=?", new String[]{userID});
+
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
 
     public boolean deleteOrg(String orgID){
@@ -1051,6 +1102,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.update(TABLE_ORGANIZATION, conVal, "orgID=?", new String[]{orgID}) == 1;
     }
 
+    public boolean updateOrgReady(String orgID, String orgReady){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("orgReady", orgReady);
+
+        return db.update(TABLE_ORGANIZATION, conVal, "orgID=?", new String[]{orgID}) == 1;
+    }
+
     public boolean updateUserInfo(String fName, String lName, String userEmail, String phoneNo, String addressLine, String postcode, String city, String state, String userID) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues conVal = new ContentValues();
@@ -1081,6 +1141,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues conVal = new ContentValues();
 
         conVal.put("reportStatus", updatedStatus);
+
+        return db.update(TABLE_REPORT_FROM_USER, conVal, "reportID=?", new String[]{reportID}) == 1;
+    }
+
+    public boolean updateReportExaminerByReportID(String reportID, String selectedExaminerID){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues conVal = new ContentValues();
+
+        conVal.put("examiner", selectedExaminerID);
 
         return db.update(TABLE_REPORT_FROM_USER, conVal, "reportID=?", new String[]{reportID}) == 1;
     }

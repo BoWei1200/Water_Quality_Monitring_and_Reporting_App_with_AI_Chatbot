@@ -45,13 +45,27 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Spotted Location (For Posting Reference)"
+                    android:fontFamily="@font/nunito_sans"/>
+
+                <TextView
+                    android:id="@+id/newsAdd_txt_spottedLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_sans"
+                    android:layout_marginBottom="20dp"
+                    android:textSize="20dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="Title"
                     android:fontFamily="@font/nunito_sans"/>
 
                 <EditText
                     android:id="@+id/newsAdd_eTxt_title"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_sans" />
 
                 <TextView
@@ -74,7 +88,7 @@
                 <EditText
                     android:id="@+id/newsAdd_eTxt_desc"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_sans"
                     android:inputType="textMultiLine"/>
 
@@ -131,11 +145,8 @@
 
             </LinearLayout>
 
-
-            
         </ScrollView>
-        
-        
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ubidots.ApiClient;
 import com.ubidots.DataSource;
@@ -111,8 +112,6 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                     abidotsSetup = new ApiUbidotsSetup().execute();
                     userUbidotsAccSetup_linearLayout_searching.setVisibility(View.VISIBLE);
                     hideKeyboard(this);
-//                    startActivity(new Intent(this, UserUbidotsAPIkeyLoading_Searching.class));
-//                    finish();
                 }else{
                     displayToast("This API key already exists");
                 }
@@ -127,7 +126,14 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
     }
 
     public void displayToast(String msg){
-        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+    }
+
+    public void displaySnackBar(String msg){
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.userUbidotsAccSetup_linearLayout_main), msg, 5000);
+        Snackbar finalSnackbar = snackbar;
+        snackbar.setAction("OK", view1 -> finalSnackbar.dismiss());
+        snackbar.show();
     }
 
     public static void hideKeyboard(Activity activity) {
@@ -195,6 +201,7 @@ public class UserUbidotsAccSetup extends AppCompatActivity {
                                     try{
                                         displayToast("Invalid API key");
                                     }catch(Exception e){
+                                        //displayToast(e.toString());
                                     }
                                 }
                             });
