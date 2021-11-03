@@ -85,6 +85,7 @@
     <string name="delete_user_title">Delete user ?</string>
     <string name="delete_news_title">Delete this news?</string>
     <string name="delete_em_title">Delete employee ?</string>
+    <string name="alert_delete_only_one">Still Proceed with Deletion?</string>
 
     <string-array name="state_array">
         <item>Johor</item>

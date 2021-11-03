@@ -649,7 +649,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAvailableExaminerByOrgID(String selectedOrgID) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT user.userID, employOrg.* FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " employOrg WHERE user.userType='EX' AND employOrg.orgID=? AND employOrg.userID=user.userID", new String[]{selectedOrgID});
+        return db.rawQuery("SELECT employOrg.* FROM " + TABLE_USER + " user, " + TABLE_EMPLOYEE_ORGANIZATION + " employOrg WHERE user.userType='EX' AND employOrg.orgID=? AND employOrg.userID=user.userID", new String[]{selectedOrgID});
     }
 
     public Boolean resetAllAvailableEmployeeReportIsTakenByOrgIDAndUsertype(String selectedOrgID, String userType) {
@@ -681,6 +681,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean resetSelectedExaminerReportIsTaken(String selectedExaminerID) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues conVal = new ContentValues();
+
+        System.out.println("SELECTED ID IN DB: " + selectedExaminerID);
 
         conVal.put("reportIsTaken", "1");
 

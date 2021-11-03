@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
@@ -67,6 +68,9 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
     Cursor cursorUserInfo;
 
     Boolean nameValid = false, emailValid = false, phoneValid = false, addressValid = false;
+
+    Boolean deleteOnlyOne = false;
+    String deleteUserType = "";
 
     private static final Pattern phone_pattern = Pattern.compile("^(01)[0-46-9][0-9]{7,8}$");
 
@@ -460,6 +464,7 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
     }
 
     public void displayAlert(int title, int msg, int drawable){
+
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(msg)
@@ -478,7 +483,7 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                                 getOrgIDPreference = mPreferences.getString(orgIDPreference, null);
 
                                 Cursor CursorDeleteUserType = dbHelper.getEmployeesByOrgID(getOrgIDPreference, userID, "All");
-                                String deleteUserType = CursorDeleteUserType.getString(CursorDeleteUserType.getColumnIndex("userType"));
+                                deleteUserType = CursorDeleteUserType.getString(CursorDeleteUserType.getColumnIndex("userType"));
                                 //displayToast(deleteUserType + " will be deleted");
 
                                 if(deleteUserType.equals("EX")){
@@ -486,69 +491,41 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                                     cursorExaminer.moveToFirst();
 
                                     if(cursorExaminer.getCount() > 1){
+                                        ArrayList<String> availableExaminersExcludingDeleted = new ArrayList<>();
+
+                                        for(int i = 0; i < cursorExaminer.getCount(); i++){
+                                            if(!cursorExaminer.getString(cursorExaminer.getColumnIndex("userID")).equals(userID))
+                                                availableExaminersExcludingDeleted.add(cursorExaminer.getString(cursorExaminer.getColumnIndex("userID")));
+
+                                            cursorExaminer.moveToNext();
+                                        }
                                         //update new examiner to the report.
                                         // get all report by examiner ID, and store in Array list.
                                         Cursor cursorAllProcessingReportFromExaminer = dbHelper.getAllProcessingReportByExaminerID(userID);
+
+                                        int currentIndexExaminer = 0;
                                         if(cursorAllProcessingReportFromExaminer != null){
-                                            for (int i = 0; i < cursorAllProcessingReportFromExaminer.getCount(); i++){
+                                            for(cursorAllProcessingReportFromExaminer.moveToFirst();
+                                                !cursorAllProcessingReportFromExaminer.isAfterLast();
+                                                cursorAllProcessingReportFromExaminer.moveToNext() ){
 
+                                                String selectedExaminerID = availableExaminersExcludingDeleted.get(currentIndexExaminer);
 
-
-                                                String selectedExaminerID = "";
-
-                                                cursorExaminer.moveToFirst();
-
-                                                Boolean examinerIDFound = false;
-
-                                                for (int j = 0; j < cursorExaminer.getCount(); j++){
-                                                    if(cursorExaminer.getString(cursorExaminer.getColumnIndex("reportIsTaken")).equals("0")
-                                                            && !cursorExaminer.getString(cursorExaminer.getColumnIndex("userID")).equals(userID)){
-                                                        selectedExaminerID = cursorExaminer.getString(cursorExaminer.getColumnIndex("userID"));
-                                                        examinerIDFound = true;
-                                                        break;
-                                                    }
-                                                    cursorExaminer.moveToNext();
-                                                }
-
-                                                if(!examinerIDFound){
-                                                    dbHelper.resetAllAvailableEmployeeReportIsTakenByOrgIDAndUsertype(getOrgIDPreference, "EX");
-                                                    cursorExaminer.moveToFirst();
-
-                                                    selectedExaminerID = cursorExaminer.getString(cursorExaminer.getColumnIndex("userID"));
-
-                                                    if(selectedExaminerID.equals(userID)){
-                                                        cursorExaminer.moveToNext();
-                                                        selectedExaminerID = cursorExaminer.getString(cursorExaminer.getColumnIndex("userID"));
-                                                    }
-                                                }
+                                                currentIndexExaminer = (currentIndexExaminer + 1) % availableExaminersExcludingDeleted.size();
 
                                                 System.out.println("Selected Examiner: " + selectedExaminerID);
 
-                                                dbHelper.resetSelectedExaminerReportIsTaken(selectedExaminerID);
-
                                                 dbHelper.updateReportExaminerByReportID(cursorAllProcessingReportFromExaminer.getString(cursorAllProcessingReportFromExaminer.getColumnIndex("reportID")), selectedExaminerID);
-
-
-
-
-
-                                                cursorAllProcessingReportFromExaminer.moveToNext();
                                             }
                                         }
                                     }
                                     else{
-                                        Cursor cursorAllProcessingReportFromExaminer = dbHelper.getAllProcessingReportByExaminerID(userID);
-                                        if(cursorAllProcessingReportFromExaminer != null) {
-                                            for (int i = 0; i < cursorAllProcessingReportFromExaminer.getCount(); i++) {
-                                                dbHelper.updateReportStatusByReportID(cursorAllProcessingReportFromExaminer.getString(cursorAllProcessingReportFromExaminer.getColumnIndex("reportID")), "Rejected");
-                                                cursorAllProcessingReportFromExaminer.moveToNext();
-                                            }
-                                        }
-
-                                        dbHelper.updateOrgReady(getOrgIDPreference, "0");
-
+                                        deleteOnlyOne = true;
+                                        displaytAlertDeleteOnlyOne(R.string.alert_delete_only_one, "examiner", R.drawable.warningiconedit);
                                         // reject all report except in "Resolved" or "Rejected" state.
                                         // set the company yo not ready
+                                        //deleteOnlyOne = true;
+                                        System.out.println("delete only one");
                                     }
                                 }
                                 else if(deleteUserType.equals("IN")){
@@ -561,13 +538,46 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                                     // if there is no other report handler to assign, then reject report "Resolving", and set the company yo not ready
                                 }
 
-                                if(dbHelper.deleteEmployee(userID))
-                                    displayToast("Employee " + userID + " deleted");
+                                if(!deleteOnlyOne){
+                                    if(dbHelper.deleteEmployee(userID))
+                                        displayToast("Employee " + userID + " deleted");
 
-                                finish();
+                                    finish();
+                                }
+
                                 break;
                         }
                     }
+                })
+
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(drawable)
+                .show();
+    }
+
+    public void displaytAlertDeleteOnlyOne(int title, String msg, int drawable){
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage("** CAUTION: All processing reports will be rejected due to incomplete organization (without " + msg + "), and the process cannot be undone")
+
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    if(deleteUserType.equals("EX")){
+                        Cursor cursorAllProcessingReportFromExaminer = dbHelper.getAllProcessingReportByExaminerID(userID);
+                        if(cursorAllProcessingReportFromExaminer != null) {
+                            for (int i = 0; i < cursorAllProcessingReportFromExaminer.getCount(); i++) {
+                                dbHelper.updateReportStatusByReportID(cursorAllProcessingReportFromExaminer.getString(cursorAllProcessingReportFromExaminer.getColumnIndex("reportID")), "Rejected");
+                                cursorAllProcessingReportFromExaminer.moveToNext();
+                            }
+                        }
+                    }
+
+                    dbHelper.updateOrgReady(getOrgIDPreference, "0");
+
+                    if(dbHelper.deleteEmployee(userID))
+                        displayToast("Employee " + userID + " deleted");
+
+                    finish();
                 })
 
                 .setNegativeButton(android.R.string.no, null)
