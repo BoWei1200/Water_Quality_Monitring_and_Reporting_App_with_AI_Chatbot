@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -96,8 +97,11 @@ public class UserMyReport extends AppCompatActivity {
         loadMyReportFromDatabase();
 
         UserMyReportRecycleVAdapter adapter = new UserMyReportRecycleVAdapter(this, myReportIDs, myReportDates, myReportTimes, myReportStatus, reportIDSelected);
+
+        userMyReport_recycleV_reportList.setItemViewCacheSize(countMyReport);
         userMyReport_recycleV_reportList.setAdapter(adapter);
         userMyReport_recycleV_reportList.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     private void loadMyReportFromDatabase() {

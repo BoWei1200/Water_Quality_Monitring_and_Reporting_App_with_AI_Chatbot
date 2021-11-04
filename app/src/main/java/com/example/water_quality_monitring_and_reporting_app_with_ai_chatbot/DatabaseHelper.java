@@ -797,6 +797,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
+    public Cursor getAvailableTeamMemByInvestigatorTeamID(String investigatorTeamID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("", new String[]{investigatorTeamID});
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
     public Cursor getReportByInvestigationTeam(String investigationTeamID, String pendingOrCompleted, String searchReportID) {
         SQLiteDatabase db = getReadableDatabase();
 
@@ -816,6 +822,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(investigationTeamID)});
 
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getAllProcessingReportByINTeamID(String INTeamID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM reportFromUser WHERE reportInvestigationTeam=? AND reportStatus != 'Resolved' AND reportStatus != 'Rejected' AND reportStatus != 'Examining'", new String[]{INTeamID});
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
@@ -1049,6 +1061,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }catch(Exception e){
             return false;
         }
+    }
+
+    public boolean deleteInvestigator(String userID){
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(TABLE_INVESTIGATION_TEAM_MEMBER,  "investigationTeamUserID=?", new String[]{userID}) == 1;
     }
 
     public boolean deleteOrg(String orgID){

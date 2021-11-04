@@ -30,6 +30,7 @@ public class UserMyReportRecycleVAdapter extends RecyclerView.Adapter<UserMyRepo
     ArrayList<String> reportIDSelected;
 
     Boolean selectMode = false;
+    int selectedPosition = -1;
 
     public UserMyReportRecycleVAdapter(Context context, String[] myReportIDs, String[] myReportDates, String[] myReportTimes, String[] myReportStatus, ArrayList reportIDSelected) {
         this.context = context;
@@ -54,6 +55,7 @@ public class UserMyReportRecycleVAdapter extends RecyclerView.Adapter<UserMyRepo
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(@NonNull @NotNull UserMyReportRecycleVAdapter.UserMyReportRecycleViewHolder holder, int position) {
+        //holder.setIsRecyclable(false);
         ConstraintLayout userMyReport_constraintLayout_longPressOperation = (ConstraintLayout) ((UserMyReport)context).findViewById(R.id.userMyReport_constraintLayout_longPressOperation);
 
         holder.userMyReportRecycleVLayout_txt_reportID.setText(myReportIDs[position]);
@@ -129,8 +131,10 @@ public class UserMyReportRecycleVAdapter extends RecyclerView.Adapter<UserMyRepo
                         }
                     }
                     reportIDSelected.add(myReportIDs[position]);
-                    holder.userMyReport_img_arrowGoTo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_icon_red));
+                    selectedPosition = position;
+                    System.out.println("POSITION " + position);
 
+                    holder.userMyReport_img_arrowGoTo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_icon_red));
                 }
             }
         });
@@ -140,8 +144,10 @@ public class UserMyReportRecycleVAdapter extends RecyclerView.Adapter<UserMyRepo
             public boolean onLongClick(View v) {
                 if(!selectMode){
                     selectMode = true;
-                    ImageView userMyReport_img_arrowGoTo = v.findViewById(R.id.userMyReport_img_arrowGoTo);
-                    userMyReport_img_arrowGoTo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_icon_red));
+                    selectedPosition = position;
+                    holder.userMyReport_img_arrowGoTo.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_check_icon_red));
+
+
                     reportIDSelected.add(myReportIDs[position]);
                     userMyReport_constraintLayout_longPressOperation.setVisibility(View.VISIBLE);
                 }

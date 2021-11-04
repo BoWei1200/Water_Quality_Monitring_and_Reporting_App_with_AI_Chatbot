@@ -528,10 +528,70 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                                         System.out.println("delete only one");
                                     }
                                 }
+
                                 else if(deleteUserType.equals("IN")){
-                                    // needs to identify whether IN team has only one member,
-                                    // if it is, reassign the report to other team.
-                                    // if there is no other team to assign, then reject report from status "Investigating2", and set the company yo not ready
+                                    Cursor cursorINTeamID = dbHelper.getInvestigatorTeamInfoByUserID(userID);
+                                    String INTeamID = cursorINTeamID.getString(cursorINTeamID.getColumnIndex("investigationTeamID"));
+                                    Cursor cursorAvailableInvestigatorInTeam = dbHelper.getAvailableTeamMemByInvestigatorTeamID(INTeamID);
+
+                                    if(cursorAvailableInvestigatorInTeam.getCount() == 1){
+                                        Cursor cursorAvailableINTeamInOrg = dbHelper.getAvailableInvestigationTeamByOrgID(getOrgIDPreference);
+
+                                        if(cursorAvailableINTeamInOrg.getCount() > 1){
+                                            // reassign to other teams
+                                            ArrayList<String> availableINTeamExcludingDeleted = new ArrayList<>();
+
+                                            for(int i = 0; i < cursorAvailableINTeamInOrg.getCount(); i++){
+                                                if(!cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID")).equals(INTeamID))
+                                                    availableINTeamExcludingDeleted.add(cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID")));
+
+                                                cursorAvailableINTeamInOrg.moveToNext();
+                                            }
+                                            //update new team to the report.
+                                            // get all report by team  ID, and store in Array list.
+                                            Cursor cursorAllProcessingReportFromINTeam = dbHelper.getAllProcessingReportByINTeamID(INTeamID);
+
+                                            int currentIndexINTeam = 0;
+                                            if(cursorAllProcessingReportFromINTeam != null){
+                                                for(cursorAllProcessingReportFromINTeam.moveToFirst();
+                                                    !cursorAllProcessingReportFromINTeam.isAfterLast();
+                                                    cursorAllProcessingReportFromINTeam.moveToNext() ){
+
+                                                    String selectedINTeamID = availableINTeamExcludingDeleted.get(currentIndexINTeam);
+
+                                                    currentIndexINTeam = (currentIndexINTeam + 1) % availableINTeamExcludingDeleted.size();
+
+                                                    System.out.println("Selected IN Team: " + selectedINTeamID);
+
+                                                    dbHelper.updateReportInvestigationTeamByReportID(cursorAllProcessingReportFromINTeam.getString(cursorAllProcessingReportFromINTeam.getColumnIndex("reportID")), selectedINTeamID);
+                                                }
+                                            }
+                                        }
+                                        else{
+                                            deleteOnlyOne = true;
+                                            displaytAlertDeleteOnlyOne(R.string.alert_delete_only_one, "investigator", R.drawable.warningiconedit);
+                                            //double warning
+                                            // reject report from status "Investigating2", and set the company to not ready
+                                        }
+                                    }
+
+                                    if(!deleteOnlyOne){
+                                        //delete investigator
+                                        dbHelper.deleteInvestigator(userID);
+                                    }
+
+
+
+                                    //get available team member in that investigator team.
+                                    // if (team member only one in that team)
+                                    //      get all available team in org
+                                    //      if (available team > 1)
+                                    //          reassign the report to other team
+                                    //      else
+                                    //          reject report from status "Investigating2", and set the company to not ready
+                                    // else
+                                    //      direct delete
+
                                 }
                                 else if(deleteUserType.equals("RH")){
                                     // needs reassign report to others
@@ -570,6 +630,11 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                                 cursorAllProcessingReportFromExaminer.moveToNext();
                             }
                         }
+                    }
+
+                    else if(deleteUserType.equals("IN")){
+
+                        //dbHelper.deleteInvestigator(userID);
                     }
 
                     dbHelper.updateOrgReady(getOrgIDPreference, "0");
