@@ -531,6 +531,7 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
 
                                 else if(deleteUserType.equals("IN")){
                                     Cursor cursorINTeamID = dbHelper.getInvestigatorTeamInfoByUserID(userID);
+                                    cursorINTeamID.moveToFirst();
                                     String INTeamID = cursorINTeamID.getString(cursorINTeamID.getColumnIndex("investigationTeamID"));
                                     Cursor cursorAvailableInvestigatorInTeam = dbHelper.getAvailableTeamMemByInvestigatorTeamID(INTeamID);
 
@@ -580,22 +581,58 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                                         dbHelper.deleteInvestigator(userID);
                                     }
 
-
-
                                     //get available team member in that investigator team.
                                     // if (team member only one in that team)
                                     //      get all available team in org
                                     //      if (available team > 1)
-                                    //          reassign the report to other team
+                                    //          reassign the report to other team - tested
                                     //      else
                                     //          reject report from status "Investigating2", and set the company to not ready
                                     // else
-                                    //      direct delete
+                                    //      direct delete - tested
 
                                 }
+
                                 else if(deleteUserType.equals("RH")){
                                     // needs reassign report to others
                                     // if there is no other report handler to assign, then reject report "Resolving", and set the company yo not ready
+                                    Cursor cursorReportHandler = dbHelper.getAvailableReportHandlerByOrgID(getOrgIDPreference);
+                                    cursorReportHandler.moveToFirst();
+
+                                    if(cursorReportHandler.getCount() > 1){
+                                        ArrayList<String> availableReportHandlerExcludingDeleted = new ArrayList<>();
+
+                                        for(int i = 0; i < cursorReportHandler.getCount(); i++){
+                                            if(!cursorReportHandler.getString(cursorReportHandler.getColumnIndex("userID")).equals(userID))
+                                                availableReportHandlerExcludingDeleted.add(cursorReportHandler.getString(cursorReportHandler.getColumnIndex("userID")));
+
+                                            cursorReportHandler.moveToNext();
+                                        }
+
+                                        Cursor cursorAllProcessingReportFromRH = dbHelper.getAllProcessingReportByReportHandlerID(userID);
+
+                                        int currentIndexReportHandler = 0;
+                                        if(cursorAllProcessingReportFromRH != null){
+                                            for(cursorAllProcessingReportFromRH.moveToFirst();
+                                                !cursorAllProcessingReportFromRH.isAfterLast();
+                                                cursorAllProcessingReportFromRH.moveToNext() ){
+
+                                                String selectedReportHandlerID = availableReportHandlerExcludingDeleted.get(currentIndexReportHandler);
+
+                                                currentIndexReportHandler = (currentIndexReportHandler + 1) % availableReportHandlerExcludingDeleted.size();
+
+                                                System.out.println("Selected RH: " + selectedReportHandlerID);
+
+                                                dbHelper.updateReportHandlerByReportID(cursorAllProcessingReportFromRH.getString(cursorAllProcessingReportFromRH.getColumnIndex("reportID")), selectedReportHandlerID);
+                                            }
+                                        }
+                                    }
+                                    else{
+                                        deleteOnlyOne = true;
+                                        displaytAlertDeleteOnlyOne(R.string.alert_delete_only_one, "report handler", R.drawable.warningiconedit);
+
+                                        System.out.println("delete only one");
+                                    }
                                 }
 
                                 if(!deleteOnlyOne){
@@ -633,8 +670,28 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                     }
 
                     else if(deleteUserType.equals("IN")){
+                        Cursor cursorGetINTeamIDByUserID = dbHelper.getInvestigatorTeamInfoByUserID(userID);
+                        cursorGetINTeamIDByUserID.moveToFirst();
+                        Cursor cursorAllProcessingReportFromInvestigatorTeam = dbHelper.getAllProcessingReportByINTeamID(cursorGetINTeamIDByUserID.getString(cursorGetINTeamIDByUserID.getColumnIndex("investigationTeamID")));
 
-                        //dbHelper.deleteInvestigator(userID);
+                        if(cursorAllProcessingReportFromInvestigatorTeam != null) {
+                            for (int i = 0; i < cursorAllProcessingReportFromInvestigatorTeam.getCount(); i++) {
+                                dbHelper.updateReportStatusByReportID(cursorAllProcessingReportFromInvestigatorTeam.getString(cursorAllProcessingReportFromInvestigatorTeam.getColumnIndex("reportID")), "Rejected");
+                                cursorAllProcessingReportFromInvestigatorTeam.moveToNext();
+                            }
+                        }
+
+                        dbHelper.deleteInvestigator(userID);
+                    }
+
+                    else if (deleteUserType.equals("RH")){
+                       Cursor cursorAllProcessingReportFromRH = dbHelper.getAllProcessingReportByReportHandlerID(userID);
+                        if(cursorAllProcessingReportFromRH != null) {
+                            for (int i = 0; i < cursorAllProcessingReportFromRH.getCount(); i++) {
+                                dbHelper.updateReportStatusByReportID(cursorAllProcessingReportFromRH.getString(cursorAllProcessingReportFromRH.getColumnIndex("reportID")), "Rejected");
+                                cursorAllProcessingReportFromRH.moveToNext();
+                            }
+                        }
                     }
 
                     dbHelper.updateOrgReady(getOrgIDPreference, "0");

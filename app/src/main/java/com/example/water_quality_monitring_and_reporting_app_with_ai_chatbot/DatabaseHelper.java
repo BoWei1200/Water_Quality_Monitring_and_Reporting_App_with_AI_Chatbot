@@ -799,7 +799,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAvailableTeamMemByInvestigatorTeamID(String investigatorTeamID){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("", new String[]{investigatorTeamID});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_INVESTIGATION_TEAM_MEMBER + " WHERE investigationTeamID=?", new String[]{investigatorTeamID});
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
@@ -855,6 +855,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(reportHandler)});
 
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public Cursor getAllProcessingReportByReportHandlerID(String reportHandlerID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM reportFromUser WHERE reportHandler=? AND reportStatus != 'Resolved' AND reportStatus != 'Rejected' AND reportStatus != 'Investigating2' AND reportStatus != 'Examining'", new String[]{reportHandlerID});
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
