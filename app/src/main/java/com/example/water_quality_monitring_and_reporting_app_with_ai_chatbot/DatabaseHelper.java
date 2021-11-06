@@ -791,6 +791,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
+    public Cursor getAllProcessingReportFromExaminerByOrgID(String orgID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM reportFromUser WHERE orgID=? AND reportStatus != 'Resolved' AND reportStatus != 'Rejected'", new String[]{orgID});
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
     public Cursor getAvailableInvestigationTeamByOrgID(String orgID) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT DISTINCT inTeam.* FROM " + TABLE_INVESTIGATION_TEAM + " inTeam, " + TABLE_INVESTIGATION_TEAM_MEMBER + " inTeamMem WHERE inTeam.investigationTeamOrgID=? AND inTeam.investigationTeamID = inTeamMem.investigationTeamID", new String[]{orgID});
@@ -831,6 +837,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return (cursor.moveToFirst()) ? cursor : null;
     }
 
+    public Cursor getAllProcessingReportFromINTeamByOrgID(String orgID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM reportFromUser WHERE orgID=? AND reportStatus != 'Resolved' AND reportStatus != 'Rejected' AND reportStatus != 'Examining'", new String[]{orgID});
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
     public Cursor getReportByReportHandler(String reportHandler, String currentTab, String searchKey) {
         SQLiteDatabase db = getReadableDatabase();
 
@@ -861,6 +873,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllProcessingReportByReportHandlerID(String reportHandlerID){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM reportFromUser WHERE reportHandler=? AND reportStatus != 'Resolved' AND reportStatus != 'Rejected' AND reportStatus != 'Investigating2' AND reportStatus != 'Examining'", new String[]{reportHandlerID});
+        return (cursor.moveToFirst()) ? cursor : null;
+    }
+
+    public  Cursor getAllProcessingReportFromReportHandlerByOrgID(String orgID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM reportFromUser WHERE orgID=? AND reportStatus != 'Resolved' AND reportStatus != 'Rejected' AND reportStatus != 'Investigating2' AND reportStatus != 'Examining'", new String[]{orgID});
         return (cursor.moveToFirst()) ? cursor : null;
     }
 

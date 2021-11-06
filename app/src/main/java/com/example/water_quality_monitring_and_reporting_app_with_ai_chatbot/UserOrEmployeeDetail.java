@@ -474,7 +474,7 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                         switch(title){
                             case R.string.delete_user_title:
                                 if(dbHelper.deleteUser(userID))
-                                    displayToast("user " + userID + " deleted");
+                                    displayToast("User " + userID + " deleted");
 
                                 finish();
                                 break;
@@ -635,6 +635,8 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                                     }
                                 }
 
+
+
                                 if(!deleteOnlyOne){
                                     if(dbHelper.deleteEmployee(userID))
                                         displayToast("Employee " + userID + " deleted");
@@ -660,7 +662,7 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
 
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                     if(deleteUserType.equals("EX")){
-                        Cursor cursorAllProcessingReportFromExaminer = dbHelper.getAllProcessingReportByExaminerID(userID);
+                        Cursor cursorAllProcessingReportFromExaminer = dbHelper.getAllProcessingReportFromExaminerByOrgID(getOrgIDPreference);
                         if(cursorAllProcessingReportFromExaminer != null) {
                             for (int i = 0; i < cursorAllProcessingReportFromExaminer.getCount(); i++) {
                                 dbHelper.updateReportStatusByReportID(cursorAllProcessingReportFromExaminer.getString(cursorAllProcessingReportFromExaminer.getColumnIndex("reportID")), "Rejected");
@@ -670,25 +672,29 @@ public class UserOrEmployeeDetail extends AppCompatActivity implements AdapterVi
                     }
 
                     else if(deleteUserType.equals("IN")){
-                        Cursor cursorGetINTeamIDByUserID = dbHelper.getInvestigatorTeamInfoByUserID(userID);
-                        cursorGetINTeamIDByUserID.moveToFirst();
-                        Cursor cursorAllProcessingReportFromInvestigatorTeam = dbHelper.getAllProcessingReportByINTeamID(cursorGetINTeamIDByUserID.getString(cursorGetINTeamIDByUserID.getColumnIndex("investigationTeamID")));
+                        Cursor cursorAllProcessingReportFromInvestigatorTeam = dbHelper.getAllProcessingReportFromINTeamByOrgID(getOrgIDPreference);
 
                         if(cursorAllProcessingReportFromInvestigatorTeam != null) {
                             for (int i = 0; i < cursorAllProcessingReportFromInvestigatorTeam.getCount(); i++) {
-                                dbHelper.updateReportStatusByReportID(cursorAllProcessingReportFromInvestigatorTeam.getString(cursorAllProcessingReportFromInvestigatorTeam.getColumnIndex("reportID")), "Rejected");
+                                String reportID = cursorAllProcessingReportFromInvestigatorTeam.getString(cursorAllProcessingReportFromInvestigatorTeam.getColumnIndex("reportID"));
+                                dbHelper.updateReportStatusByReportID(reportID, "Rejected");
+                                dbHelper.updateReportExaminerByReportID(reportID, "-");
                                 cursorAllProcessingReportFromInvestigatorTeam.moveToNext();
                             }
+
                         }
 
                         dbHelper.deleteInvestigator(userID);
                     }
 
                     else if (deleteUserType.equals("RH")){
-                       Cursor cursorAllProcessingReportFromRH = dbHelper.getAllProcessingReportByReportHandlerID(userID);
+                       Cursor cursorAllProcessingReportFromRH = dbHelper.getAllProcessingReportFromReportHandlerByOrgID(getOrgIDPreference);
+
                         if(cursorAllProcessingReportFromRH != null) {
                             for (int i = 0; i < cursorAllProcessingReportFromRH.getCount(); i++) {
-                                dbHelper.updateReportStatusByReportID(cursorAllProcessingReportFromRH.getString(cursorAllProcessingReportFromRH.getColumnIndex("reportID")), "Rejected");
+                                String reportID = cursorAllProcessingReportFromRH.getString(cursorAllProcessingReportFromRH.getColumnIndex("reportID"));
+                                dbHelper.updateReportStatusByReportID(reportID, "Rejected");
+                                dbHelper.updateReportExaminerByReportID(reportID, "-");
                                 cursorAllProcessingReportFromRH.moveToNext();
                             }
                         }
