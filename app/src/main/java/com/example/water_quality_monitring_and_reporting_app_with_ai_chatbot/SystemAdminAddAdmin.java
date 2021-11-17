@@ -2,6 +2,7 @@ package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Patterns;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,7 +34,7 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
     private Spinner systemAdminAddAdmin_spinner_state;
 
     private TextView systemAdminAddAdmin_txt_errorName, systemAdminAddAdmin_txt_errorEmail, systemAdminAddAdmin_txt_errorPhone,
-            systemAdminAddAdmin_txt_errorAddress;
+            systemAdminAddAdmin_txt_errorAddress, systemAdminAddAdmin_txt_adminInfoHeader;
 
     private Boolean nameValid = false, emailValid = false, phoneValid = false, addressValid = false;
 
@@ -51,9 +53,6 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
         Intent intent = getIntent();
         addWhichAdmin = intent.getStringExtra("addWhichAdmin");
 
-        if(addWhichAdmin.equals("AD"))
-            passedOrgID = intent.getStringExtra("orgID");
-
         systemAdminAddAdmin_txtInputET_fName = findViewById(R.id.systemAdminAddAdmin_txtInputET_fName);
         systemAdminAddAdmin_txtInputET_lName = findViewById(R.id.systemAdminAddAdmin_txtInputET_lName);
         systemAdminAddAdmin_txtInputET_email = findViewById(R.id.systemAdminAddAdmin_txtInputET_email);
@@ -68,6 +67,20 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
         systemAdminAddAdmin_txt_errorEmail = findViewById(R.id.systemAdminAddAdmin_txt_errorEmail);
         systemAdminAddAdmin_txt_errorPhone = findViewById(R.id.systemAdminAddAdmin_txt_errorPhone);
         systemAdminAddAdmin_txt_errorAddress = findViewById(R.id.systemAdminAddAdmin_txt_errorAddress);
+        systemAdminAddAdmin_txt_adminInfoHeader = findViewById(R.id.systemAdminAddAdmin_txt_adminInfoHeader);
+
+        if(addWhichAdmin.equals("AD")){
+            passedOrgID = intent.getStringExtra("orgID");
+        }else{
+            Toolbar toolbar = findViewById(R.id.systemAdminAddAdmin_toolbar);
+            setSupportActionBar(toolbar);
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+            getSupportActionBar().setTitle("Add System Admin");
+            systemAdminAddAdmin_txt_adminInfoHeader.setText("System Admin Information");
+        }
 
         nameValidation(systemAdminAddAdmin_txtInputET_fName);
         nameValidation(systemAdminAddAdmin_txtInputET_lName);
@@ -146,6 +159,14 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {}
+
+    @Override //when back button clicked
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()== android.R.id.home){
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public void nameValidation(TextInputEditText txtInputET_nameAttribute){
         txtInputET_nameAttribute.addTextChangedListener(new TextWatcher() {
@@ -252,13 +273,18 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
                             }else{
                                 displayToast("Failed to add organization admin");
                             }
+                        }else{
+                            displayToast("System admin added successfully!");
                         }
 
                         String name = systemAdminAddAdmin_txtInputET_fName.getText().toString() + " " +systemAdminAddAdmin_txtInputET_lName.getText().toString();
                         String message = name + ", your HydroMy password is " + randomizedPassword;
 
-                        Intent intent = new Intent(this, SystemAdminAddOrg.class);
-                        startActivity(intent);
+                        if(addWhichAdmin.equals("AD")){
+                            Intent intent = new Intent(this, SystemAdminAddOrg.class);
+                            startActivity(intent);
+                        }
+
                         finish();
 
                         sendEmail(systemAdminAddAdmin_txtInputET_email.getText().toString(), message);
@@ -283,12 +309,6 @@ public class SystemAdminAddAdmin extends AppCompatActivity implements AdapterVie
             }
         }else{
             displayToast("Please ensure every credential is filled in correctly");
-
-            //shortcut
-//            Intent intent = new Intent(this, ActivitySuccessfulDisplay.class);
-//            intent.putExtra("successfulDisplayIndicator", "registration");
-//            startActivity(intent);
-//            finish();
         }
     }
 

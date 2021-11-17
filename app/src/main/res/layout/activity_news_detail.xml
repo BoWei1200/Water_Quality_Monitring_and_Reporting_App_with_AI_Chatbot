@@ -127,6 +127,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/loading_icon_edit"
                         app:shapeAppearanceOverlay="@style/roundedCornersImg"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

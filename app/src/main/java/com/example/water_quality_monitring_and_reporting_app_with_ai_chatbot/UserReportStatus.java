@@ -278,8 +278,12 @@ public class UserReportStatus extends AppCompatActivity{
 
         userReportStatus_img_pollutionPhoto.setOnClickListener(v -> {
             Intent intent = new Intent(UserReportStatus.this, ReportPhotoViewer.class);
-            intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
-            intent.putExtra("passedActivity", "fromWeb");
+
+            if(imageUri[currentDisplayingPhotoIndex] != null){
+                intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
+                intent.putExtra("passedActivity", "fromWeb");
+            }
+
             startActivity(intent);
         });
         prevNextandOtherBtnsDisplay();

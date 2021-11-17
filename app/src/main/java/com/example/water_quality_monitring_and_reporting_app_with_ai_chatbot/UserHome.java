@@ -1,5 +1,6 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -7,7 +8,9 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
@@ -23,14 +26,22 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.squareup.picasso.Picasso;
 import com.ubidots.ApiClient;
 import com.ubidots.DataSource;
 import com.ubidots.Value;
 import com.ubidots.Variable;
 
 import com.jjoe64.graphview.GraphView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -63,10 +74,10 @@ public class UserHome extends AppCompatActivity{
     private GraphView graphWQI;
     private UserIoTValues userIoTValues;
     private LinearLayout userHome_linearlayout_graphDetails_hide, userHome_linearlayout_others, userHome_linearlayout_callToSetup;
-    private TextView userHome_txt_clickToViewMore, userHome_txt_callToSetup;
+    private TextView userHome_txt_clickToViewMore, userHome_txt_callToSetup, userHome_txt_latestNewsTitle;
     private CardView userHome_cv_graph;
     private UserIoTWQICalculation WQIcalc;
-    private ImageView userHome_img_setting;
+    private ImageView userHome_img_setting, userHome_img_pollutionPhoto;
     private PopupMenu userHome_popupMenu_setting;
     private Button userHome_btn_setUpNow;
 
@@ -104,9 +115,11 @@ public class UserHome extends AppCompatActivity{
 
         userHome_txt_clickToViewMore = findViewById(R.id.userHome_txt_clickToViewMore);
         userHome_txt_callToSetup = findViewById(R.id.userHome_txt_callToSetup);
+        userHome_txt_latestNewsTitle = findViewById(R.id.userHome_txt_latestNewsTitle);
 
         userHome_cv_graph = findViewById(R.id.userHome_cv_graph);
         userHome_img_setting = findViewById(R.id.userHome_img_setting);
+        userHome_img_pollutionPhoto = findViewById(R.id.userHome_img_pollutionPhoto);
 
         userHome_btn_setUpNow = findViewById(R.id.userHome_btn_setUpNow);
 
@@ -162,7 +175,8 @@ public class UserHome extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
         runApiUbidots(true);
-        //Toast.makeText(this,"Start!",Toast.LENGTH_SHORT).show();
+
+        setLatestNews();
     }
 
     @Override
@@ -202,6 +216,60 @@ public class UserHome extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         System.out.println("App completely terminated");
+    }
+
+    public void setLatestNews(){
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+
+        Cursor cursorGetNews = dbHelper.getAllNews();
+
+        if(cursorGetNews != null){
+            String newsID = cursorGetNews.getString(cursorGetNews.getColumnIndex("newsID"));
+
+            String title = cursorGetNews.getString(cursorGetNews.getColumnIndex("newsTitle"));
+
+            userHome_txt_latestNewsTitle.setText(title);
+
+            Cursor getNewsImg = dbHelper.getImageByNewsID(newsID);
+            String imgName = getNewsImg.getString(getNewsImg.getColumnIndex("newsImageName"));
+
+            displayImage(imgName);
+
+        }
+
+    }
+    public void displayImage(String imgName) {
+
+        final Uri[] imageUri = new Uri[1];
+        final UserReportImage[] userReportImage = new UserReportImage[1];
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("reportFromUserImage");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+
+                for(DataSnapshot ds : snapshot.getChildren()){
+                    try{
+                        UserReportImage userReportImageRead = ds.getValue(UserReportImage.class);
+                        if(userReportImageRead.getName().equals(imgName)){
+                            userReportImage[0] = ds.getValue(UserReportImage.class);
+                            System.out.println("IMG URL " + userReportImage[0].getUrl());
+                            imageUri[0] = Uri.parse(userReportImage[0].getUrl());
+
+                            Picasso.get().load(imageUri[0]).fit().centerCrop().into(userHome_img_pollutionPhoto);
+                            break;
+                        }
+                    }catch(Exception e){
+                        System.out.println("ERROR IN FETCHING: " + e.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void startWaterSensorThread(){

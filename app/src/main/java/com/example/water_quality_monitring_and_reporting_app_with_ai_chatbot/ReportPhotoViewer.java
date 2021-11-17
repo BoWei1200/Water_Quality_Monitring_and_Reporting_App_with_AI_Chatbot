@@ -20,15 +20,16 @@ public class ReportPhotoViewer extends AppCompatActivity{
         Bundle bundle = getIntent().getExtras();
         reportPhotoViewer_img_imgToDisplay = findViewById(R.id.reportPhotoViewer_img_imgToDisplay);
 
-        if(bundle.getString("passedActivity").equals("addReport")){
-            reportPhotoViewer_img_imgToDisplay.setImageURI(Uri.parse(bundle.getString("imageToDisplay")));
-        }else{
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            int height= displayMetrics.heightPixels;
-            int width = displayMetrics.widthPixels;
-            Picasso.get().load(Uri.parse(bundle.getString("imageToDisplay"))).resize(width,height).centerCrop().into(reportPhotoViewer_img_imgToDisplay);
-        }
+        if(bundle != null)
+            if(bundle.getString("passedActivity").equals("addReport")){
+                reportPhotoViewer_img_imgToDisplay.setImageURI(Uri.parse(bundle.getString("imageToDisplay")));
+            }else{
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height= displayMetrics.heightPixels;
+                int width = displayMetrics.widthPixels;
+                Picasso.get().load(Uri.parse(bundle.getString("imageToDisplay"))).resize(width,height).centerCrop().into(reportPhotoViewer_img_imgToDisplay);
+            }
 
         reportPhotoViewer_img_imgToDisplay.setAdjustViewBounds(true);
 

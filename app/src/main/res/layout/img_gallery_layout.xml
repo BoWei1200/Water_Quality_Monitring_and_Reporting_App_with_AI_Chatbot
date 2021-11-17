@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/roundedCornersImg"
-            app:srcCompat="@drawable/takephoto" />
+            app:srcCompat="@drawable/loading_icon_edit" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgGalleryLayout_img_photoRight"

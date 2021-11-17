@@ -69,7 +69,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/adminHome_cv_org"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="1dp"
@@ -80,7 +80,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:padding="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -88,7 +88,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="150dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -128,6 +128,40 @@
                             android:gravity="center_vertical"/>
 
                     </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/adminHome_linearLayout_notice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="#FF909090"
+                        android:layout_marginBottom="10dp"/>
+
+                    <TextView
+                        android:id="@+id/adminHome_txt_noticeHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Notice"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginBottom="10dp"/>
+
+                    <TextView
+                        android:id="@+id/adminHome_txt_notice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:fontFamily="@font/nunito_sans"
+                        android:layout_marginBottom="10dp"/>
 
                 </LinearLayout>
 

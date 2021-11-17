@@ -484,7 +484,7 @@ public class EmployeeReportStatus extends AppCompatActivity {
     public void approveOrReject(View view) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         String updatedStatus = "";
-        boolean firstDocNotExist = false;
+        boolean rejectWithInCompleteOrg = false;
         switch (view.getId()){
             case R.id.employeeReportStatus_btn_approve:
 
@@ -526,101 +526,151 @@ public class EmployeeReportStatus extends AppCompatActivity {
                     updatedStatus = "Rejected";
 
                 else if (reportStatus.equals("Examining") || reportStatus.equals("Resolved")){
-                    updatedStatus = "Resolving";
-                    dbHelper.updateSecondInvestigationDoc(null, reportID);
+                    Cursor cursorOrgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+                    String orgID = cursorOrgInfo.getString(cursorOrgInfo.getColumnIndex("orgID"));
+
+                    Boolean reportHandlerExist = false, INTeamExist = false;
+
+                    Cursor cursorReportInfo = dbHelper.getReportInfoByReportID(reportID);
+                    String reportHandler = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportHandler"));
+                    String INTeam = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportInvestigationTeam"));
+
+                    Cursor checkReportHandler = dbHelper.getEmployeesByOrgID(orgID, reportHandler, "All");
+                    reportHandlerExist = (checkReportHandler != null) ?
+                                            (checkReportHandler.getCount() != 0 ? true : false)
+                                            : false;
+
+                    Cursor checkINTeam = dbHelper.getAvailableTeamMemByInvestigatorTeamID(INTeam);
+                    INTeamExist = (checkINTeam != null) ?
+                                    (checkINTeam.getCount() > 0 ? true : false)
+                                    : false;
+
+                    if(reportHandlerExist && INTeamExist){
+                        updatedStatus = "Resolving";
+                        dbHelper.updateSecondInvestigationDoc(null, reportID);
+                    }
+                    else{
+                        rejectWithInCompleteOrg = true;
+                        displayAlert();
+                    }
+
                 }
 
                 break;
         }
 
-        if(dbHelper.updateReportStatusByReportID(reportID, updatedStatus)){
-            displayToast("Report status updated successfully");
+        if(!rejectWithInCompleteOrg){
+            if(dbHelper.updateReportStatusByReportID(reportID, updatedStatus)){
+                displayToast("Report status updated successfully");
 
-            if(updatedStatus.equals("Investigating1")){
-                Cursor cursorGetReportInfo = dbHelper.getReportInfoByReportID(reportID);
+                if(updatedStatus.equals("Investigating1")){
+                    Cursor cursorGetReportInfo = dbHelper.getReportInfoByReportID(reportID);
 
-                if(cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("reportInvestigationTeam")) == null){
-                    String reportOrgID = cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("orgID"));
+                    if(cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("reportInvestigationTeam")) == null){
+                        String reportOrgID = cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("orgID"));
 
-                    String selectedInvestigationTeamID = "";
-                    Cursor cursorAvailableINTeamInOrg = dbHelper.getAvailableInvestigationTeamByOrgID(reportOrgID);
+                        String selectedInvestigationTeamID = "";
+                        Cursor cursorAvailableINTeamInOrg = dbHelper.getAvailableInvestigationTeamByOrgID(reportOrgID);
 
-                    cursorAvailableINTeamInOrg.moveToFirst();
-
-                    Boolean INTeamIDFound = false;
-
-                    for (int i = 0; i < cursorAvailableINTeamInOrg.getCount(); i++){
-                        if(cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("reportIsTaken")).equals("0")){
-                            selectedInvestigationTeamID = cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID"));
-                            INTeamIDFound = true;
-                            break;
-                        }
-                        cursorAvailableINTeamInOrg.moveToNext();
-                    }
-
-                    if(!INTeamIDFound){
-                        dbHelper.resetAllAvailableINTeamReportIsTakenByOrgID(reportOrgID);
                         cursorAvailableINTeamInOrg.moveToFirst();
-                        selectedInvestigationTeamID = cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID"));
-                    }
 
-                    System.out.println("Selected IN TEAM: " + selectedInvestigationTeamID);
+                        Boolean INTeamIDFound = false;
 
-                    dbHelper.resetSelectedINTeamReportIsTaken(selectedInvestigationTeamID);
-
-
-                    if(dbHelper.updateReportInvestigationTeamByReportID(reportID, selectedInvestigationTeamID))
-                        System.out.println("Team ID assigned: " + selectedInvestigationTeamID);
-                    else
-                        System.out.println("Assigned failed");
-                }
-            }
-            else if(updatedStatus.equals("Resolving")){
-                Cursor cursorGetReportInfo = dbHelper.getReportInfoByReportID(reportID);
-
-                if(cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("reportHandler")) == null){
-                    String reportOrgID = cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("orgID"));
-
-                    String selectedReportHandlerID = "";
-                    Cursor cursorAvailableReportHandlerInOrg = dbHelper.getAvailableReportHandlerByOrgID(reportOrgID);
-
-                    cursorAvailableReportHandlerInOrg.moveToFirst();
-
-                    Boolean ReportHandlerIDFound = false;
-
-                    for (int i = 0; i < cursorAvailableReportHandlerInOrg.getCount(); i++){
-                        if(cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("reportIsTaken")).equals("0")){
-                            selectedReportHandlerID = cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID"));
-                            ReportHandlerIDFound = true;
-                            break;
+                        for (int i = 0; i < cursorAvailableINTeamInOrg.getCount(); i++){
+                            if(cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("reportIsTaken")).equals("0")){
+                                selectedInvestigationTeamID = cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID"));
+                                INTeamIDFound = true;
+                                break;
+                            }
+                            cursorAvailableINTeamInOrg.moveToNext();
                         }
-                        cursorAvailableReportHandlerInOrg.moveToNext();
+
+                        if(!INTeamIDFound){
+                            dbHelper.resetAllAvailableINTeamReportIsTakenByOrgID(reportOrgID);
+                            cursorAvailableINTeamInOrg.moveToFirst();
+                            selectedInvestigationTeamID = cursorAvailableINTeamInOrg.getString(cursorAvailableINTeamInOrg.getColumnIndex("investigationTeamID"));
+                        }
+
+                        System.out.println("Selected IN TEAM: " + selectedInvestigationTeamID);
+
+                        dbHelper.resetSelectedINTeamReportIsTaken(selectedInvestigationTeamID);
+
+
+                        if(dbHelper.updateReportInvestigationTeamByReportID(reportID, selectedInvestigationTeamID))
+                            System.out.println("Team ID assigned: " + selectedInvestigationTeamID);
+                        else
+                            System.out.println("Assigned failed");
                     }
-
-                    if(!ReportHandlerIDFound){
-                        dbHelper.resetAllAvailableEmployeeReportIsTakenByOrgIDAndUsertype(reportOrgID, "RH");
-                        cursorAvailableReportHandlerInOrg.moveToFirst();
-                        selectedReportHandlerID = cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID"));
-                    }
-
-                    System.out.println("Selected report handler: " + selectedReportHandlerID);
-
-                    dbHelper.resetSelectedReportHandlerReportIsTaken(selectedReportHandlerID);
-
-                    if(dbHelper.updateReportHandlerByReportID(reportID, selectedReportHandlerID))
-                        System.out.println("Report Handler ID assigned: " + selectedReportHandlerID);
-                    else
-                        System.out.println("Assigned failed");
                 }
 
-                dbHelper.updateReportDurationAndCauseByReportID(
-                        employeeReportStatus_eTxt_reportDuration.getText().toString(),
-                        employeeReportStatus_eTxt_reportCause.getText().toString(), reportID);
+                else if(updatedStatus.equals("Resolving")){
+                    Cursor cursorGetReportInfo = dbHelper.getReportInfoByReportID(reportID);
+
+                    if(cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("reportHandler")) == null){
+                        String reportOrgID = cursorGetReportInfo.getString(cursorGetReportInfo.getColumnIndex("orgID"));
+
+                        String selectedReportHandlerID = "";
+                        Cursor cursorAvailableReportHandlerInOrg = dbHelper.getAvailableReportHandlerByOrgID(reportOrgID);
+
+                        cursorAvailableReportHandlerInOrg.moveToFirst();
+
+                        Boolean ReportHandlerIDFound = false;
+
+                        for (int i = 0; i < cursorAvailableReportHandlerInOrg.getCount(); i++){
+                            if(cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("reportIsTaken")).equals("0")){
+                                selectedReportHandlerID = cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID"));
+                                ReportHandlerIDFound = true;
+                                break;
+                            }
+                            cursorAvailableReportHandlerInOrg.moveToNext();
+                        }
+
+                        if(!ReportHandlerIDFound){
+                            dbHelper.resetAllAvailableEmployeeReportIsTakenByOrgIDAndUsertype(reportOrgID, "RH");
+                            cursorAvailableReportHandlerInOrg.moveToFirst();
+                            selectedReportHandlerID = cursorAvailableReportHandlerInOrg.getString(cursorAvailableReportHandlerInOrg.getColumnIndex("userID"));
+                        }
+
+                        System.out.println("Selected report handler: " + selectedReportHandlerID);
+
+                        dbHelper.resetSelectedReportHandlerReportIsTaken(selectedReportHandlerID);
+
+                        if(dbHelper.updateReportHandlerByReportID(reportID, selectedReportHandlerID))
+                            System.out.println("Report Handler ID assigned: " + selectedReportHandlerID);
+                        else
+                            System.out.println("Assigned failed");
+                    }
+
+                    dbHelper.updateReportDurationAndCauseByReportID(
+                            employeeReportStatus_eTxt_reportDuration.getText().toString(),
+                            employeeReportStatus_eTxt_reportCause.getText().toString(), reportID);
+                }
             }
+            finish();
         }
 
-        finish();
         //displayToast(updatedStatus);
+    }
+
+    public void displayAlert(){
+        new AlertDialog.Builder(this)
+                .setTitle("Still Proceed with Deletion?")
+                .setMessage("** CAUTION: If you reject on this report, you will lose track of the report because the report handler / investigators in charge have been removed")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        DatabaseHelper dbHelper = new DatabaseHelper(EmployeeReportStatus.this);
+
+                        if(dbHelper.updateReportStatusByReportID(reportID, "Rejected")){
+                            displayToast("Report status updated successfully");
+                            dbHelper.updateReportExaminerByReportID(reportID, "-");
+                        }
+
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(R.drawable.warningiconedit)
+                .show();
     }
 
     public void update(View view) {
@@ -798,8 +848,12 @@ public class EmployeeReportStatus extends AppCompatActivity {
 
         employeeReportStatus_img_pollutionPhoto.setOnClickListener(v -> {
             Intent intent = new Intent(EmployeeReportStatus.this, ReportPhotoViewer.class);
-            intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
-            intent.putExtra("passedActivity", "fromWeb");
+
+            if(imageUri[currentDisplayingPhotoIndex] != null){
+                intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
+                intent.putExtra("passedActivity", "fromWeb");
+            }
+
             startActivity(intent);
         });
         prevNextandOtherBtnsDisplay();

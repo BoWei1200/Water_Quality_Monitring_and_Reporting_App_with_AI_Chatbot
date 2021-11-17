@@ -153,8 +153,12 @@ public class NewsDetail extends AppCompatActivity {
 
         newsDetail_img_pollutionPhoto.setOnClickListener(v -> {
             Intent intent = new Intent(NewsDetail.this, ReportPhotoViewer.class);
-            intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
-            intent.putExtra("passedActivity", "fromWeb");
+
+            if(imageUri[currentDisplayingPhotoIndex] != null){
+                intent.putExtra("imageToDisplay", imageUri[currentDisplayingPhotoIndex].toString());
+                intent.putExtra("passedActivity", "fromWeb");
+            }
+
             startActivity(intent);
         });
         prevNextandOtherBtnsDisplay();

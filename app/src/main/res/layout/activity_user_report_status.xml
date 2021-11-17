@@ -446,7 +446,6 @@
                                     app:srcCompat="@drawable/arrownext" />
                             </LinearLayout>
 
-
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/userReportStatus_img_pollutionPhoto"
                                 android:layout_width="70dp"
@@ -455,7 +454,7 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:srcCompat="@drawable/takephoto"
+                                app:srcCompat="@drawable/loading_icon_edit"
                                 app:shapeAppearanceOverlay="@style/roundedCornersImg"/>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
