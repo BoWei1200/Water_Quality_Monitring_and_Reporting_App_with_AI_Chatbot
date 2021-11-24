@@ -175,7 +175,7 @@ public class UserReportStatus extends AppCompatActivity{
 
         Cursor cursorGetOrgInfo = dbHelper.getOrgInfoByOrgID(cursorReportInfo.getString(cursorReportInfo.getColumnIndex("orgID")));
 
-        userReportStatus_txt_reportOrg.setText(cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgName")));
+        userReportStatus_txt_reportOrg.setText(cursorGetOrgInfo != null ? cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgName")) : "None");
 
         String reportEstimatedSolveDuration = cursorReportInfo.getString(cursorReportInfo.getColumnIndex("reportEstimatedSolveDuration"));
         userReportStatus_txt_reportDuration.setText(!(reportEstimatedSolveDuration==null) ? reportEstimatedSolveDuration + " day(s)" : " - ");
