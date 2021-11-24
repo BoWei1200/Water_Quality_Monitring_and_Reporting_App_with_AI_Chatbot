@@ -1,9 +1,11 @@
 package com.example.water_quality_monitring_and_reporting_app_with_ai_chatbot;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -21,6 +24,8 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.ArrayList;
 
 public class OrgDetail extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -36,6 +41,7 @@ public class OrgDetail extends AppCompatActivity implements AdapterView.OnItemSe
     private TextInputEditText orgDetail_txtInputET_addressLine, orgDetail_txtInputET_postcode, orgDetail_txtInputET_city;
     private Spinner orgDetail_spinner_state;
     private Switch orgDetail_switch_ready;
+    private ImageView orgDetail_img_deleteOrg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,8 @@ public class OrgDetail extends AppCompatActivity implements AdapterView.OnItemSe
 
         orgDetail_switch_ready = findViewById(R.id.orgDetail_switch_ready);
 
+        orgDetail_img_deleteOrg = findViewById(R.id.orgDetail_img_deleteOrg);
+
         Intent intent = getIntent();
         orgID = intent.getStringExtra("orgID");
 
@@ -80,7 +88,9 @@ public class OrgDetail extends AppCompatActivity implements AdapterView.OnItemSe
             orgDetail_txtInputET_postcode.setText(cursorOrgInfo.getString(cursorOrgInfo.getColumnIndex("orgPostCode")));
             orgDetail_txtInputET_city.setText(cursorOrgInfo.getString(cursorOrgInfo.getColumnIndex("orgCity")));
 
-            if (orgDetail_spinner_state != null) {
+            orgDetail_img_deleteOrg.setVisibility((getUserTypePreference.equals("SAD")) ? View.VISIBLE : View.GONE);
+
+                if (orgDetail_spinner_state != null) {
                 orgDetail_spinner_state.setOnItemSelectedListener(this);
 
                 ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -158,5 +168,61 @@ public class OrgDetail extends AppCompatActivity implements AdapterView.OnItemSe
         }
 
         finish();
+    }
+
+    public void deleteOrg(View view) {
+        displayAlert(R.string.delete_org_title, R.string.empty_string, R.drawable.warningiconedit);
+    }
+
+    public void displayAlert(int title, int msg, int drawable){
+
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        DatabaseHelper dbHelper = new DatabaseHelper(OrgDetail.this);
+                        switch(title){
+                            case R.string.delete_org_title:
+
+                                Cursor cursorGetReportByOrg = dbHelper.getAllProcessingReportByOrgID(orgID);
+
+                                if(cursorGetReportByOrg != null){
+                                    for(cursorGetReportByOrg.moveToFirst(); !cursorGetReportByOrg.isAfterLast(); cursorGetReportByOrg.moveToNext()){
+                                        dbHelper.updateReportStatusByReportID(cursorGetReportByOrg.getString(cursorGetReportByOrg.getColumnIndex("reportID")), "Rejected");
+                                    }
+                                }
+
+                                Cursor cursorGetEmployeeByOrg = dbHelper.getEmployeesByOrgID(orgID, "", "All");
+                                if(cursorGetEmployeeByOrg != null){
+                                    for(cursorGetEmployeeByOrg.moveToFirst(); !cursorGetEmployeeByOrg.isAfterLast(); cursorGetEmployeeByOrg.moveToNext()){
+                                        if(cursorGetEmployeeByOrg.getString(cursorGetEmployeeByOrg.getColumnIndex("userType")).equals("IN"))
+                                            dbHelper.deleteInvestigator(cursorGetEmployeeByOrg.getString(cursorGetEmployeeByOrg.getColumnIndex("userID")));
+
+                                        dbHelper.deleteEmployee(cursorGetEmployeeByOrg.getString(cursorGetEmployeeByOrg.getColumnIndex("userID")));
+                                    }
+                                }
+
+                                Cursor cursorGetINTeam = dbHelper.getInvestigationTeamByOrgID(orgID);
+                                if(cursorGetINTeam.moveToFirst()){
+                                    for(; !cursorGetINTeam.isAfterLast(); cursorGetINTeam.moveToNext()){
+                                        dbHelper.deleteINTeam(cursorGetINTeam.getString(cursorGetINTeam.getColumnIndex("investigationTeamID")));
+                                    }
+                                }
+
+                                if(dbHelper.deleteOrg(orgID)){
+                                    displayToast("Organization deleted");
+                                }
+
+                                finish();
+
+                                break;
+                        }
+                    }
+                })
+
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(drawable)
+                .show();
     }
 }
