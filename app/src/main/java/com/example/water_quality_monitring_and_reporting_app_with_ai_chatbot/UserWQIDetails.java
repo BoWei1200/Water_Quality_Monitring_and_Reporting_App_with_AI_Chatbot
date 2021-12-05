@@ -28,7 +28,7 @@ public class UserWQIDetails extends AppCompatActivity {
 
         Intent intent = getIntent();
         String indicator = intent.getStringExtra("WQIInfoIndicator");
-        displayToast(indicator);
+        //displayToast(indicator);
 
         getSupportActionBar().setTitle(indicator);
 

@@ -309,7 +309,7 @@
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:fontFamily="@font/nunito_sans"
-                                                android:text="Pollution spotted in ..."
+                                                android:text="No news recently ..."
                                                 android:textStyle="bold"
                                                 android:textSize="18dp" />
 

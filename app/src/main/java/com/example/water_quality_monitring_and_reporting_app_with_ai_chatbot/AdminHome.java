@@ -98,6 +98,19 @@ public class AdminHome extends AppCompatActivity {
 
     protected void onRestart(){
         super.onRestart();
+
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+
+        cursorGetOrgInfo = dbHelper.getOrgInfoByUserID(getUserIDPreference);
+        try {
+            if(cursorGetOrgInfo.moveToFirst()){
+                String orgName = cursorGetOrgInfo.getString(cursorGetOrgInfo.getColumnIndex("orgName"));
+                adminHome_txt_orgName.setText(orgName);
+            }
+        }catch (Exception e){
+            System.out.println("ERROR: "+ e.toString());
+        }
+
         setNotice();
     }
 

@@ -54,7 +54,7 @@ public class UserGraphDetails extends AppCompatActivity {
         graphDetails_cv_graph = findViewById(R.id.graphDetails_cv_graph);
 
         graphDetails_linearLayout_WQIDesc = findViewById(R.id.graphDetails_linearLayout_WQIDesc);
-        graphDetails_linearlayout_others = findViewById(R.id.graphDetails_linearlayout_others);
+        graphDetails_linearlayout_others = findViewById(R.id.graphDetails_linearLayout_other);
 
         graphDetails_btn_aboutMyWQI = findViewById(R.id.graphDetails_btn_aboutMyWQI);
 
