@@ -6,12 +6,21 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
-    <string name="WQI_desc">Your water quality is measured based on WQI from 0 - 100. \n\n
-        0.00 - 30.9 : Heavily Polluted \n
-        31.0 - 51.8 : Polluted \n
-        51.9 – 76.4 : Neutral \n
-        76.5 – 92.6 : Clean \n
-        92.7 - 100  : Very Clean \n\n</string>
+    <string name="WQI_desc">Your water quality is measured based on WQI from <b>0 - 100</b>. \n\n
+        <b>0.00 - 30.9 :</b> \n
+        Heavily Polluted, cannot be used in any aspects. \n\n
+
+        <b>31.0 - 51.8 :</b> \n
+        Polluted, can only be used in irrigation\n\n
+
+        <b>51.9 – 76.4 :</b> \n
+        Neutral, can be used in livestock drinking\n\n
+
+        <b>76.5 – 92.6 :</b> \n
+        Clean, suitable for recreational use body contact\n\n
+
+        <b>92.7 - 100 :</b> \n
+        Very Clean, safe and drinkable water \n\n</string>
     <string name="view_more"><u>View More ..</u></string>
     <string name="hide"><u>Hide</u></string>
     <string name="discard_report_title">Discard your report?</string>
@@ -49,12 +58,22 @@
         Since pH can be affected by chemicals in the water, pH is an important indicator of water that is changing chemically. pH is reported in "logarithmic units".
         Each number represents a 10-fold change in the acidity/basicness of the water. Water with a pH of five is ten times more acidic than water having a pH of six.
     </string>
-    <string name="WQI_desc_detail">Your water quality is measured based on WQI from 0 - 100. \n\n
-        0.00 - 30.9 : Heavily Polluted \n
-        31.0 - 51.8 : Polluted \n
-        51.9 – 76.4 : Neutral \n
-        76.5 – 92.6 : Clean \n
-        92.7 - 100  : Very Clean \n\n
+    <string name="WQI_desc_detail">Your water quality is measured based on WQI from <b>0 - 100</b>. \n\n
+        <b>0.00 - 30.9 :</b> \n
+        Heavily Polluted, cannot be used in any aspects. \n\n
+
+        <b>31.0 - 51.8 :</b> \n
+        Polluted, can only be used in irrigation\n\n
+
+        <b>51.9 – 76.4 :</b> \n
+        Neutral, can be used in livestock drinking\n\n
+
+        <b>76.5 – 92.6 :</b> \n
+        Clean, suitable for recreational use body contact\n\n
+
+        <b>92.7 - 100 :</b> \n
+        Very Clean, safe and drinkable water \n\n
+
         It is for measuring water quality by applying some water quality measurements as parameters. The calculation as below: \n\n
 
         WQI = \n
