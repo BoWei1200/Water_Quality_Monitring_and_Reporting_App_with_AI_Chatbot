@@ -997,7 +997,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else if(filter.equals("Investigator")){
             whereClause = " userType='IN'";
         }
-        else if(filter.equals("Report Handler")){
+        else if(filter.equals("Independent Examiner")){
             whereClause = " userType='RH'";
         }
         else{

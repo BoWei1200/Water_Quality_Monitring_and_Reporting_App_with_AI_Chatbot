@@ -141,7 +141,7 @@
         <item>Organization Admin</item>
         <item>Examiner</item>
         <item>Investigator</item>
-        <item>Report Handler</item>
+        <item>Independent Examiner</item>
     </string-array>
 
 </resources>

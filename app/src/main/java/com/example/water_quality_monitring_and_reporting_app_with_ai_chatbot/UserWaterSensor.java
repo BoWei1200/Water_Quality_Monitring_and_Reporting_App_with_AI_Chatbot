@@ -156,17 +156,19 @@ public class UserWaterSensor implements Runnable{
                 editor.putString(currentWQIPreference, Double.toString(calculatedWQI));
                 editor.commit();
 
-                String status = "";
+                String status = "", usage = "";
 
                 if(calculatedWQI < 51.9){
                     if(calculatedWQI < 31.0){
                         status = "heavily polluted";
+                        usage = "cannot be used in any aspects";
                     }else{
                         status = "polluted";
+                        usage = "can only be used in irrigation";
                     }
                     int drawable = R.drawable.appicon;
                     String notificationTitle = "Water from your faucet is " + status + "!";
-                    String notificationText = "Detected WQI: " + String.format("%.2f", calculatedWQI);
+                    String notificationText = "Detected WQI: " + String.format("%.2f", calculatedWQI) + ", " + usage;
                     NotificationSender notificationSender = new NotificationSender(context, drawable, notificationTitle, notificationText, "WQI");
                     notificationSender.start();
                 }

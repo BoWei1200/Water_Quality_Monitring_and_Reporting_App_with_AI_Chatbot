@@ -357,7 +357,7 @@
                         android:id="@+id/adminAddEmployee_rBtn_RH"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Report Handler"
+                        android:text="Independent Examiner"
                         android:layout_gravity="center_horizontal"
                         android:textSize="16dp"
                         android:fontFamily="@font/nunito_sans"

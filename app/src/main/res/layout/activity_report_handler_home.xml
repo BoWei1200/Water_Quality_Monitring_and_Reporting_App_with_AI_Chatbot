@@ -60,7 +60,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="- Report Handler Site -"
+            android:text="- Independent Examiner Site -"
             android:textSize="18dp"
             android:gravity="center"
             android:fontFamily="@font/nunito_sans"
